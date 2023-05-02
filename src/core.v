@@ -10,10 +10,12 @@ module core (
     input   [ 7:0]  rom_data,
 
     output          ram_rd_en,
+    output          ram_rd_we,
     output  [19:0]  ram_rd_addr,
     input   [ 7:0]  ram_rd_data,
 
     output          ram_wr_en,
+    output          ram_wr_we,
     output  [19:0]  ram_wr_addr,
     output  [ 7:0]  ram_wr_data
 );
