@@ -18,6 +18,23 @@ module core (
     output  [ 7:0]  ram_wr_data
 );
 
+    integer i;
+
+    reg [7:0] inst_reg [5:0];
+
+    reg [5:0] clear_byte;
+
+    reg [5:0] first_byte;
+
+    reg [15:0] addr_reg;
+
+    reg [15:0] data_reg;
+
+    reg [15:0] register [7:0];
+
+    reg [15:0] segment_register [3:0];
+
+    reg [15:0] flags;
 
 
 endmodule
