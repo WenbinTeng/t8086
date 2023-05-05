@@ -35,15 +35,24 @@ function mov_m_a_b      (input [7:0] i); mov_m_a_b      = (i[7:0]==8'b10100010);
 function mov_m_a_w      (input [7:0] i); mov_m_a_w      = (i[7:0]==8'b10100011); endfunction
 function mov_sr_rm      (input [7:0] i); mov_sr_rm      = (i[7:0]==8'b10001110); endfunction
 function mov_rm_sr      (input [7:0] i); mov_rm_sr      = (i[7:0]==8'b10001100); endfunction
+// PUSH
+function push_rm        (input [7:0] i); push_rm        = (i[7:0]==8'b11111111); endfunction
+function push_r         (input [7:0] i); push_r         = (i[7:3]==5'b01010   ); endfunction
+function push_sr        (input [7:0] i); push_sr        = (i&'he7==8'b00000110); endfunction
+// POP
+function pop_rm         (input [7:0] i); pop_rm         = (i[7:0]==8'b10001111); endfunction
+function pop_r          (input [7:0] i); pop_r          = (i[7:3]==5'b01011   ); endfunction
+function pop_sr         (input [7:0] i); pop_sr         = (i&'he7==8'b00000111); endfunction
 
 
 
 function length1 (input [7:0] i);
-    length1 = 'b0;
+    length1 = push_r(i)|push_sr(i)|pop_r(i)|pop_sr(i);
 endfunction
 
 function length2 (input [7:0] i1, input [7:0] i2);
-    length2 = mov_r_i_b(i1)|mov_rm_r_b(i1)&~disp(i2)|mov_r_rm_b(i1)&~disp(i2)|mov_rm_r_w(i1)&~disp(i2)|mov_r_rm_w(i1)&~disp(i2)|mov_sr_rm(i1)&~disp(i2)|mov_rm_sr(i1)&~disp(i2);
+    length2 = mov_r_i_b(i1)|mov_rm_r_b(i1)&~disp(i2)|mov_r_rm_b(i1)&~disp(i2)|mov_rm_r_w(i1)&~disp(i2)|mov_r_rm_w(i1)&~disp(i2)|mov_sr_rm(i1)&~disp(i2)|mov_rm_sr(i1)&~disp(i2)|
+              push_rm(i1)&~disp(i2)|pop_rm(i1)&~disp(i2);
 endfunction
 
 function length3 (input [7:0] i1, input [7:0] i2);
@@ -51,7 +60,8 @@ function length3 (input [7:0] i1, input [7:0] i2);
 endfunction
 
 function length4 (input [7:0] i1, input [7:0] i2);
-    length4 = mov_rm_r_b(i1)&disp(i2)|mov_r_rm_b(i1)&disp(i2)|mov_rm_r_w(i1)&disp(i2)|mov_r_rm_w(i1)&disp(i2)|mov_rm_i_w(i1)&~disp(i2)|mov_sr_rm(i1)&disp(i2)|mov_rm_sr(i1)&disp(i2);
+    length4 = mov_rm_r_b(i1)&disp(i2)|mov_r_rm_b(i1)&disp(i2)|mov_rm_r_w(i1)&disp(i2)|mov_r_rm_w(i1)&disp(i2)|mov_rm_i_w(i1)&~disp(i2)|mov_sr_rm(i1)&disp(i2)|mov_rm_sr(i1)&disp(i2)|
+              push_rm(i1)&disp(i2)|pop_rm(i1)&disp(i2);
 endfunction
 
 function length5 (input [7:0] i1, input [7:0] i2);
