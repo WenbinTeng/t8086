@@ -82,7 +82,7 @@ function disp1 (input [7:0] i2);
 endfunction
 
 function disp2 (input [7:0] i2);
-    disp2 = i2[7:6] == 2'b10;
+    disp2 = ((i2[7:6] == 2'b00) && (i2[2:0] == 3'b110)) || (i2[7:6] == 2'b10);
 endfunction
 
 // TODO: MUL FUNC
