@@ -51,29 +51,38 @@ function length1 (input [7:0] i);
 endfunction
 
 function length2 (input [7:0] i1, input [7:0] i2);
-    length2 = mov_r_i_b(i1)|mov_rm_r_b(i1)&~disp(i2)|mov_r_rm_b(i1)&~disp(i2)|mov_rm_r_w(i1)&~disp(i2)|mov_r_rm_w(i1)&~disp(i2)|mov_sr_rm(i1)&~disp(i2)|mov_rm_sr(i1)&~disp(i2)|
-              push_rm(i1)&~disp(i2)|pop_rm(i1)&~disp(i2);
+    length2 = mov_rm_r_b(i1)&disp0(i2)|mov_r_rm_b(i1)&disp0(i2)|mov_rm_r_w(i1)&disp0(i2)|mov_r_rm_w(i1)&disp0(i2)|mov_r_i_b(i1)|mov_sr_rm(i1)&disp0(i2)|mov_rm_sr(i1)&disp0(i2)|
+              push_rm(i1)&disp0(i2)|pop_rm(i1)&disp0(i2);
 endfunction
 
 function length3 (input [7:0] i1, input [7:0] i2);
-    length3 = mov_rm_i_b(i1)&~disp(i2)|mov_r_i_w(i1)|mov_a_m_b(i1)|mov_a_m_w(i1)|mov_m_a_b(i1)|mov_m_a_w(i1);
+    length3 = mov_rm_r_b(i1)&disp1(i2)|mov_r_rm_b(i1)&disp1(i2)|mov_rm_r_w(i1)&disp1(i2)|mov_r_rm_w(i1)&disp1(i2)|mov_rm_i_b(i1)&disp0(i2)|mov_r_i_w(i1)|mov_a_m_b(i1)|mov_a_m_w(i1)|mov_m_a_b(i1)|mov_m_a_w(i1)|mov_sr_rm(i1)&disp1(i2)|mov_rm_sr(i1)&disp1(i2)|
+              push_rm(i1)&disp1(i2)|pop_rm(i1)&disp1(i2);
 endfunction
 
 function length4 (input [7:0] i1, input [7:0] i2);
-    length4 = mov_rm_r_b(i1)&disp(i2)|mov_r_rm_b(i1)&disp(i2)|mov_rm_r_w(i1)&disp(i2)|mov_r_rm_w(i1)&disp(i2)|mov_rm_i_w(i1)&~disp(i2)|mov_sr_rm(i1)&disp(i2)|mov_rm_sr(i1)&disp(i2)|
-              push_rm(i1)&disp(i2)|pop_rm(i1)&disp(i2);
+    length4 = mov_rm_r_b(i1)&disp2(i2)|mov_r_rm_b(i1)&disp2(i2)|mov_rm_r_w(i1)&disp2(i2)|mov_r_rm_w(i1)&disp2(i2)|mov_rm_i_b(i1)&disp1(i2)|mov_rm_i_w(i1)&disp0(i2)|mov_sr_rm(i1)&disp2(i2)|mov_rm_sr(i1)&disp2(i2)|
+              push_rm(i1)&disp2(i2)|pop_rm(i1)&disp2(i2);
 endfunction
 
 function length5 (input [7:0] i1, input [7:0] i2);
-    length5 = mov_rm_i_b(i1)&disp(i2);
+    length5 = mov_rm_i_b(i1)&disp2(i2)|mov_rm_i_w(i1)&disp1(i2);
 endfunction
 
 function length6 (input [7:0] i1, input [7:0] i2);
-    length6 = mov_rm_i_w(i1)&disp(i2);
+    length6 = mov_rm_i_w(i1)&disp2(i2);
 endfunction
 
-function disp (input [7:0] i2);
-    disp = ((i2[7:6] == 2'b00) && (i2[2:0] != 3'b110)) || (i2[7:6] == 2'b11);
+function disp0 (input [7:0] i2);
+    disp0 = ((i2[7:6] == 2'b00) && (i2[2:0] != 3'b110)) || (i2[7:6] == 2'b11);
+endfunction
+
+function disp1 (input [7:0] i2);
+    disp1 = i2[7:6] == 2'b01;
+endfunction
+
+function disp2 (input [7:0] i2);
+    disp2 = i2[7:6] == 2'b10;
 endfunction
 
 // TODO: MUL FUNC
