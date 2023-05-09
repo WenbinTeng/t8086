@@ -1,23 +1,25 @@
-`define AX register[3'h0]
-`define CX register[3'h1]
-`define DX register[3'h2]
-`define BX register[3'h3]
-`define SP register[3'h4]
-`define BP register[3'h5]
-`define SI register[3'h6]
-`define DI register[3'h7]
-`define AL register[3'h0][ 7:0]
-`define AH register[3'h0][15:8]
-`define CL register[3'h1][ 7:0]
-`define CH register[3'h1][15:8]
-`define DL register[3'h2][ 7:0]
-`define DH register[3'h2][15:8]
-`define BL register[3'h3][ 7:0]
-`define BH register[3'h3][15:8]
+`define AL register[4'd0]
+`define AH register[4'd4]
+`define CL register[4'd1]
+`define CH register[4'd5]
+`define DL register[4'd2]
+`define DH register[4'd6]
+`define BL register[4'd3]
+`define BH register[4'd7]
+`define AX {`AH, `AL}
+`define CX {`CH, `CL}
+`define DX {`DH, `DL}
+`define BX {`BH, `BL}
+`define SP {register[4'd12], register[4'd8 ]}
+`define BP {register[4'd13], register[4'd9 ]}
+`define SI {register[4'd14], register[4'd10]}
+`define DI {register[4'd15], register[4'd11]}
 `define ES segment_register[2'b0]
 `define CS segment_register[2'b1]
 `define SS segment_register[2'b2]
 `define DS segment_register[2'b3]
+
+
 
 // DATA TRANSFER OPERATIONS
 // MOV
@@ -83,6 +85,34 @@ endfunction
 
 function disp2 (input [7:0] i2);
     disp2 = ((i2[7:6] == 2'b00) && (i2[2:0] == 3'b110)) || (i2[7:6] == 2'b10);
+endfunction
+
+function [1:0] field_mod (input [7:0] i);
+    field_mod = i[7:6];
+endfunction
+
+function [2:0] field_reg (input [7:0] i);
+    field_reg = i[5:3];
+endfunction
+
+function [2:0] field_r_m (input [7:0] i);
+    field_reg = i[2:0];
+endfunction
+
+function is_mem_mod (input [7:0] i);
+    is_mem_mod = i[7:6] != 2'b11;
+endfunction
+
+function is_reg_mod (input [7:0] i);
+    is_reg_mod = i[7:6] == 2'b11;
+endfunction
+
+function [3:0] reg_w_hi (input [2:0] a);
+    reg_w_hi = {a[2], 1'b1, a[1:0]};
+endfunction
+
+function [3:0] reg_w_lo (input [2:0] a);
+    reg_w_lo = {a[2], 1'b0, a[1:0]};
 endfunction
 
 // TODO: MUL FUNC
