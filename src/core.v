@@ -81,7 +81,7 @@ module core (
         if (~rst)                                   disp_sel = 'b0;
         else if (field_mod(inst_reg[1]) == 2'b00)   disp_sel = 'b0;
         else if (field_mod(inst_reg[1]) == 2'b01)   disp_sel = {8{inst_reg[0][7]}, inst_reg[0]};
-        else if (field_mod(inst_reg[1]) == 2'b10)   disp_sel = {inst_reg[0], rom_data};
+        else if (field_mod(inst_reg[1]) == 2'b10)   disp_sel = {  rom_data,        inst_reg[0]};
         else                                        disp_sel = 'b0;
     end
 
@@ -90,24 +90,35 @@ module core (
     always @(posedge clk or negedge rst) begin
         if (~rst) addr_reg <= 'b0;
         else if (first_byte[2] && (
-            mov_rm_r_b(inst_reg[2]) || mov_r_rm_b(inst_reg[2]) || mov_rm_r_w(inst_reg[2]) || mov_r_rm_w(inst_reg[2]) || mov_rm_i_b(inst_reg[2]) || mov_rm_i_w(inst_reg[2]) || mov_rm_sr(inst_reg[2]) || mov_sr_rm(inst_reg[2])
+            mov_rm_r_b(inst_reg[2]) || mov_r_rm_b(inst_reg[2]) ||
+            mov_rm_r_w(inst_reg[2]) || mov_r_rm_w(inst_reg[2]) ||
+            mov_rm_i_b(inst_reg[2]) || mov_rm_i_w(inst_reg[2]) ||
+            mov_rm_sr (inst_reg[2]) || mov_sr_rm (inst_reg[2]) ||
+            push_rm   (inst_reg[2]) || pop_rm    (inst_reg[2])
         )) begin
-            case (field_r_m(inst_reg[1]))
-                3'b000: addr_reg <= `BX + `SI + disp_sel;
-                3'b001: addr_reg <= `BX + `DI + disp_sel;
-                3'b010: addr_reg <= `BP + `SI + disp_sel;
-                3'b011: addr_reg <= `BP + `DI + disp_sel;;
-                3'b100: addr_reg <= `SI + disp_sel;
-                3'b101: addr_reg <= `DI + disp_sel;
-                3'b110: addr_reg <= field_mod(inst_reg[1]) == 2'b00 ? {inst_reg[0], rom_data} : `BP + disp_sel;
-                3'b111: addr_reg <= `BX + disp_sel;
-                default: addr_reg <= 'b0;
-            endcase
+            if (field_mod(inst_reg[1]) == 2'b00 && field_r_m(inst_reg[1]) == 3'b110) begin
+                addr_reg <= disp_sel;
+            end
+            else begin
+                case (field_r_m(inst_reg[1]))
+                    3'b000: addr_reg <= `BX + `SI + disp_sel;
+                    3'b001: addr_reg <= `BX + `DI + disp_sel;
+                    3'b010: addr_reg <= `BP + `SI + disp_sel;
+                    3'b011: addr_reg <= `BP + `DI + disp_sel;
+                    3'b100: addr_reg <= `SI + disp_sel;
+                    3'b101: addr_reg <= `DI + disp_sel;
+                    3'b110: addr_reg <= `BP + disp_sel;
+                    3'b111: addr_reg <= `BX + disp_sel;
+                    default: addr_reg <= 'b0;
+                endcase
+            end
         end
         else if (first_byte[2] && (
-            mov_a_m_b(inst_reg[2]) || mov_a_m_w(inst_reg[2]) || mov_m_a_b(inst_reg[2]) || mov_m_a_w(inst_reg[2])
-        ))
-            addr_reg <= {inst_reg[1], inst_reg[0]};
+            mov_a_m_b(inst_reg[2]) || mov_a_m_w(inst_reg[2]) ||
+            mov_m_a_b(inst_reg[2]) || mov_m_a_w(inst_reg[2])
+        )) begin
+            addr_reg <= {inst_reg[0], inst_reg[1]};
+        end
     end
 
     reg [15:0] data_reg;
@@ -115,14 +126,18 @@ module core (
     always @(posedge clk or negedge rst) begin
         if (~rst) data_reg <= 'b0;
         else if (first_byte[3]) begin
-            if      (mov_rm_r_b(inst_reg[3]))                               data_reg <= {8'b0, register[field_reg(inst_reg[2])]};
-            else if (mov_r_rm_b(inst_reg[3]))                               data_reg <= is_reg_mod(inst_reg[2]) ? {8'b0, register[field_r_m(inst_reg[2])]} : ram_rd_data;
-            else if (mov_rm_r_w(inst_reg[3]))                               data_reg <= {register[reg_w_hi(field_r_m(inst_reg[2]))], register[reg_w_lo(field_r_m(inst_reg[2]))]};
-            else if (mov_r_rm_w(inst_reg[3]))                               data_reg <= is_reg_mod(inst_reg[2]) ? {register[reg_w_hi(field_r_m(inst_reg[2]))], register[reg_w_lo(field_r_m(inst_reg[2]))]} : ram_rd_data;
-            else if (mov_a_m_b(inst_reg[3]) || mov_a_m_w(inst_reg[3]))      data_reg <= ram_rd_data;
-            else if (mov_m_a_b(inst_reg[3]) || mov_m_a_w(inst_reg[3]))      data_reg <= `AX;
-            else if (mov_sr_rm(inst_reg[3]))                                data_reg <= is_reg_mod(inst_reg[2]) ? {register[reg_w_hi(field_r_m(inst_reg[2]))], register[reg_w_lo(field_r_m(inst_reg[2]))]} : ram_rd_data;
-            else if (mov_rm_sr(inst_reg[3]))                                data_reg <= segment_register[field_reg(inst_reg[2])[1:0]];
+            if      (mov_rm_r_b(inst_reg[3]))                                               data_reg <= {8'b0, register[field_reg(inst_reg[2])]};
+            else if (mov_r_rm_b(inst_reg[3]))                                               data_reg <= is_reg_mod(inst_reg[2]) ? {8'b0, register[field_r_m(inst_reg[2])]} : ram_rd_data;
+            else if (mov_rm_r_w(inst_reg[3]))                                               data_reg <= {register[reg_w_hi(field_r_m(inst_reg[2]))], register[reg_w_lo(field_r_m(inst_reg[2]))]};
+            else if (mov_r_rm_w(inst_reg[3]))                                               data_reg <= is_reg_mod(inst_reg[2]) ? {register[reg_w_hi(field_r_m(inst_reg[2]))], register[reg_w_lo(field_r_m(inst_reg[2]))]} : ram_rd_data;
+            else if (mov_a_m_b(inst_reg[3]) || mov_a_m_w(inst_reg[3]))                      data_reg <= ram_rd_data;
+            else if (mov_m_a_b(inst_reg[3]) || mov_m_a_w(inst_reg[3]))                      data_reg <= `AX;
+            else if (mov_sr_rm(inst_reg[3]))                                                data_reg <= is_reg_mod(inst_reg[2]) ? {register[reg_w_hi(field_r_m(inst_reg[2]))], register[reg_w_lo(field_r_m(inst_reg[2]))]} : ram_rd_data;
+            else if (mov_rm_sr(inst_reg[3]))                                                data_reg <= segment_register[field_reg(inst_reg[2])[1:0]];
+            else if (push_rm(inst_reg[3]))                                                  data_reg <= is_reg_mod(inst_reg[2]) ? {register[reg_w_hi(field_r_m(inst_reg[2]))], register[reg_w_lo(field_r_m(inst_reg[2]))]} : ram_rd_data;
+            else if (push_r(inst_reg[3]))                                                   data_reg <= {register[reg_w_hi(field_r_m(inst_reg[3]))], register[reg_w_lo(field_r_m(inst_reg[3]))]};
+            else if (push_sr(inst_reg[3]))                                                  data_reg <= segment_register[field_reg(inst_reg[2])[1:0]];
+            else if (pop_rm(inst_reg[3]) || pop_r(inst_reg[3]) || pop_sr(inst_reg[3]))      data_reg <= ram_rd_data;
         end
     end
 
@@ -135,17 +150,21 @@ module core (
             end
         end
         else if (first_byte[4]) begin
-            if      (mov_rm_r_b(inst_reg[4]) && is_reg_mod(inst_reg[3]))    register[field_r_m(inst_reg[3])] <= data_reg[7:0];
-            else if (mov_r_rm_b(inst_reg[4]))                               register[field_reg(inst_reg[3])] <= data_reg[7:0];
-            else if (mov_rm_r_w(inst_reg[4]) && is_reg_mod(inst_reg[3]))    {register[reg_w_hi(field_r_m(inst_reg[3]))], register[reg_w_lo(field_r_m(inst_reg[3]))]} <= data_reg;
-            else if (mov_r_rm_w(inst_reg[4]))                               {register[reg_w_hi(field_r_m(inst_reg[3]))], register[reg_w_lo(field_r_m(inst_reg[3]))]} <= data_reg;
-            else if (mov_rm_i_b(inst_reg[4]) && is_reg_mod(inst_reg[3]))    register[field_r_m(inst_reg[3])] <= inst_reg[2];
-            else if (mov_rm_i_w(inst_reg[4]) && is_reg_mod(inst_reg[3]))    {register[reg_w_hi(field_r_m(inst_reg[3]))], register[reg_w_lo(field_r_m(inst_reg[3]))]} <= {inst_reg[2], inst_reg[1]};
-            else if (mov_r_i_b(inst_reg[4]))                                register[field_r_m(inst_reg[4])] <= inst_reg[3];
-            else if (mov_r_i_w(inst_reg[4]))                                {register[reg_w_hi(field_r_m(inst_reg[4]))], register[reg_w_lo(field_r_m(inst_reg[4]))]} <= {inst_reg[3], inst_reg[2]};
-            else if (mov_a_m_b(inst_reg[4]))                                `AL <= data_reg[ 7:0];
-            else if (mov_a_m_w(inst_reg[4]))                                `AX <= data_reg[15:0];
-            else if (mov_rm_sr(inst_reg[4]) && is_reg_mod(inst_reg[3]))     {register[reg_w_hi(field_r_m(inst_reg[3]))], register[reg_w_lo(field_r_m(inst_reg[3]))]} <= data_reg;
+            if      (mov_rm_r_b(inst_reg[4]) && is_reg_mod(inst_reg[3]))                    register[field_r_m(inst_reg[3])] <= data_reg[7:0];
+            else if (mov_r_rm_b(inst_reg[4]))                                               register[field_reg(inst_reg[3])] <= data_reg[7:0];
+            else if (mov_rm_r_w(inst_reg[4]) && is_reg_mod(inst_reg[3]))                    {register[reg_w_hi(field_r_m(inst_reg[3]))], register[reg_w_lo(field_r_m(inst_reg[3]))]} <= data_reg;
+            else if (mov_r_rm_w(inst_reg[4]))                                               {register[reg_w_hi(field_reg(inst_reg[3]))], register[reg_w_lo(field_reg(inst_reg[3]))]} <= data_reg;
+            else if (mov_rm_i_b(inst_reg[4]) && is_reg_mod(inst_reg[3]))                    register[field_r_m(inst_reg[3])] <= inst_reg[2];
+            else if (mov_rm_i_w(inst_reg[4]) && is_reg_mod(inst_reg[3]))                    {register[reg_w_hi(field_r_m(inst_reg[3]))], register[reg_w_lo(field_r_m(inst_reg[3]))]} <= {inst_reg[1], inst_reg[2]};
+            else if (mov_r_i_b(inst_reg[4]))                                                register[field_r_m(inst_reg[4])] <= inst_reg[3];
+            else if (mov_r_i_w(inst_reg[4]))                                                {register[reg_w_hi(field_r_m(inst_reg[4]))], register[reg_w_lo(field_r_m(inst_reg[4]))]} <= {inst_reg[2], inst_reg[3]};
+            else if (mov_a_m_b(inst_reg[4]))                                                `AL <= data_reg[ 7:0];
+            else if (mov_a_m_w(inst_reg[4]))                                                `AX <= data_reg[15:0];
+            else if (mov_rm_sr(inst_reg[4]) && is_reg_mod(inst_reg[3]))                     {register[reg_w_hi(field_r_m(inst_reg[3]))], register[reg_w_lo(field_r_m(inst_reg[3]))]} <= data_reg;
+            else if (push_rm(inst_reg[4]) || push_r(inst_reg[4]) || push_sr(inst_reg[4]))   `SP <= `SP - 'h2;
+            else if (pop_rm(inst_reg[4]) && is_reg_mod(inst_reg[3]))                        begin `SP <= `SP + 'h2; {register[reg_w_hi(field_r_m(inst_reg[3]))], register[reg_w_lo(field_r_m(inst_reg[3]))]} <= data_reg; end
+            else if (pop_r(inst_reg[4]))                                                    begin `SP <= `SP + 'h2; {register[reg_w_hi(field_r_m(inst_reg[4]))], register[reg_w_lo(field_r_m(inst_reg[4]))]} <= data_reg; end
+            else if (pop_sr(inst_reg[4]))                                                   begin `SP <= `SP + 'h2; segment_register[field_reg(inst_reg[2])[1:0]] <= data_reg; end
         end
     end
 
@@ -167,24 +186,33 @@ module core (
     assign ram_rd_en = first_byte[3] && (
         mov_r_rm_b(inst_reg[3]) && is_mem_mod(inst_reg[2]) ||
         mov_r_rm_w(inst_reg[3]) && is_mem_mod(inst_reg[2]) ||
-        mov_a_m_b(inst_reg[3]) || mov_a_m_w(inst_reg[3])
+        mov_a_m_b (inst_reg[3]) || mov_a_m_w (inst_reg[3]) ||
+        push_rm   (inst_reg[3]) && is_mem_mod(inst_reg[2]) ||
+        pop_rm    (inst_reg[3]) || pop_r     (inst_reg[3]) || pop_sr(inst_reg[3])
     );
 
     assign ram_rd_we = first_byte[3] && (
         mov_r_rm_w(inst_reg[3]) && is_mem_mod(inst_reg[2]) ||
-        mov_a_m_w(inst_reg[3])
+        mov_a_m_w (inst_reg[3]) ||
+        push_rm   (inst_reg[3]) && is_mem_mod(inst_reg[2]) ||
+        pop_rm    (inst_reg[3]) || pop_r     (inst_reg[3]) || pop_sr(inst_reg[3])
     );
 
-    reg [15:0] ram_rd_addr_signal;
+    reg [19:0] ram_rd_addr_signal;
 
     always @(*) begin
         if (~rst) ram_rd_addr_signal = 'b0;
         else if (first_byte[3] && (
             mov_r_rm_b(inst_reg[3]) && is_mem_mod(inst_reg[2]) ||
             mov_r_rm_w(inst_reg[3]) && is_mem_mod(inst_reg[2]) ||
-            mov_a_m_b(inst_reg[3]) || mov_a_m_w(inst_reg[3])
+            mov_a_m_b (inst_reg[3]) || mov_a_m_w (inst_reg[3]) ||
+            push_rm   (inst_reg[3]) && is_mem_mod(inst_reg[2]) ||
         ))
-            ram_rd_addr_signal = addr_reg;
+            ram_rd_addr_signal = {`DS, 4'b0} + addr_reg;
+        else if (first_byte[3] && (
+            pop_rm    (inst_reg[3]) || pop_r     (inst_reg[3]) || pop_sr(inst_reg[3])
+        ))
+            ram_rd_addr_signal = {`SS, 4'b0} + `SP;
     end
 
     assign ram_rd_addr = ram_rd_addr_signal;
@@ -194,16 +222,18 @@ module core (
         mov_rm_r_w(inst_reg[4]) && is_mem_mod(inst_reg[3]) ||
         mov_rm_i_b(inst_reg[4]) && is_mem_mod(inst_reg[3]) ||
         mov_rm_i_w(inst_reg[4]) && is_mem_mod(inst_reg[3]) ||
-        mov_m_a_b(inst_reg[4]) || mov_m_a_w(inst_reg[4])
+        mov_m_a_b (inst_reg[4]) || mov_m_a_w (inst_reg[4]) ||
+        push_rm   (inst_reg[4]) || push_r    (inst_reg[4]) || push_sr(inst_reg[4])
     );
 
     assign ram_wr_we = first_byte[4] && (
         mov_rm_r_w(inst_reg[4]) && is_mem_mod(inst_reg[3]) ||
         mov_rm_i_w(inst_reg[4]) && is_mem_mod(inst_reg[3]) ||
-        mov_m_a_w(inst_reg[4])
+        mov_m_a_w (inst_reg[4]) ||
+        push_rm   (inst_reg[4]) || push_r    (inst_reg[3]) || push_sr(inst_reg[4])
     );
 
-    reg [15:0] ram_wr_addr_signal;
+    reg [19:0] ram_wr_addr_signal;
 
     always @(*) begin
         if (~rst)
@@ -213,9 +243,13 @@ module core (
             mov_rm_r_w(inst_reg[4]) && is_mem_mod(inst_reg[3]) ||
             mov_rm_i_b(inst_reg[4]) && is_mem_mod(inst_reg[3]) ||
             mov_rm_i_w(inst_reg[4]) && is_mem_mod(inst_reg[3]) ||
-            mov_m_a_b(inst_reg[4]) || mov_m_a_w(inst_reg[4])
+            mov_m_a_b (inst_reg[4]) || mov_m_a_w (inst_reg[4])
         ))
-            ram_wr_addr = addr_reg;
+            ram_wr_addr_signal = {`DS, 4'b0} + addr_reg;
+        else if (first_byte[4] && (
+            push_rm   (inst_reg[4]) || push_r    (inst_reg[4]) || push_sr(inst_reg[4])
+        ))
+            ram_wr_addr_signal = {`SS, 4'b0} + `SP - 'h2;
     end
 
     assign ram_wr_addr = ram_wr_addr_signal;
@@ -228,17 +262,27 @@ module core (
         else if (first_byte[4] && (
             mov_rm_r_b(inst_reg[4]) && is_mem_mod(inst_reg[3]) ||
             mov_rm_r_w(inst_reg[4]) && is_mem_mod(inst_reg[3]) ||
-            mov_m_a_b(inst_reg[4]) || mov_m_a_w(inst_reg[4])
+            mov_m_a_b (inst_reg[4]) || mov_m_a_w (inst_reg[4]) ||
+            push_rm   (inst_reg[4]) || push_r    (inst_reg[4]) || push_sr(inst_reg[4])
         ))
             ram_wr_data_signal = data_reg;
         else if (first_byte[4] && (
             mov_rm_i_b(inst_reg[4]) && is_mem_mod(inst_reg[3])
         ))
-            ram_wr_data_signal = {8'b0, disp0(inst_reg[3]) ? inst_reg[2] : disp1(inst_reg[3]) ? inst_reg[1] : disp2(inst_reg[3]) ? inst_reg[0] : 'b0};
+            ram_wr_data_signal = {8'b0, 
+                disp0(inst_reg[3]) ? inst_reg[2] :
+                disp1(inst_reg[3]) ? inst_reg[1] :
+                disp2(inst_reg[3]) ? inst_reg[0] :
+                'b0
+            };
         else if (first_byte[4] && (
             mov_rm_i_w(inst_reg[4]) && is_mem_mod(inst_reg[3])
         ))
-            ram_wr_data_signal = disp0(inst_reg[3]) ? {inst_reg[2], inst_reg[1]} : disp1(inst_reg[3]) ? {inst_reg[1], inst_reg[0]} : disp2(inst_reg[3]) ? {inst_reg[0], rom_data} : 'b0;
+            ram_wr_data_signal = 
+                disp0(inst_reg[3]) ? {inst_reg[1], inst_reg[2]} :
+                disp1(inst_reg[3]) ? {inst_reg[0], inst_reg[1]} :
+                disp2(inst_reg[3]) ? {rom_data,    inst_reg[0]} :
+                'b0;
     end
 
     assign ram_wr_data = ram_wr_data_signal;
