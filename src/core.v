@@ -188,6 +188,7 @@ module core (
             else if (pop_sr     (inst_reg[4]))      {segment_register[field_reg(inst_reg[2])[1:0]], `SP} <= {data_reg, `SP + 'h2};
             else if (xchg_r_rm_b(inst_reg[4]))      register[field_reg(inst_reg[3])] <= data_reg[7:0];
             else if (xchg_r_rm_w(inst_reg[4]))      {register[reg_w_hi(field_reg(inst_reg[3]))], register[reg_w_lo(field_reg(inst_reg[3]))]} <= data_reg;
+            else if (xlat       (inst_reg[4]))      `AL <= data_reg[ 7:0];
         end
     end
 
@@ -213,10 +214,10 @@ module core (
 
     )) || (first_byte[3] && (
         mov_a_m_b  (inst_reg[3]) || mov_a_m_w  (inst_reg[3]) ||
-        pop_rm     (inst_reg[3])
-        pop_r      (inst_reg[3])
-        pop_sr     (inst_reg[3])
-
+        pop_rm     (inst_reg[3]) ||
+        pop_r      (inst_reg[3]) ||
+        pop_sr     (inst_reg[3]) ||
+        xlat       (inst_reg[3])
     ));
 
     assign ram_rd_we = (first_byte[3] && is_mem_mod(inst_reg[2]) && (
@@ -249,6 +250,8 @@ module core (
             pop_sr(inst_reg[3])
         ))
             ram_rd_addr_signal = {`SS, 4'b0} + `SP;
+        else if (first_byte[3] && xlat(inst_reg[3]))
+            ram_rd_addr_signal = `BX + {8'b0, `AL};
         else
             ram_rd_addr_signal = 'b0;
     end
@@ -349,7 +352,5 @@ module core (
     end
 
     assign ram_wr_data = ram_wr_data_signal;
-
-    
 
 endmodule

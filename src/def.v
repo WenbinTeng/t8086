@@ -49,7 +49,8 @@ function pop_sr         (input [7:0] i); pop_sr         = (i&'he7==8'b00000111);
 function xchg_r_rm_b    (input [7:0] i); xchg_r_rm_b    = (i[7:0]==8'b10000110); endfunction
 function xchg_r_rm_w    (input [7:0] i); xchg_r_rm_w    = (i[7:0]==8'b10000111); endfunction
 function xchg_a_r       (input [7:0] i); xchg_a_r       = (i[7:3]==5'b10010   ); endfunction
-
+// XLAT
+function xlat           (input [7:0] i); xlat           = (i[7:0]==8'b11010111); endfunction
 
 
 function length1 (input [7:0] i);
