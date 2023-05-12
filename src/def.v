@@ -57,6 +57,10 @@ function lea            (input [7:0] i); lea            = (i[7:0]==8'b10001101);
 function lds            (input [7:0] i); lds            = (i[7:0]==8'b11000101); endfunction
 // LES
 function les            (input [7:0] i); les            = (i[7:0]==8'b11000100); endfunction
+// LAHF
+function lahf           (input [7:0] i); lahf           = (i[7:0]==8'b10011111); endfunction
+// SAHF
+function sahf           (input [7:0] i); sahf           = (i[7:0]==8'b10011110); endfunction
 
 function length1 (input [7:0] i);
     length1 = push_r(i)|push_sr(i)|pop_r(i)|pop_sr(i)|xchg_a_r(i)|xlat(i);

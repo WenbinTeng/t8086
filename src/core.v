@@ -157,6 +157,8 @@ module core (
             else if (xchg_r_rm_w(inst_reg[3]))      data_reg <= ram_rd_data;
             else if (lds        (inst_reg[3]))      data_reg <= ram_rd_data;
             else if (les        (inst_reg[3]))      data_reg <= ram_rd_data;
+            else if (lahf       (inst_reg[3]))      data_reg <= flags;
+            else if (sahf       (inst_reg[3]))      data_reg <= `AH;
         end
     end
 
@@ -196,6 +198,7 @@ module core (
             else if (lea        (inst_reg[4]))      {register[reg_w_hi(field_reg(inst_reg[3]))], register[reg_w_lo(field_reg(inst_reg[3]))]} <= addr_reg;
             else if (lds        (inst_reg[4]))      {register[reg_w_hi(field_reg(inst_reg[3]))], register[reg_w_lo(field_reg(inst_reg[3]))]} <= data_reg;
             else if (les        (inst_reg[4]))      {register[reg_w_hi(field_reg(inst_reg[3]))], register[reg_w_lo(field_reg(inst_reg[3]))]} <= data_reg;
+            else if (lahf       (inst_reg[4]))      `AH <= data_reg[7:0];
         end
     end
 
@@ -215,6 +218,14 @@ module core (
     end
 
     reg [15:0] flags;
+
+    always @(posedge clk or negedge rst) begin
+        if (~rst)
+            flags <= 'b0;
+        else if (first_byte[4]) begin
+            if      (sahf       (inst_reg[4]))      flags <= data_reg;
+        end
+    end
 
     assign ram_rd_en = (first_byte[3] && is_mem_mod(inst_reg[2]) && (
         mov_r_rm_b (inst_reg[3]) || mov_r_rm_w (inst_reg[3]) ||
