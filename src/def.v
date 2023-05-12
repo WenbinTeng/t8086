@@ -61,6 +61,10 @@ function les            (input [7:0] i); les            = (i[7:0]==8'b11000100);
 function lahf           (input [7:0] i); lahf           = (i[7:0]==8'b10011111); endfunction
 // SAHF
 function sahf           (input [7:0] i); sahf           = (i[7:0]==8'b10011110); endfunction
+// PUSHF
+function pushf          (input [7:0] i); pushf          = (i[7:0]==8'b10011100); endfunction
+// POPF
+function popf           (input [7:0] i)l popf           = (i[7:0]==8'b10011101); endfunction
 
 function length1 (input [7:0] i);
     length1 = push_r(i)|push_sr(i)|pop_r(i)|pop_sr(i)|xchg_a_r(i)|xlat(i);
