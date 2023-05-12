@@ -51,25 +51,33 @@ function xchg_r_rm_w    (input [7:0] i); xchg_r_rm_w    = (i[7:0]==8'b10000111);
 function xchg_a_r       (input [7:0] i); xchg_a_r       = (i[7:3]==5'b10010   ); endfunction
 // XLAT
 function xlat           (input [7:0] i); xlat           = (i[7:0]==8'b11010111); endfunction
-
+// LEA
+function lea            (input [7:0] i); lea            = (i[7:0]==8'b10001101); endfunction
+// LDS
+function lds            (input [7:0] i); lds            = (i[7:0]==8'b11000101); endfunction
+// LES
+function les            (input [7:0] i); les            = (i[7:0]==8'b11000100); endfunction
 
 function length1 (input [7:0] i);
-    length1 = push_r(i)|push_sr(i)|pop_r(i)|pop_sr(i)|xchg_a_r(i);
+    length1 = push_r(i)|push_sr(i)|pop_r(i)|pop_sr(i)|xchg_a_r(i)|xlat(i);
 endfunction
 
 function length2 (input [7:0] i1, input [7:0] i2);
     length2 = mov_rm_r_b(i1)&disp0(i2)|mov_r_rm_b(i1)&disp0(i2)|mov_rm_r_w(i1)&disp0(i2)|mov_r_rm_w(i1)&disp0(i2)|mov_r_i_b(i1)|mov_sr_rm(i1)&disp0(i2)|mov_rm_sr(i1)&disp0(i2)|
-              push_rm(i1)&disp0(i2)|pop_rm(i1)&disp0(i2)|xchg_r_rm_b(i1)&disp0(i2)|xchg_r_rm_w(i1)&disp0(i2);
+              push_rm(i1)&disp0(i2)|pop_rm(i1)&disp0(i2)|xchg_r_rm_b(i1)&disp0(i2)|xchg_r_rm_w(i1)&disp0(i2)|
+              lea(i1)&disp0(i2)|lds(i1)&disp0(i2)|les(i1)&disp0(i2);
 endfunction
 
 function length3 (input [7:0] i1, input [7:0] i2);
     length3 = mov_rm_r_b(i1)&disp1(i2)|mov_r_rm_b(i1)&disp1(i2)|mov_rm_r_w(i1)&disp1(i2)|mov_r_rm_w(i1)&disp1(i2)|mov_rm_i_b(i1)&disp0(i2)|mov_r_i_w(i1)|mov_a_m_b(i1)|mov_a_m_w(i1)|mov_m_a_b(i1)|mov_m_a_w(i1)|mov_sr_rm(i1)&disp1(i2)|mov_rm_sr(i1)&disp1(i2)|
-              push_rm(i1)&disp1(i2)|pop_rm(i1)&disp1(i2)|xchg_r_rm_b(i1)&disp1(i2)|xchg_r_rm_w(i1)&disp1(i2);
+              push_rm(i1)&disp1(i2)|pop_rm(i1)&disp1(i2)|xchg_r_rm_b(i1)&disp1(i2)|xchg_r_rm_w(i1)&disp1(i2)|
+              lea(i1)&disp1(i2)|lds(i1)&disp1(i2)|les(i1)&disp1(i2);
 endfunction
 
 function length4 (input [7:0] i1, input [7:0] i2);
     length4 = mov_rm_r_b(i1)&disp2(i2)|mov_r_rm_b(i1)&disp2(i2)|mov_rm_r_w(i1)&disp2(i2)|mov_r_rm_w(i1)&disp2(i2)|mov_rm_i_b(i1)&disp1(i2)|mov_rm_i_w(i1)&disp0(i2)|mov_sr_rm(i1)&disp2(i2)|mov_rm_sr(i1)&disp2(i2)|
-              push_rm(i1)&disp2(i2)|pop_rm(i1)&disp2(i2)|xchg_r_rm_b(i1)&disp2(i2)|xchg_r_rm_w(i1)&disp2(i2);
+              push_rm(i1)&disp2(i2)|pop_rm(i1)&disp2(i2)|xchg_r_rm_b(i1)&disp2(i2)|xchg_r_rm_w(i1)&disp2(i2)|
+              lea(i1)&disp1(i2)|lds(i1)&disp1(i2)|les(i1)&disp1(i2);
 endfunction
 
 function length5 (input [7:0] i1, input [7:0] i2);

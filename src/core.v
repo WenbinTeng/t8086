@@ -95,7 +95,9 @@ module core (
             mov_rm_i_b (inst_reg[2]) || mov_rm_i_w (inst_reg[2]) ||
             mov_rm_sr  (inst_reg[2]) || mov_sr_rm  (inst_reg[2]) ||
             push_rm    (inst_reg[2]) || pop_rm     (inst_reg[2]) ||
-            xchg_r_rm_b(inst_reg[2]) || xchg_r_rm_w(inst_reg[2])
+            xchg_r_rm_b(inst_reg[2]) || xchg_r_rm_w(inst_reg[2]) ||
+            lea        (inst_reg[2]) ||
+            lds        (inst_reg[2]) || les         (inst_reg[2])
         )) begin
             if (field_mod(inst_reg[1]) == 2'b00 && field_r_m(inst_reg[1]) == 3'b110) begin
                 addr_reg <= disp_sel;
@@ -153,6 +155,8 @@ module core (
             else if (pop_sr     (inst_reg[3]))      data_reg <= ram_rd_data;
             else if (xchg_r_rm_b(inst_reg[3]))      data_reg <= ram_rd_data;
             else if (xchg_r_rm_w(inst_reg[3]))      data_reg <= ram_rd_data;
+            else if (lds        (inst_reg[3]))      data_reg <= ram_rd_data;
+            else if (les        (inst_reg[3]))      data_reg <= ram_rd_data;
         end
     end
 
@@ -189,6 +193,9 @@ module core (
             else if (xchg_r_rm_b(inst_reg[4]))      register[field_reg(inst_reg[3])] <= data_reg[7:0];
             else if (xchg_r_rm_w(inst_reg[4]))      {register[reg_w_hi(field_reg(inst_reg[3]))], register[reg_w_lo(field_reg(inst_reg[3]))]} <= data_reg;
             else if (xlat       (inst_reg[4]))      `AL <= data_reg[ 7:0];
+            else if (lea        (inst_reg[4]))      {register[reg_w_hi(field_reg(inst_reg[3]))], register[reg_w_lo(field_reg(inst_reg[3]))]} <= addr_reg;
+            else if (lds        (inst_reg[4]))      {register[reg_w_hi(field_reg(inst_reg[3]))], register[reg_w_lo(field_reg(inst_reg[3]))]} <= data_reg;
+            else if (les        (inst_reg[4]))      {register[reg_w_hi(field_reg(inst_reg[3]))], register[reg_w_lo(field_reg(inst_reg[3]))]} <= data_reg;
         end
     end
 
@@ -201,7 +208,9 @@ module core (
             end
         end
         else if (first_byte[4]) begin
-            if      (mov_sr_rm(inst_reg[4]))                                                segment_register[field_reg(inst_reg[3])[1:0]] <= data_reg;
+            if      (mov_sr_rm  (inst_reg[4]))      segment_register[field_reg(inst_reg[3])[1:0]] <= data_reg;
+            else if (lds        (inst_reg[4]))      `DS <= ram_rd_data;
+            else if (les        (inst_reg[4]))      `ES <= ram_rd_data;
         end
     end
 
@@ -217,7 +226,10 @@ module core (
         pop_rm     (inst_reg[3]) ||
         pop_r      (inst_reg[3]) ||
         pop_sr     (inst_reg[3]) ||
-        xlat       (inst_reg[3])
+        xlat       (inst_reg[3]) ||
+        lds        (inst_reg[3]) || les        (inst_reg[3])
+    )) || (first_byte[4] && (
+        lds        (inst_reg[4]) || les        (inst_reg[4])
     ));
 
     assign ram_rd_we = (first_byte[3] && is_mem_mod(inst_reg[2]) && (
@@ -228,7 +240,10 @@ module core (
         mov_a_m_w  (inst_reg[3]) ||
         pop_rm     (inst_reg[3]) ||
         pop_r      (inst_reg[3]) ||
-        pop_sr     (inst_reg[3])
+        pop_sr     (inst_reg[3]) ||
+        lds        (inst_reg[3]) || les        (inst_reg[3])
+    )) || (first_byte[4] && (
+        lds        (inst_reg[4]) || les        (inst_reg[4])
     ));
 
     reg [19:0] ram_rd_addr_signal;
@@ -241,17 +256,25 @@ module core (
             push_rm    (inst_reg[3]) ||
             xchg_r_rm_b(inst_reg[3]) || xchg_r_rm_w(inst_reg[3])
         )) || (first_byte[3] && (
-            mov_a_m_b  (inst_reg[3]) || mov_a_m_w  (inst_reg[3])
+            mov_a_m_b  (inst_reg[3]) || mov_a_m_w  (inst_reg[3]) ||
         )))
             ram_rd_addr_signal = {`DS, 4'b0} + addr_reg;
         else if (first_byte[3] && (
-            pop_rm    (inst_reg[3]) ||
-            pop_r     (inst_reg[3]) ||
-            pop_sr(inst_reg[3])
+            pop_rm     (inst_reg[3]) ||
+            pop_r      (inst_reg[3]) ||
+            pop_sr     (inst_reg[3])
         ))
             ram_rd_addr_signal = {`SS, 4'b0} + `SP;
         else if (first_byte[3] && xlat(inst_reg[3]))
             ram_rd_addr_signal = `BX + {8'b0, `AL};
+        else if (first_byte[3] && lds(inst_reg[3]))
+            ram_rd_addr_signal = {`DS, 4'b0} + addr_reg;
+        else if (first_byte[3] && les(inst_reg[3]))
+            ram_rd_addr_signal = {`ES, 4'b0} + addr_reg;
+        else if (first_byte[4] && lds(inst_reg[4]))
+            ram_rd_addr_signal = {`DS, 4'b0} + addr_reg + 'h2;
+        else if (first_byte[4] && les(inst_reg[4]))
+            ram_rd_addr_signal = {`ES, 4'b0} + addr_reg + 'h2;
         else
             ram_rd_addr_signal = 'b0;
     end
