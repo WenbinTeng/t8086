@@ -31,60 +31,74 @@
 
 // DATA TRANSFER OPERATIONS
 // MOV
-function mov_rm_r_b     (input [7:0] i); mov_rm_r_b     = (i[7:0]==8'b10001000); endfunction
-function mov_r_rm_b     (input [7:0] i); mov_r_rm_b     = (i[7:0]==8'b10001010); endfunction
-function mov_rm_r_w     (input [7:0] i); mov_rm_r_w     = (i[7:0]==8'b10001001); endfunction
-function mov_r_rm_w     (input [7:0] i); mov_r_rm_w     = (i[7:0]==8'b10001011); endfunction
-function mov_rm_i_b     (input [7:0] i); mov_rm_i_b     = (i[7:0]==8'b11000110); endfunction
-function mov_rm_i_w     (input [7:0] i); mov_rm_i_w     = (i[7:0]==8'b11000111); endfunction
-function mov_r_i_b      (input [7:0] i); mov_r_i_b      = (i[7:3]==5'b10110   ); endfunction
-function mov_r_i_w      (input [7:0] i); mov_r_i_w      = (i[7:3]==5'b10111   ); endfunction
-function mov_a_m_b      (input [7:0] i); mov_a_m_b      = (i[7:0]==8'b10100000); endfunction
-function mov_a_m_w      (input [7:0] i); mov_a_m_w      = (i[7:0]==8'b10100001); endfunction
-function mov_m_a_b      (input [7:0] i); mov_m_a_b      = (i[7:0]==8'b10100010); endfunction
-function mov_m_a_w      (input [7:0] i); mov_m_a_w      = (i[7:0]==8'b10100011); endfunction
-function mov_sr_rm      (input [7:0] i); mov_sr_rm      = (i[7:0]==8'b10001110); endfunction
-function mov_rm_sr      (input [7:0] i); mov_rm_sr      = (i[7:0]==8'b10001100); endfunction
+function mov_rm_r_b     (input[7:0]i);      mov_rm_r_b      = (i[7:0]==8'b10001000);                    endfunction
+function mov_r_rm_b     (input[7:0]i);      mov_r_rm_b      = (i[7:0]==8'b10001010);                    endfunction
+function mov_rm_r_w     (input[7:0]i);      mov_rm_r_w      = (i[7:0]==8'b10001001);                    endfunction
+function mov_r_rm_w     (input[7:0]i);      mov_r_rm_w      = (i[7:0]==8'b10001011);                    endfunction
+function mov_rm_i_b     (input[7:0]i1,i2);  mov_rm_i_b      = (i1[7:0]==8'b11000110&i2[5:3]==3'b000);   endfunction
+function mov_rm_i_w     (input[7:0]i1,i2);  mov_rm_i_w      = (i1[7:0]==8'b11000111&i2[5:3]==3'b000);   endfunction
+function mov_r_i_b      (input[7:0]i);      mov_r_i_b       = (i[7:3]==5'b10110);                       endfunction
+function mov_r_i_w      (input[7:0]i);      mov_r_i_w       = (i[7:3]==5'b10111);                       endfunction
+function mov_a_m_b      (input[7:0]i);      mov_a_m_b       = (i[7:0]==8'b10100000);                    endfunction
+function mov_a_m_w      (input[7:0]i);      mov_a_m_w       = (i[7:0]==8'b10100001);                    endfunction
+function mov_m_a_b      (input[7:0]i);      mov_m_a_b       = (i[7:0]==8'b10100010);                    endfunction
+function mov_m_a_w      (input[7:0]i);      mov_m_a_w       = (i[7:0]==8'b10100011);                    endfunction
+function mov_sr_rm      (input[7:0]i);      mov_sr_rm       = (i[7:0]==8'b10001110);                    endfunction
+function mov_rm_sr      (input[7:0]i);      mov_rm_sr       = (i[7:0]==8'b10001100);                    endfunction
 // PUSH
-function push_rm        (input [7:0] i); push_rm        = (i[7:0]==8'b11111111); endfunction
-function push_r         (input [7:0] i); push_r         = (i[7:3]==5'b01010   ); endfunction
-function push_sr        (input [7:0] i); push_sr        = (i&'he7==8'b00000110); endfunction
+function push_rm        (input[7:0]i1,i2);  push_rm         = (i1[7:0]==8'b11111111&i2[5:3]==3'b110);   endfunction
+function push_r         (input[7:0]i);      push_r          = (i[7:3]==5'b01010);                       endfunction
+function push_sr        (input[7:0]i);      push_sr         = (i&'he7==8'b00000110);                    endfunction
 // POP
-function pop_rm         (input [7:0] i); pop_rm         = (i[7:0]==8'b10001111); endfunction
-function pop_r          (input [7:0] i); pop_r          = (i[7:3]==5'b01011   ); endfunction
-function pop_sr         (input [7:0] i); pop_sr         = (i&'he7==8'b00000111); endfunction
+function pop_rm         (input[7:0]i1,i2);  pop_rm          = (i1[7:0]==8'b10001111&i2[5:3]==3'b000);   endfunction
+function pop_r          (input[7:0]i);      pop_r           = (i[7:3]==5'b01011);                       endfunction
+function pop_sr         (input[7:0]i);      pop_sr          = (i&'he7==8'b00000111);                    endfunction
 // XCHG
-function xchg_r_rm_b    (input [7:0] i); xchg_r_rm_b    = (i[7:0]==8'b10000110); endfunction
-function xchg_r_rm_w    (input [7:0] i); xchg_r_rm_w    = (i[7:0]==8'b10000111); endfunction
-function xchg_a_r       (input [7:0] i); xchg_a_r       = (i[7:3]==5'b10010   ); endfunction
+function xchg_r_rm_b    (input[7:0]i);      xchg_r_rm_b     = (i[7:0]==8'b10000110);                    endfunction
+function xchg_r_rm_w    (input[7:0]i);      xchg_r_rm_w     = (i[7:0]==8'b10000111);                    endfunction
+function xchg_a_r       (input[7:0]i);      xchg_a_r        = (i[7:3]==5'b10010);                       endfunction
 // XLAT
-function xlat           (input [7:0] i); xlat           = (i[7:0]==8'b11010111); endfunction
+function xlat           (input[7:0]i);      xlat            = (i[7:0]==8'b11010111);                    endfunction
 // LEA
-function lea            (input [7:0] i); lea            = (i[7:0]==8'b10001101); endfunction
+function lea            (input[7:0]i);      lea             = (i[7:0]==8'b10001101);                    endfunction
 // LDS
-function lds            (input [7:0] i); lds            = (i[7:0]==8'b11000101); endfunction
+function lds            (input[7:0]i);      lds             = (i[7:0]==8'b11000101);                    endfunction
 // LES
-function les            (input [7:0] i); les            = (i[7:0]==8'b11000100); endfunction
+function les            (input[7:0]i);      les             = (i[7:0]==8'b11000100);                    endfunction
 // LAHF
-function lahf           (input [7:0] i); lahf           = (i[7:0]==8'b10011111); endfunction
+function lahf           (input[7:0]i);      lahf            = (i[7:0]==8'b10011111);                    endfunction
 // SAHF
-function sahf           (input [7:0] i); sahf           = (i[7:0]==8'b10011110); endfunction
+function sahf           (input[7:0]i);      sahf            = (i[7:0]==8'b10011110);                    endfunction
 // PUSHF
-function pushf          (input [7:0] i); pushf          = (i[7:0]==8'b10011100); endfunction
+function pushf          (input[7:0]i);      pushf           = (i[7:0]==8'b10011100);                    endfunction
 // POPF
-function popf           (input [7:0] i)l popf           = (i[7:0]==8'b10011101); endfunction
+function popf           (input[7:0]i)l      popf            = (i[7:0]==8'b10011101);                    endfunction
 
 // ARITHMETIC OPERATIONS
 // ADD
-function add_rm_r_b     (input [7:0] i); add_rm_r_b     = (i[7:0]==8'b00000000); endfunction
-function add_r_rm_b     (input [7:0] i); add_r_rm_b     = (i[7:0]==8'b00000010); endfunction
-function add_rm_r_w     (input [7:0] i); add_rm_r_w     = (i[7:0]==8'b00000001); endfunction
-function add_r_rm_w     (input [7:0] i); add_r_rm_w     = (i[7:0]==8'b00000011); endfunction
-function add_rm_i_b     (input [7:0] i); add_rm_i_b     = (i[7:0]==8'b10000000); endfunction
-function add_rm_zi_w    (input [7:0] i); add_rm_zi_w    = (i[7:0]==8'b10000001); endfunction
-function add_rm_si_w    (input [7:0] i); add_rm_si_w    = (i[7:0]==8'b10000011); endfunction
-function add_a_i_b      (input [7:0] i); add_a_i_b      = (i[7:0]==8'b00010100); endfunction
-function add_a_i_w      (input [7:0] i); add_a_i_w      = (i[7:0]==8'b00010101); endfunction
+function add_rm_r_b     (input[7:0]i);      add_rm_r_b      = (i[7:0]==8'b00000000);                    endfunction
+function add_r_rm_b     (input[7:0]i);      add_r_rm_b      = (i[7:0]==8'b00000010);                    endfunction
+function add_rm_r_w     (input[7:0]i);      add_rm_r_w      = (i[7:0]==8'b00000001);                    endfunction
+function add_r_rm_w     (input[7:0]i);      add_r_rm_w      = (i[7:0]==8'b00000011);                    endfunction
+function add_rm_i_b     (input[7:0]i1,i2);  add_rm_i_b      = (i1[7:0]==8'b10000000&i2[5:3]==3'b000);   endfunction
+function add_rm_zi_w    (input[7:0]i1,i2);  add_rm_zi_w     = (i1[7:0]==8'b10000001&i2[5:3]==3'b000);   endfunction
+function add_rm_si_w    (input[7:0]i1,i2);  add_rm_si_w     = (i1[7:0]==8'b10000011&i2[5:3]==3'b000);   endfunction
+function add_a_i_b      (input[7:0]i);      add_a_i_b       = (i[7:0]==8'b00010100);                    endfunction
+function add_a_i_w      (input[7:0]i);      add_a_i_w       = (i[7:0]==8'b00010101);                    endfunction
+// ADC
+function adc_rm_r_b     (input[7:0]i);      adc_rm_r_b      = (i[7:0]==8'b00010000);                    endfunction
+function adc_r_rm_b     (input[7:0]i);      adc_r_rm_b      = (i[7:0]==8'b00010010);                    endfunction
+function adc_rm_r_w     (input[7:0]i);      adc_rm_r_w      = (i[7:0]==8'b00010001);                    endfunction
+function adc_r_rm_w     (input[7:0]i);      adc_r_rm_w      = (i[7:0]==8'b00010011);                    endfunction
+function adc_rm_i_b     (input[7:0]i1,i2);  adc_rm_i_b      = (i[7:0]==8'b10000000&i2[5:3]==3'b010);    endfunction
+function adc_rm_zi_w    (input[7:0]i1,i2);  adc_rm_zi_w     = (i[7:0]==8'b10000001&i2[5:3]==3'b010);    endfunction
+function adc_rm_si_w    (input[7:0]i1,i2);  adc_rm_si_w     = (i[7:0]==8'b10000011&i2[5:3]==3'b010);    endfunction
+function adc_a_i_b      (input[7:0]i);      adc_a_i_b       = (i[7:0]==8'b00010100);                    endfunction
+function adc_a_i_w      (input[7:0]i);      adc_a_i_w       = (i[7:0]==8'b00010101);                    endfunction
+// INC
+function inc_rm_b       (input[7:0]i1,i2)   inc_rm_b        = (i1[7:0]==8'b11111110&i2[5:3]==3'b000);   endfunction
+function inc_rm_w       (input[7:0]i1,i2)   inc_rm_w        = (i1[7:0]==8'b11111111&i2[5:3]==3'b000);   endfunction
+function inc_r          (input[7:0]i)       inc_r           = (i[7:3]==5'b01000);                       endfunction
 
 function length1 (input [7:0] i);
     length1 = push_r(i)|push_sr(i)|pop_r(i)|pop_sr(i)|xchg_a_r(i)|xlat(i)|lahf(i)|sahf(i)|pushf(i)|popf(i);
