@@ -1,19 +1,19 @@
-`define AL register[4'd0]
-`define AH register[4'd4]
-`define CL register[4'd1]
-`define CH register[4'd5]
-`define DL register[4'd2]
-`define DH register[4'd6]
-`define BL register[4'd3]
-`define BH register[4'd7]
-`define AX {`AH, `AL}
-`define CX {`CH, `CL}
-`define DX {`DH, `DL}
-`define BX {`BH, `BL}
-`define SP {register[4'd12], register[4'd8 ]}
-`define BP {register[4'd13], register[4'd9 ]}
-`define SI {register[4'd14], register[4'd10]}
-`define DI {register[4'd15], register[4'd11]}
+`define AL register[7'b0000000 +:  8]
+`define AH register[7'b0001000 +:  8]
+`define CL register[7'b0010000 +:  8]
+`define CH register[7'b0011000 +:  8]
+`define DL register[7'b0100000 +:  8]
+`define DH register[7'b0101000 +:  8]
+`define BL register[7'b0110000 +:  8]
+`define BH register[7'b0111000 +:  8]
+`define AX register[7'b0000000 +: 16]
+`define CX register[7'b0010000 +: 16]
+`define DX register[7'b0100000 +: 16]
+`define BX register[7'b0110000 +: 16]
+`define SP register[7'b1000000 +: 16]
+`define BP register[7'b1010000 +: 16]
+`define SI register[7'b1100000 +: 16]
+`define DI register[7'b1110000 +: 16]
 `define ES segment_register[2'b0]
 `define CS segment_register[2'b1]
 `define SS segment_register[2'b2]
@@ -27,6 +27,7 @@
 `define AF flags[4'd4 ]
 `define PF flags[4'd2 ]
 `define CF flags[4'd0 ]
+
 
 
 // DATA TRANSFER OPERATIONS
@@ -99,38 +100,50 @@ function adc_a_i_w      (input[7:0]i);      adc_a_i_w       = (i[7:0]==8'b000101
 function inc_rm_b       (input[7:0]i1,i2)   inc_rm_b        = (i1[7:0]==8'b11111110&i2[5:3]==3'b000);   endfunction
 function inc_rm_w       (input[7:0]i1,i2)   inc_rm_w        = (i1[7:0]==8'b11111111&i2[5:3]==3'b000);   endfunction
 function inc_r          (input[7:0]i)       inc_r           = (i[7:3]==5'b01000);                       endfunction
+// AAA
+function aaa            (input[7:0]i)       aaa             = (i[7:0]==8'b00110111);                    endfunction
+// DAA
+function daa            (input[7:0]i)       daa             = (i[7:0]==8'b00100111);                    endfunction
 
 function length1 (input [7:0] i);
-    length1 = push_r(i)|push_sr(i)|pop_r(i)|pop_sr(i)|xchg_a_r(i)|xlat(i)|lahf(i)|sahf(i)|pushf(i)|popf(i);
+    length1 = push_r(i)|push_sr(i)|pop_r(i)|pop_sr(i)|xchg_a_r(i)|xlat(i)|lahf(i)|sahf(i)|pushf(i)|popf(i)|inc_r(i)|aaa(i)|daa(i);
 endfunction
 
 function length2 (input [7:0] i1, input [7:0] i2);
     length2 = mov_rm_r_b(i1)&disp0(i2)|mov_r_rm_b(i1)&disp0(i2)|mov_rm_r_w(i1)&disp0(i2)|mov_r_rm_w(i1)&disp0(i2)|mov_r_i_b(i1)|mov_sr_rm(i1)&disp0(i2)|mov_rm_sr(i1)&disp0(i2)|
               push_rm(i1)&disp0(i2)|pop_rm(i1)&disp0(i2)|xchg_r_rm_b(i1)&disp0(i2)|xchg_r_rm_w(i1)&disp0(i2)|
               lea(i1)&disp0(i2)|lds(i1)&disp0(i2)|les(i1)&disp0(i2)|
-              add_rm_r_b(i1)&disp0(i2)|add_r_rm_b(i1)&disp0(i2)|add_rm_r_w(i1)&disp0(i2)|add_r_rm_w(i1)&disp0(i2)|add_a_i_b(i1);
+              add_rm_r_b(i1)&disp0(i2)|add_r_rm_b(i1)&disp0(i2)|add_rm_r_w(i1)&disp0(i2)|add_r_rm_w(i1)&disp0(i2)|add_a_i_b(i1)|
+              adc_rm_r_b(i1)&disp0(i2)|adc_r_rm_b(i1)&disp0(i2)|adc_rm_r_w(i1)&disp0(i2)|adc_r_rm_w(i1)&disp0(i2)|adc_a_i_b(i1)|
+              inc_rm_b(i1,i2)&disp0(i2)|inc_rm_w(i1,i2)&disp0(i2);
 endfunction
 
 function length3 (input [7:0] i1, input [7:0] i2);
     length3 = mov_rm_r_b(i1)&disp1(i2)|mov_r_rm_b(i1)&disp1(i2)|mov_rm_r_w(i1)&disp1(i2)|mov_r_rm_w(i1)&disp1(i2)|mov_rm_i_b(i1)&disp0(i2)|mov_r_i_w(i1)|mov_a_m_b(i1)|mov_a_m_w(i1)|mov_m_a_b(i1)|mov_m_a_w(i1)|mov_sr_rm(i1)&disp1(i2)|mov_rm_sr(i1)&disp1(i2)|
               push_rm(i1)&disp1(i2)|pop_rm(i1)&disp1(i2)|xchg_r_rm_b(i1)&disp1(i2)|xchg_r_rm_w(i1)&disp1(i2)|
               lea(i1)&disp1(i2)|lds(i1)&disp1(i2)|les(i1)&disp1(i2)|
-              add_rm_r_b(i1)&disp1(i2)|add_r_rm_b(i1)&disp1(i2)|add_rm_r_w(i1)&disp1(i2)|add_r_rm_w(i1)&disp1(i2)|add_rm_i_b(i1)&disp0(i2)|add_rm_si_w(i1)&disp0(i2)|add_a_i_b(i1);
+              add_rm_r_b(i1)&disp1(i2)|add_r_rm_b(i1)&disp1(i2)|add_rm_r_w(i1)&disp1(i2)|add_r_rm_w(i1)&disp1(i2)|add_rm_i_b(i1,i2)&disp0(i2)|add_rm_si_w(i1,i2)&disp0(i2)|add_a_i_w(i1)|
+              adc_rm_r_b(i1)&disp1(i2)|adc_r_rm_b(i1)&disp1(i2)|adc_rm_r_w(i1)&disp1(i2)|adc_r_rm_w(i1)&disp1(i2)|adc_rm_i_b(i1,i2)&disp0(i2)|adc_rm_si_w(i1,i2)&disp0(i2)|adc_a_i_w(i1)|
+              inc_rm_b(i1,i2)&disp1(i2)|inc_rm_w(i1,i2)&disp1(i2);
 endfunction
 
 function length4 (input [7:0] i1, input [7:0] i2);
     length4 = mov_rm_r_b(i1)&disp2(i2)|mov_r_rm_b(i1)&disp2(i2)|mov_rm_r_w(i1)&disp2(i2)|mov_r_rm_w(i1)&disp2(i2)|mov_rm_i_b(i1)&disp1(i2)|mov_rm_i_w(i1)&disp0(i2)|mov_sr_rm(i1)&disp2(i2)|mov_rm_sr(i1)&disp2(i2)|
               push_rm(i1)&disp2(i2)|pop_rm(i1)&disp2(i2)|xchg_r_rm_b(i1)&disp2(i2)|xchg_r_rm_w(i1)&disp2(i2)|
               lea(i1)&disp2(i2)|lds(i1)&disp2(i2)|les(i1)&disp2(i2)|
-              add_rm_r_b(i1)&disp2(i2)|add_r_rm_b(i1)&disp2(i2)|add_rm_r_w(i1)&disp2(i2)|add_r_rm_w(i1)&disp2(i2)|add_rm_i_b(i1)&disp1(i2)|add_rm_si_w(i1)&disp1(i2)|add_rm_zi_w(i1)&disp0(i2);
+              add_rm_r_b(i1)&disp2(i2)|add_r_rm_b(i1)&disp2(i2)|add_rm_r_w(i1)&disp2(i2)|add_r_rm_w(i1)&disp2(i2)|add_rm_i_b(i1,i2)&disp1(i2)|add_rm_si_w(i1,i2)&disp1(i2)|add_rm_zi_w(i1,i2)&disp0(i2)|
+              adc_rm_r_b(i1)&disp2(i2)|adc_r_rm_b(i1)&disp2(i2)|adc_rm_r_w(i1)&disp2(i2)|adc_r_rm_w(i1)&disp2(i2)|adc_rm_i_b(i1,i2)&disp1(i2)|adc_rm_si_w(i1,i2)&disp1(i2)|adc_rm_zi_w(i1,i2)&disp0(i2)|
+              inc_rm_b(i1,i2)&disp2(i2)|inc_rm_w(i1,i2)&disp2(i2);
 endfunction
 
 function length5 (input [7:0] i1, input [7:0] i2);
-    length5 = mov_rm_i_b(i1)&disp2(i2)|mov_rm_i_w(i1)&disp1(i2)|add_rm_i_b(i1)&disp2(i2)|add_rm_si_w(i1)&disp2(i2)|add_rm_zi_w(i1)&disp1(i2);
+    length5 = mov_rm_i_b(i1)&disp2(i2)|mov_rm_i_w(i1)&disp1(i2)|
+              add_rm_i_b(i1,i2)&disp2(i2)|add_rm_si_w(i1,i2)&disp2(i2)|add_rm_zi_w(i1,i2)&disp1(i2)|
+              adc_rm_i_b(i1,i2)&disp2(i2)|adc_rm_si_w(i1,i2)&disp2(i2)|adc_rm_zi_w(i1,i2)&disp1(i2);
 endfunction
 
 function length6 (input [7:0] i1, input [7:0] i2);
-    length6 = mov_rm_i_w(i1)&disp2(i2)|add_rm_zi_w(i1)&disp2(i2);
+    length6 = mov_rm_i_w(i1)&disp2(i2)|add_rm_zi_w(i1,i2)&disp2(i2)|adc_rm_zi_w(i1,i2)&disp2(i2);
 endfunction
 
 function disp0 (input [7:0] i2);
@@ -165,12 +178,12 @@ function is_reg_mod (input [7:0] i);
     is_reg_mod = i[7:6] == 2'b11;
 endfunction
 
-function [3:0] reg_w_hi (input [2:0] a);
-    reg_w_hi = {a[2], 1'b1, a[1:0]};
+function [6:0] reg_b (input [2:0] a);
+    reg_b = {1'b0, a[1:0], a[2], 3'b0};
 endfunction
 
-function [3:0] reg_w_lo (input [2:0] a);
-    reg_w_lo = {a[2], 1'b0, a[1:0]};
+function [6:0] reg_w (input [2:0] a);
+    reg_w = {a[2:0], 4'b0};
 endfunction
 
 function of_b (input [7:0] a,b,r);
@@ -197,12 +210,12 @@ function zf_w (input [15:0] r);
     zf_w = r == 16'b0;
 endfunction
 
-function af_b (input [7:0] a,b; reg [3:0] r);
-    {af_b, r} = a[3:0] + b[3:0];
+function af_b (input [7:0] a,b; input c; reg [3:0] r);
+    {af_b, r} = a[3:0] + b[3:0] + c;
 endfunction
 
-function af_w (input [15:0] a,b; reg [3:0] r);
-    {af_w, r} = a[3:0] + b[3:0];
+function af_w (input [15:0] a,b; input c; reg [3:0] r);
+    {af_w, r} = a[3:0] + b[3:0] + c;
 endfunction
 
 function pf_b (input [7:0] r);
@@ -213,12 +226,12 @@ function pf_w (input [15:0] r);
     pf_w = ~(^r);
 endfunction
 
-function cf_b (input [7:0] a,b; reg [7:0] r);
-    {cf_b, r} = a + b;
+function cf_b (input [7:0] a,b; input c; reg [7:0] r);
+    {cf_b, r} = a + b + c;
 endfunction
 
-function cf_w (input [15:0] a,b; reg [15:0] r);
-    {cf_w, r} = a + b;
+function cf_w (input [15:0] a,b; input c; reg [15:0] r);
+    {cf_w, r} = a + b + c;
 endfunction
 
 
