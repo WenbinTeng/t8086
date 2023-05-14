@@ -145,8 +145,22 @@ function neg_rm_w       (input[7:0]i1,i2);  neg_rm_w        = (i1[7:0]==8'b11110
 function aas            (input[7:0]i);      aas             = (i[7:0]==8'b00111111);                    endfunction
 // DAS
 function das            (input[7:0]i);      das             = (i[7:0]==8'b00101111);                    endfunction
-
-
+// MUL
+function mul_r_rm_b     (input[7:0]i1,i2);  mul_r_rm_b      = (i1[7:0]==8'b11110110&i2[5:3]==3'b100);   endfunction
+function mul_r_rm_w     (input[7:0]i1,i2);  mul_r_rm_w      = (i1[7:0]==8'b11110111&i2[5:3]==3'b100);   endfunction
+// IMUL
+function imul_r_rm_b    (input[7:0]i1,i2);  imul_r_rm_b     = (i1[7:0]==8'b11110110&i2[5:3]==3'b101);   endfunction
+function imul_r_rm_w    (input[7:0]i1,i2);  imul_r_rm_w     = (i1[7:0]==8'b11110111&i2[5:3]==3'b101);   endfunction
+// AAM
+function aam            (input[7:0]i1,i2);  aam             = (i1[7:0]==8'b11010100&i2==8'b00001010);   endfunction
+// DIV
+function div_r_rm_b     (input[7:0]i1,i2);  div_r_rm_b      = (i1[7:0]==8'b11110110&i2[5:3]==3'b110);   endfunction
+function div_r_rm_w     (input[7:0]i1,i2);  div_r_rm_w      = (i1[7:0]==8'b11110111&i2[5:3]==3'b110);   endfunction
+// IDIV
+function idiv_r_rm_b    (input[7:0]i1,i2);  idiv_r_rm_b     = (i1[7:0]==8'b11110110&i2[5:3]==3'b111);   endfunction
+function idiv_r_rm_w    (input[7:0]i1,i2);  idiv_r_rm_w     = (i1[7:0]==8'b11110111&i2[5:3]==3'b111);   endfunction
+// AAD
+function aad            (input[7:0]i1,i2);  aad             = (i1[7:0]==8'b11010101&i2==8'b00001010);   endfunction
 
 function length1 (input [7:0] i);
     length1 = push_r(i)|push_sr(i)|pop_r(i)|pop_sr(i)|xchg_a_r(i)|xlat(i)|lahf(i)|sahf(i)|pushf(i)|popf(i)|inc_r(i)|aaa(i)|daa(i)|dec_r(i)|aas(i)|das(i);
@@ -298,6 +312,10 @@ endfunction
 
 
 // TODO: MUL FUNC
-function [15:0] fmul (input [7:0] a, b); fmul = a * b; endfunction
+function [15:0] fmul_b (input [7:0] a, b); fmul_b = a * b; endfunction
 // TODO: DIV FUNC
-function [15:0] fdiv (input [7:0] a, b); fdiv = {a % b, a / b}; endfunction
+function [15:0] fdiv_b (input [7:0] a, b); fdiv_b = {a % b, a / b}; endfunction
+// TODO: MUL FUNC
+function [31:0] fmul_w (input [15:0] a, b); fmul_w = a * b; endfunction
+// TODO: DIV FUNC
+function [31:0] fdiv_w (input [15:0] a, b); fdiv_w = {a % b, a / b}; endfunction
