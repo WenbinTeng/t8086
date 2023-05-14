@@ -92,40 +92,47 @@ module core (
             addr_reg <= 'b0;
         end
         else if (first_byte[2] && (
-            mov_rm_r_b (inst_reg[2]) || mov_r_rm_b (inst_reg[2]) ||
-            mov_rm_r_w (inst_reg[2]) || mov_r_rm_w (inst_reg[2]) ||
-            mov_rm_sr  (inst_reg[2]) || mov_sr_rm  (inst_reg[2]) ||
-            push_rm    (inst_reg[2]) || pop_rm     (inst_reg[2]) ||
-            xchg_r_rm_b(inst_reg[2]) || xchg_r_rm_w(inst_reg[2]) ||
-            add_rm_r_b (inst_reg[2]) || add_r_rm_b (inst_reg[2]) ||
-            add_rm_r_w (inst_reg[2]) || add_r_rm_w (inst_reg[2]) ||
-            adc_rm_r_b (inst_reg[2]) || adc_r_rm_b (inst_reg[2]) ||
-            adc_rm_r_w (inst_reg[2]) || adc_r_rm_w (inst_reg[2]) ||
-            sub_rm_r_b (inst_reg[2]) || sub_r_rm_b (inst_reg[2]) ||
-            sub_rm_r_w (inst_reg[2]) || sub_r_rm_w (inst_reg[2]) ||
-            sbb_rm_r_b (inst_reg[2]) || sbb_r_rm_b (inst_reg[2]) ||
-            sbb_rm_r_w (inst_reg[2]) || sbb_r_rm_w (inst_reg[2]) ||
-            lea        (inst_reg[2]) ||
-            lds        (inst_reg[2]) ||
-            les        (inst_reg[2]) ||
-            mov_rm_i_b (inst_reg[2], inst_reg[1]) ||
-            mov_rm_i_w (inst_reg[2], inst_reg[1]) ||
-            add_rm_i_b (inst_reg[2], inst_reg[1]) ||
-            add_rm_zi_w(inst_reg[2], inst_reg[1]) ||
-            add_rm_si_w(inst_reg[2], inst_reg[1]) ||
-            adc_rm_i_b (inst_reg[2], inst_reg[1]) ||
-            adc_rm_zi_w(inst_reg[2], inst_reg[1]) ||
-            adc_rm_si_w(inst_reg[2], inst_reg[1]) ||
-            sub_rm_i_b (inst_reg[2], inst_reg[1]) ||
-            sub_rm_zi_w(inst_reg[2], inst_reg[1]) ||
-            sub_rm_si_w(inst_reg[2], inst_reg[1]) ||
-            sbb_rm_i_b (inst_reg[2], inst_reg[1]) ||
-            sbb_rm_zi_w(inst_reg[2], inst_reg[1]) ||
-            sbb_rm_si_w(inst_reg[2], inst_reg[1]) ||
-            inc_rm_b   (inst_reg[2], inst_reg[1]) ||
-            inc_rm_w   (inst_reg[2], inst_reg[1]) ||
-            dec_rm_b   (inst_reg[2], inst_reg[1]) ||
-            dec_rm_w   (inst_reg[2], inst_reg[1]) 
+            mov_rm_r_b  (inst_reg[2]) || mov_r_rm_b (inst_reg[2]) ||
+            mov_rm_r_w  (inst_reg[2]) || mov_r_rm_w (inst_reg[2]) ||
+            mov_rm_sr   (inst_reg[2]) || mov_sr_rm  (inst_reg[2]) ||
+            push_rm     (inst_reg[2]) || pop_rm     (inst_reg[2]) ||
+            xchg_r_rm_b (inst_reg[2]) || xchg_r_rm_w(inst_reg[2]) ||
+            add_rm_r_b  (inst_reg[2]) || add_r_rm_b (inst_reg[2]) ||
+            add_rm_r_w  (inst_reg[2]) || add_r_rm_w (inst_reg[2]) ||
+            adc_rm_r_b  (inst_reg[2]) || adc_r_rm_b (inst_reg[2]) ||
+            adc_rm_r_w  (inst_reg[2]) || adc_r_rm_w (inst_reg[2]) ||
+            sub_rm_r_b  (inst_reg[2]) || sub_r_rm_b (inst_reg[2]) ||
+            sub_rm_r_w  (inst_reg[2]) || sub_r_rm_w (inst_reg[2]) ||
+            sbb_rm_r_b  (inst_reg[2]) || sbb_r_rm_b (inst_reg[2]) ||
+            sbb_rm_r_w  (inst_reg[2]) || sbb_r_rm_w (inst_reg[2]) ||
+            cmp_rm_r_b  (inst_reg[2]) || cmp_r_rm_b (inst_reg[2]) ||
+            cmp_rm_r_w  (inst_reg[2]) || cmp_r_rm_w (inst_reg[2]) ||
+            lea         (inst_reg[2]) ||
+            lds         (inst_reg[2]) ||
+            les         (inst_reg[2]) ||
+            mov_rm_i_b  (inst_reg[2], inst_reg[1]) ||
+            mov_rm_i_w  (inst_reg[2], inst_reg[1]) ||
+            add_rm_i_b  (inst_reg[2], inst_reg[1]) ||
+            add_rm_zi_w (inst_reg[2], inst_reg[1]) ||
+            add_rm_si_w (inst_reg[2], inst_reg[1]) ||
+            adc_rm_i_b  (inst_reg[2], inst_reg[1]) ||
+            adc_rm_zi_w (inst_reg[2], inst_reg[1]) ||
+            adc_rm_si_w (inst_reg[2], inst_reg[1]) ||
+            sub_rm_i_b  (inst_reg[2], inst_reg[1]) ||
+            sub_rm_zi_w (inst_reg[2], inst_reg[1]) ||
+            sub_rm_si_w (inst_reg[2], inst_reg[1]) ||
+            sbb_rm_i_b  (inst_reg[2], inst_reg[1]) ||
+            sbb_rm_zi_w (inst_reg[2], inst_reg[1]) ||
+            sbb_rm_si_w (inst_reg[2], inst_reg[1]) ||
+            cmp_rm_i_b  (inst_reg[2], inst_reg[1]) ||
+            cmp_rm_zi_w (inst_reg[2], inst_reg[1]) ||
+            cmp_rm_si_w (inst_reg[2], inst_reg[1]) ||
+            inc_rm_b    (inst_reg[2], inst_reg[1]) ||
+            inc_rm_w    (inst_reg[2], inst_reg[1]) ||
+            dec_rm_b    (inst_reg[2], inst_reg[1]) ||
+            dec_rm_w    (inst_reg[2], inst_reg[1]) ||
+            neg_rm_b    (inst_reg[2], inst_reg[1]) ||
+            neg_rm_w    (inst_reg[2], inst_reg[1])
         )) begin
             if (
                 field_mod(inst_reg[1]) == 2'b00 &&
@@ -160,44 +167,53 @@ module core (
         if (~rst)                                                       data_reg <= 'b0;
         else if (first_byte[3] && is_reg_mod(inst_reg[2])) begin
             if      (
-                mov_r_rm_b (inst_reg[3]) ||
-                add_rm_r_b (inst_reg[3]) ||
-                add_r_rm_b (inst_reg[3]) ||
-                adc_rm_r_b (inst_reg[3]) ||
-                adc_r_rm_b (inst_reg[3]) ||
-                sub_rm_r_b (inst_reg[3]) ||
-                sub_r_rm_b (inst_reg[3]) ||
-                sbb_rm_r_b (inst_reg[3]) ||
-                sbb_r_rm_b (inst_reg[3]) ||
-                add_rm_i_b (inst_reg[3], inst_reg[2]) ||
-                adc_rm_i_b (inst_reg[3], inst_reg[2]) ||
-                inc_rm_b   (inst_reg[3], inst_reg[2]) ||
-                sub_rm_i_b (inst_reg[3], inst_reg[2]) ||
-                sbb_rm_i_b (inst_reg[3], inst_reg[2]) ||
-                dec_rm_b   (inst_reg[3], inst_reg[2])
+                mov_r_rm_b  (inst_reg[3]) ||
+                add_rm_r_b  (inst_reg[3]) ||
+                add_r_rm_b  (inst_reg[3]) ||
+                adc_rm_r_b  (inst_reg[3]) ||
+                adc_r_rm_b  (inst_reg[3]) ||
+                sub_rm_r_b  (inst_reg[3]) ||
+                sub_r_rm_b  (inst_reg[3]) ||
+                sbb_rm_r_b  (inst_reg[3]) ||
+                sbb_r_rm_b  (inst_reg[3]) ||
+                cmp_rm_r_b  (inst_reg[3]) ||
+                cmp_r_rm_b  (inst_reg[3]) ||
+                add_rm_i_b  (inst_reg[3], inst_reg[2]) ||
+                adc_rm_i_b  (inst_reg[3], inst_reg[2]) ||
+                sub_rm_i_b  (inst_reg[3], inst_reg[2]) ||
+                sbb_rm_i_b  (inst_reg[3], inst_reg[2]) ||
+                cmp_rm_i_b  (inst_reg[3], inst_reg[2]) ||
+                inc_rm_b    (inst_reg[3], inst_reg[2]) ||
+                dec_rm_b    (inst_reg[3], inst_reg[2]) ||
+                neg_rm_b    (inst_reg[3], inst_reg[2])
             )                                                           data_reg <= register[reg_b(field_r_m(inst_reg[2])) +:  8];
             else if (
-                mov_r_rm_w (inst_reg[3]) ||
-                mov_sr_rm  (inst_reg[3]) ||
-                push_rm    (inst_reg[3]) ||
-                add_rm_r_w (inst_reg[3]) ||
-                add_r_rm_w (inst_reg[3]) ||
-                adc_rm_r_w (inst_reg[3]) ||
-                adc_r_rm_w (inst_reg[3]) ||
-                sub_rm_r_w (inst_reg[3]) ||
-                sub_r_rm_w (inst_reg[3]) ||
-                sbb_rm_r_w (inst_reg[3]) ||
-                sbb_r_rm_w (inst_reg[3]) ||
-                add_rm_zi_w(inst_reg[3], inst_reg[2]) ||
-                add_rm_si_w(inst_reg[3], inst_reg[2]) ||
-                adc_rm_zi_w(inst_reg[3], inst_reg[2]) ||
-                adc_rm_si_w(inst_reg[3], inst_reg[2]) ||
-                inc_rm_w   (inst_reg[3], inst_reg[2]) ||
-                sub_rm_zi_w(inst_reg[3], inst_reg[2]) ||
-                sub_rm_si_w(inst_reg[3], inst_reg[2]) ||
-                sbb_rm_zi_w(inst_reg[3], inst_reg[2]) ||
-                sbb_rm_si_w(inst_reg[3], inst_reg[2]) ||
-                dec_rm_w   (inst_reg[3], inst_reg[2])
+                mov_r_rm_w  (inst_reg[3]) ||
+                mov_sr_rm   (inst_reg[3]) ||
+                push_rm     (inst_reg[3]) ||
+                add_rm_r_w  (inst_reg[3]) ||
+                add_r_rm_w  (inst_reg[3]) ||
+                adc_rm_r_w  (inst_reg[3]) ||
+                adc_r_rm_w  (inst_reg[3]) ||
+                sub_rm_r_w  (inst_reg[3]) ||
+                sub_r_rm_w  (inst_reg[3]) ||
+                sbb_rm_r_w  (inst_reg[3]) ||
+                sbb_r_rm_w  (inst_reg[3]) ||
+                cmp_rm_r_w  (inst_reg[3]) ||
+                cmp_r_rm_w  (inst_reg[3]) ||
+                add_rm_zi_w (inst_reg[3], inst_reg[2]) ||
+                add_rm_si_w (inst_reg[3], inst_reg[2]) ||
+                adc_rm_zi_w (inst_reg[3], inst_reg[2]) ||
+                adc_rm_si_w (inst_reg[3], inst_reg[2]) ||
+                sub_rm_zi_w (inst_reg[3], inst_reg[2]) ||
+                sub_rm_si_w (inst_reg[3], inst_reg[2]) ||
+                sbb_rm_zi_w (inst_reg[3], inst_reg[2]) ||
+                sbb_rm_si_w (inst_reg[3], inst_reg[2]) ||
+                cmp_rm_zi_w (inst_reg[3], inst_reg[2]) ||
+                cmp_rm_si_w (inst_reg[3], inst_reg[2]) ||
+                inc_rm_w    (inst_reg[3], inst_reg[2]) ||
+                dec_rm_w    (inst_reg[3], inst_reg[2]) ||
+                neg_rm_w    (inst_reg[3], inst_reg[2])
             )                                                           data_reg <= register[reg_w(field_r_m(inst_reg[2])) +: 16];
         end
         else if (first_byte[3]) begin
@@ -218,14 +234,16 @@ module core (
                 add_a_i_b   (inst_reg[3]) ||
                 adc_a_i_b   (inst_reg[3]) ||
                 sub_a_i_b   (inst_reg[3]) ||
-                sbb_a_i_b   (inst_reg[3])
+                sbb_a_i_b   (inst_reg[3]) ||
+                cmp_a_i_b   (inst_reg[3]) 
             )                                                           data_reg <= {       8'b0, inst_reg[2]};
             else if (
                 mov_r_i_w   (inst_reg[3]) ||
                 add_a_i_w   (inst_reg[3]) ||
                 adc_a_i_w   (inst_reg[3]) ||
                 sub_a_i_w   (inst_reg[3]) ||
-                sbb_a_i_w   (inst_reg[3])
+                sbb_a_i_w   (inst_reg[3]) ||
+                cmp_a_i_w   (inst_reg[3])
             )                                                           data_reg <= {inst_reg[1], inst_reg[2]};
             else if (
                 mov_r_rm_b (inst_reg[3]) ||
@@ -258,22 +276,31 @@ module core (
                 sbb_r_rm_b (inst_reg[3]) ||
                 sbb_rm_r_w (inst_reg[3]) ||
                 sbb_r_rm_w (inst_reg[3]) ||
+                cmp_rm_r_b (inst_reg[3]) ||
+                cmp_r_rm_b (inst_reg[3]) ||
+                cmp_rm_r_w (inst_reg[3]) ||
+                cmp_r_rm_w (inst_reg[3]) ||
                 add_rm_i_b (inst_reg[3], inst_reg[2]) ||
                 add_rm_zi_w(inst_reg[3], inst_reg[2]) ||
                 add_rm_si_w(inst_reg[3], inst_reg[2]) ||
                 adc_rm_i_b (inst_reg[3], inst_reg[2]) ||
                 adc_rm_zi_w(inst_reg[3], inst_reg[2]) ||
                 adc_rm_si_w(inst_reg[3], inst_reg[2]) ||
-                inc_rm_b   (inst_reg[3], inst_reg[2]) ||
-                inc_rm_w   (inst_reg[3], inst_reg[2]) ||
                 sub_rm_i_b (inst_reg[3], inst_reg[2]) ||
                 sub_rm_zi_w(inst_reg[3], inst_reg[2]) ||
                 sub_rm_si_w(inst_reg[3], inst_reg[2]) ||
                 sbb_rm_i_b (inst_reg[3], inst_reg[2]) ||
                 sbb_rm_zi_w(inst_reg[3], inst_reg[2]) ||
                 sbb_rm_si_w(inst_reg[3], inst_reg[2]) ||
+                cmp_rm_i_b (inst_reg[3], inst_reg[2]) ||
+                cmp_rm_zi_w(inst_reg[3], inst_reg[2]) ||
+                cmp_rm_si_w(inst_reg[3], inst_reg[2]) ||
+                inc_rm_b   (inst_reg[3], inst_reg[2]) ||
+                inc_rm_w   (inst_reg[3], inst_reg[2]) ||
                 dec_rm_b   (inst_reg[3], inst_reg[2]) ||
-                dec_rm_w   (inst_reg[3], inst_reg[2]) 
+                dec_rm_w   (inst_reg[3], inst_reg[2]) ||
+                neg_rm_b   (inst_reg[3], inst_reg[2]) ||
+                neg_rm_w   (inst_reg[3], inst_reg[2]) 
             )
                                                                         data_reg <= ram_rd_data;
         end
@@ -308,9 +335,6 @@ module core (
             else if (adc_rm_si_w(inst_reg[4], inst_reg[3]))             begin a = data_reg; b = {8{inst_reg[2][7]}, inst_reg[2]}; r = a + b + `CF; end
             else if (adc_a_i_b  (inst_reg[4]))                          begin a = `AL; b = data_reg; r = a + b + `CF; end
             else if (adc_a_i_w  (inst_reg[4]))                          begin a = `AX; b = data_reg; r = a + b + `CF; end
-            else if (inc_rm_b   (inst_reg[4], inst_reg[3]))             begin a = data_reg; b = 16'b1; r = a + b; end
-            else if (inc_rm_w   (inst_reg[4], inst_reg[3]))             begin a = data_reg; b = 16'b1; r = a + b; end
-            else if (inc_r      (inst_reg[4], inst_reg[3]))             begin a = register[reg_w(field_r_m(inst_reg[4])) +: 16]; b = 16'b1; r = a + b; end
             else if (sub_rm_r_b (inst_reg[4]))                          begin a = data_reg; b = register[reg_b(field_reg(inst_reg[3])) +:  8]; r = a - b; end
             else if (sub_r_rm_b (inst_reg[4]))                          begin a = register[reg_b(field_reg(inst_reg[3])) +:  8]; b = data_reg; r = a - b; end
             else if (sub_rm_r_w (inst_reg[4]))                          begin a = data_reg; b = register[reg_w(field_reg(inst_reg[3])) +: 16]; r = a - b; end
@@ -329,9 +353,24 @@ module core (
             else if (sbb_rm_si_w(inst_reg[4], inst_reg[3]))             begin a = data_reg; b = {8{inst_reg[2][7]}, inst_reg[2]}; r = a - b - `CF; end
             else if (sbb_a_i_b  (inst_reg[4]))                          begin a = `AL; b = data_reg; r = a - b - `CF; end
             else if (sbb_a_i_w  (inst_reg[4]))                          begin a = `AX; b = data_reg; r = a - b - `CF; end
+            else if (cmp_rm_r_b (inst_reg[4]))                          begin a = data_reg; b = register[reg_b(field_reg(inst_reg[3])) +:  8]; r = a - b; end
+            else if (cmp_r_rm_b (inst_reg[4]))                          begin a = register[reg_b(field_reg(inst_reg[3])) +:  8]; b = data_reg; r = a - b; end
+            else if (cmp_rm_r_w (inst_reg[4]))                          begin a = data_reg; b = register[reg_w(field_reg(inst_reg[3])) +: 16]; r = a - b; end
+            else if (cmp_r_rm_w (inst_reg[4]))                          begin a = register[reg_w(field_reg(inst_reg[3])) +: 16]; b = data_reg; r = a - b; end
+            else if (cmp_rm_i_b (inst_reg[4], inst_reg[3]))             begin a = data_reg; b =                     inst_reg[2] ; r = a - b;  end
+            else if (cmp_rm_zi_w(inst_reg[4], inst_reg[3]))             begin a = data_reg; b = {inst_reg[1],       inst_reg[2]}; r = a - b; end
+            else if (cmp_rm_si_w(inst_reg[4], inst_reg[3]))             begin a = data_reg; b = {8{inst_reg[2][7]}, inst_reg[2]}; r = a - b; end
+            else if (cmp_a_i_b  (inst_reg[4]))                          begin a = `AL; b = data_reg; r = a - b; end
+            else if (cmp_a_i_w  (inst_reg[4]))                          begin a = `AX; b = data_reg; r = a - b; end
+            else if (inc_rm_b   (inst_reg[4], inst_reg[3]))             begin a = data_reg; b = 16'b1; r = a + b; end
+            else if (inc_rm_w   (inst_reg[4], inst_reg[3]))             begin a = data_reg; b = 16'b1; r = a + b; end
+            else if (inc_r      (inst_reg[4], inst_reg[3]))             begin a = register[reg_w(field_r_m(inst_reg[4])) +: 16]; b = 16'b1; r = a + b; end
             else if (dec_rm_b   (inst_reg[4], inst_reg[3]))             begin a = data_reg; b = 16'b1; r = a - b; end
             else if (dec_rm_w   (inst_reg[4], inst_reg[3]))             begin a = data_reg; b = 16'b1; r = a - b; end
             else if (dec_r      (inst_reg[4], inst_reg[3]))             begin a = register[reg_w(field_r_m(inst_reg[4])) +: 16]; b = 16'b1; r = a - b; end
+            else if (neg_rm_b   (inst_reg[4], inst_reg[3]))             begin a = 'b0; b = data_reg; r = a - b; end
+            else if (neg_rm_w   (inst_reg[4], inst_reg[3]))             begin a = 'b0; b = data_reg; r = a - b; end
+            else if (neg_r      (inst_reg[4], inst_reg[3]))             begin a = 'b0; b = register[reg_w(field_r_m(inst_reg[4])) +: 16]; r = a - b; end
             else                                                        begin a = 'b0; b = 'b0; r = 'b0; end
         end
     end
@@ -361,10 +400,11 @@ module core (
                 sbb_rm_r_b  (inst_reg[4]) ||
                 add_rm_i_b  (inst_reg[4], inst_reg[3]) ||
                 adc_rm_i_b  (inst_reg[4], inst_reg[3]) ||
-                inc_rm_b    (inst_reg[4], inst_reg[3]) ||
                 sub_rm_i_b  (inst_reg[4], inst_reg[3]) ||
                 sbb_rm_i_b  (inst_reg[4], inst_reg[3]) ||
-                dec_rm_b    (inst_reg[4], inst_reg[3])
+                inc_rm_b    (inst_reg[4], inst_reg[3]) ||
+                dec_rm_b    (inst_reg[4], inst_reg[3]) ||
+                neg_rm_b    (inst_reg[4], inst_reg[3])
             )                                                           register[reg_b(field_r_m(inst_reg[3])) +:  8] <= r[7:0];
             else if (
                 add_rm_r_w  (inst_reg[4]) ||
@@ -375,12 +415,13 @@ module core (
                 add_rm_si_w (inst_reg[4], inst_reg[3]) ||
                 adc_rm_zi_w (inst_reg[4], inst_reg[3]) ||
                 adc_rm_si_w (inst_reg[4], inst_reg[3]) ||
-                inc_rm_w    (inst_reg[4], inst_reg[3]) ||
                 sub_rm_zi_w (inst_reg[4], inst_reg[3]) ||
                 sub_rm_si_w (inst_reg[4], inst_reg[3]) ||
                 sbb_rm_zi_w (inst_reg[4], inst_reg[3]) ||
                 sbb_rm_si_w (inst_reg[4], inst_reg[3]) ||
-                dec_rm_w    (inst_reg[4], inst_reg[3]) 
+                inc_rm_w    (inst_reg[4], inst_reg[3]) ||
+                dec_rm_w    (inst_reg[4], inst_reg[3]) ||
+                neg_rm_w    (inst_reg[4], inst_reg[3])
             )                                                           register[reg_w(field_r_m(inst_reg[3])) +: 16] <= r;
             else if (
                 pop_rm      (inst_reg[4])
@@ -455,7 +496,9 @@ module core (
             )                                                           register[reg_w(field_r_m(inst_reg[4])) +: 16] <= r;
             else if (lea        (inst_reg[4]))                          register[reg_w(field_reg(inst_reg[3])) +: 16] <= addr_reg;
             else if (aaa        (inst_reg[4]))                          {`AH, `AL} <= `AL & 8'h0f > 8'h09 | `AF ? {`AH + 8'h1, `AL + 8'h6} : {`AH, `AL};
-            else if (daa        (inst_reg[4]))                          `AL <= `AL + (`AL & 8'h0f > 8'h09 | `AF ? 8'h6 : 8'h0) + (`AL > 8'h99 | `CF ? 8'h60 : 8'h00);
+            else if (daa        (inst_reg[4]))                          `AL <= `AL + (`AL & 8'h0f > 8'h09 | `AF ? 8'h6 : 8'h0) + (`AL > 8'h9f | `CF ? 8'h60 : 8'h00);
+            else if (aas        (inst_reg[4]))                          {`AH, `AL} <= `AL & 8'h0f > 8'h09 | `AF ? {`AH - 8'h1, `AL - 8'h6} : {`AH, `AL};
+            else if (das        (inst_reg[4]))                          `AL <= `AL - (`AL & 8'h0f > 8'h09 | `AF ? 8'h6 : 8'h0) - (`AL > 8'h9f | `CF ? 8'h60 : 8'h00);
         end
     end
 
@@ -514,9 +557,14 @@ module core (
                 sbb_rm_r_b  (inst_reg[4]) ||
                 sbb_r_rm_b  (inst_reg[4]) ||
                 sbb_a_i_b   (inst_reg[4]) ||
+                cmp_rm_r_b  (inst_reg[4]) ||
+                cmp_r_rm_b  (inst_reg[4]) ||
+                cmp_a_i_b   (inst_reg[4]) ||
                 sub_rm_i_b  (inst_reg[4], inst_reg[3]) ||
                 sbb_rm_i_b  (inst_reg[4], inst_reg[3]) ||
-                dec_rm_b    (inst_reg[4], inst_reg[3])
+                cmp_rm_b    (inst_reg[4], inst_reg[3]) ||
+                dec_rm_b    (inst_reg[4], inst_reg[3]) ||
+                neg_rm_b    (inst_reg[4], inst_reg[3]) 
             )                                                   begin `OF <= of_b(a,-b,r); `SF <= sf_b(r); `ZF <= zf_b(r); `AF <= af_b(a,-b,'d0); `PF <= pf_b(r); `CF <= cf_b(a,-b,'d0) end
             else if (
                 sub_rm_r_w  (inst_reg[4]) ||
@@ -525,15 +573,23 @@ module core (
                 sbb_rm_r_w  (inst_reg[4]) ||
                 sbb_r_rm_w  (inst_reg[4]) ||
                 sbb_a_i_w   (inst_reg[4]) ||
+                cmp_rm_r_w  (inst_reg[4]) ||
+                cmp_r_rm_w  (inst_reg[4]) ||
+                cmp_a_i_w   (inst_reg[4]) ||
                 sub_rm_zi_w (inst_reg[4], inst_reg[3]) ||
                 sub_rm_si_w (inst_reg[4], inst_reg[3]) ||
                 sbb_rm_zi_w (inst_reg[4], inst_reg[3]) ||
                 sbb_rm_si_w (inst_reg[4], inst_reg[3]) ||
+                cmp_rm_zi_w (inst_reg[4], inst_reg[3]) ||
+                cmp_rm_si_w (inst_reg[4], inst_reg[3]) ||
                 dec_rm_w    (inst_reg[4], inst_reg[3]) ||
-                dec_r       (inst_reg[4], inst_reg[3])
+                dec_r       (inst_reg[4], inst_reg[3]) ||
+                neg_rm_w    (inst_reg[4], inst_reg[3]) 
             )                                                   begin `OF <= of_w(a,-b,r); `SF <= sf_w(r); `ZF <= zf_w(r); `AF <= af_w(a,-b,-'d1); `PF <= pf_w(r); `CF <= cf_w(a,-b,-'d1) end
             else if (aaa        (inst_reg[4]))                  {`AF, `CF} <= {2{`AL & 8'h0f > 8'h9 | `AF}};
-            else if (daa        (inst_reg[4]))                  {`AF, `CF} <= {`AL & 8'h0f > 8'h9 | `AF, `AL > 8'h99 | `CF};
+            else if (daa        (inst_reg[4]))                  {`AF, `CF} <= {`AL & 8'h0f > 8'h9 | `AF, `AL > 8'h9f | `CF};
+            else if (aas        (inst_reg[4]))                  {`AF, `CF} <= {2{`AL & 8'h0f > 8'h9 | `AF}};
+            else if (das        (inst_reg[4]))                  {`AF, `CF} <= {`AL & 8'h0f > 8'h9 | `AF, `AL > 8'h9f | `CF};
         end
     end
 
@@ -548,6 +604,8 @@ module core (
         sub_rm_r_w (inst_reg[3]) || sub_r_rm_w (inst_reg[3]) ||
         sbb_rm_r_b (inst_reg[3]) || sbb_r_rm_b (inst_reg[3]) ||
         sbb_rm_r_w (inst_reg[3]) || sbb_r_rm_w (inst_reg[3]) ||
+        cmp_rm_r_b (inst_reg[3]) || cmp_r_rm_b (inst_reg[3]) ||
+        cmp_rm_r_w (inst_reg[3]) || cmp_r_rm_w (inst_reg[3]) ||
         push_rm    (inst_reg[3]) ||
         add_rm_i_b (inst_reg[3], inst_reg[2]) ||
         add_rm_zi_w(inst_reg[3], inst_reg[2]) ||
@@ -555,16 +613,21 @@ module core (
         adc_rm_i_b (inst_reg[3], inst_reg[2]) ||
         adc_rm_zi_w(inst_reg[3], inst_reg[2]) ||
         adc_rm_si_w(inst_reg[3], inst_reg[2]) ||
-        inc_rm_b   (inst_reg[3], inst_reg[2]) ||
-        inc_rm_w   (inst_reg[3], inst_reg[2]) ||
         sub_rm_i_b (inst_reg[3], inst_reg[2]) ||
         sub_rm_zi_w(inst_reg[3], inst_reg[2]) ||
         sub_rm_si_w(inst_reg[3], inst_reg[2]) ||
         sbb_rm_i_b (inst_reg[3], inst_reg[2]) ||
         sbb_rm_zi_w(inst_reg[3], inst_reg[2]) ||
         sbb_rm_si_w(inst_reg[3], inst_reg[2]) ||
+        cmp_rm_i_b (inst_reg[3], inst_reg[2]) ||
+        cmp_rm_zi_w(inst_reg[3], inst_reg[2]) ||
+        cmp_rm_si_w(inst_reg[3], inst_reg[2]) ||
+        inc_rm_b   (inst_reg[3], inst_reg[2]) ||
+        inc_rm_w   (inst_reg[3], inst_reg[2]) ||
         dec_rm_b   (inst_reg[3], inst_reg[2]) ||
-        dec_rm_w   (inst_reg[3], inst_reg[2])
+        dec_rm_w   (inst_reg[3], inst_reg[2]) ||
+        neg_rm_b   (inst_reg[3], inst_reg[2]) ||
+        neg_rm_w   (inst_reg[3], inst_reg[2]) 
     )) || (first_byte[3] && (
         mov_a_m_b  (inst_reg[3]) ||
         mov_a_m_w  (inst_reg[3]) ||
@@ -592,16 +655,21 @@ module core (
         sub_r_rm_w (inst_reg[3]) ||
         sbb_rm_r_w (inst_reg[3]) ||
         sbb_r_rm_w (inst_reg[3]) ||
+        cmp_rm_r_w (inst_reg[3]) ||
+        cmp_r_rm_w (inst_reg[3]) ||
         add_rm_zi_w(inst_reg[3], inst_reg[2]) ||
         add_rm_si_w(inst_reg[3], inst_reg[2]) ||
         adc_rm_zi_w(inst_reg[3], inst_reg[2]) ||
         adc_rm_si_w(inst_reg[3], inst_reg[2]) ||
-        inc_rm_w   (inst_reg[3], inst_reg[2]) ||
         sub_rm_zi_w(inst_reg[3], inst_reg[2]) ||
         sub_rm_si_w(inst_reg[3], inst_reg[2]) ||
         sbb_rm_zi_w(inst_reg[3], inst_reg[2]) ||
         sbb_rm_si_w(inst_reg[3], inst_reg[2]) ||
-        dec_rm_w   (inst_reg[3], inst_reg[2])
+        cmp_rm_zi_w(inst_reg[3], inst_reg[2]) ||
+        cmp_rm_si_w(inst_reg[3], inst_reg[2]) ||
+        inc_rm_w   (inst_reg[3], inst_reg[2]) ||
+        dec_rm_w   (inst_reg[3], inst_reg[2]) ||
+        neg_rm_w   (inst_reg[3], inst_reg[2])
     )) || (first_byte[3] && (
         mov_a_m_w  (inst_reg[3]) ||
         pop_rm     (inst_reg[3]) ||
@@ -631,6 +699,8 @@ module core (
             sub_rm_r_w (inst_reg[3]) || sub_r_rm_w (inst_reg[3]) ||
             sbb_rm_r_b (inst_reg[3]) || sbb_r_rm_b (inst_reg[3]) ||
             sbb_rm_r_w (inst_reg[3]) || sbb_r_rm_w (inst_reg[3]) ||
+            cmp_rm_r_b (inst_reg[3]) || cmp_r_rm_b (inst_reg[3]) ||
+            cmp_rm_r_w (inst_reg[3]) || cmp_r_rm_w (inst_reg[3]) ||
             push_rm    (inst_reg[3]) ||
             add_rm_i_b (inst_reg[3], inst_reg[2]) ||
             add_rm_zi_w(inst_reg[3], inst_reg[2]) ||
@@ -638,16 +708,21 @@ module core (
             adc_rm_i_b (inst_reg[3], inst_reg[2]) ||
             adc_rm_zi_w(inst_reg[3], inst_reg[2]) ||
             adc_rm_si_w(inst_reg[3], inst_reg[2]) ||
-            inc_rm_b   (inst_reg[3], inst_reg[2]) ||
-            inc_rm_w   (inst_reg[3], inst_reg[2]) ||
             sub_rm_i_b (inst_reg[3], inst_reg[2]) ||
             sub_rm_zi_w(inst_reg[3], inst_reg[2]) ||
             sub_rm_si_w(inst_reg[3], inst_reg[2]) ||
             sbb_rm_i_b (inst_reg[3], inst_reg[2]) ||
             sbb_rm_zi_w(inst_reg[3], inst_reg[2]) ||
             sbb_rm_si_w(inst_reg[3], inst_reg[2]) ||
+            cmp_rm_i_b (inst_reg[3], inst_reg[2]) ||
+            cmp_rm_zi_w(inst_reg[3], inst_reg[2]) ||
+            cmp_rm_si_w(inst_reg[3], inst_reg[2]) ||
+            inc_rm_b   (inst_reg[3], inst_reg[2]) ||
+            inc_rm_w   (inst_reg[3], inst_reg[2]) ||
             dec_rm_b   (inst_reg[3], inst_reg[2]) ||
-            dec_rm_w   (inst_reg[3], inst_reg[2])
+            dec_rm_w   (inst_reg[3], inst_reg[2]) ||
+            neg_rm_b   (inst_reg[3], inst_reg[2]) ||
+            neg_rm_w   (inst_reg[3], inst_reg[2])
         )) || (first_byte[3] && (
             mov_a_m_b  (inst_reg[3]) ||
             mov_a_m_w  (inst_reg[3])
@@ -691,16 +766,18 @@ module core (
         adc_rm_i_b (inst_reg[4], inst_reg[3]) ||
         adc_rm_zi_w(inst_reg[4], inst_reg[3]) ||
         adc_rm_si_w(inst_reg[4], inst_reg[3]) ||
-        inc_rm_b   (inst_reg[4], inst_reg[3]) ||
-        inc_rm_w   (inst_reg[4], inst_reg[3]) ||
         sub_rm_i_b (inst_reg[4], inst_reg[3]) ||
         sub_rm_zi_w(inst_reg[4], inst_reg[3]) ||
         sub_rm_si_w(inst_reg[4], inst_reg[3]) ||
         sbb_rm_i_b (inst_reg[4], inst_reg[3]) ||
         sbb_rm_zi_w(inst_reg[4], inst_reg[3]) ||
         sbb_rm_si_w(inst_reg[4], inst_reg[3]) ||
+        inc_rm_b   (inst_reg[4], inst_reg[3]) ||
+        inc_rm_w   (inst_reg[4], inst_reg[3]) ||
         dec_rm_b   (inst_reg[4], inst_reg[3]) ||
-        dec_rm_w   (inst_reg[4], inst_reg[3])
+        dec_rm_w   (inst_reg[4], inst_reg[3]) ||
+        neg_rm_b   (inst_reg[4], inst_reg[3]) ||
+        neg_rm_w   (inst_reg[4], inst_reg[3]) 
     )) || (first_byte[4] && (
         mov_m_a_b  (inst_reg[4]) ||
         mov_m_a_w  (inst_reg[4]) ||
@@ -722,12 +799,13 @@ module core (
         add_rm_si_w(inst_reg[4], inst_reg[3]) ||
         adc_rm_zi_w(inst_reg[4], inst_reg[3]) ||
         adc_rm_si_w(inst_reg[4], inst_reg[3]) ||
-        inc_rm_w   (inst_reg[4], inst_reg[3]) ||
         sub_rm_zi_w(inst_reg[4], inst_reg[3]) ||
         sub_rm_si_w(inst_reg[4], inst_reg[3]) ||
         sbb_rm_zi_w(inst_reg[4], inst_reg[3]) ||
         sbb_rm_si_w(inst_reg[4], inst_reg[3]) ||
-        dec_rm_w   (inst_reg[4], inst_reg[3])
+        inc_rm_w   (inst_reg[4], inst_reg[3]) ||
+        dec_rm_w   (inst_reg[4], inst_reg[3]) ||
+        neg_rm_w   (inst_reg[4], inst_reg[3]) 
     )) || (first_byte[4] && (
         mov_m_a_w  (inst_reg[4]) ||
         push_rm    (inst_reg[4]) ||
@@ -756,16 +834,18 @@ module core (
             adc_rm_i_b (inst_reg[4], inst_reg[3]) ||
             adc_rm_zi_w(inst_reg[4], inst_reg[3]) ||
             adc_rm_si_w(inst_reg[4], inst_reg[3]) ||
-            inc_rm_b   (inst_reg[4], inst_reg[3]) ||
-            inc_rm_w   (inst_reg[4], inst_reg[3]) ||
             sub_rm_i_b (inst_reg[4], inst_reg[3]) ||
             sub_rm_zi_w(inst_reg[4], inst_reg[3]) ||
             sub_rm_si_w(inst_reg[4], inst_reg[3]) ||
             sbb_rm_i_b (inst_reg[4], inst_reg[3]) ||
             sbb_rm_zi_w(inst_reg[4], inst_reg[3]) ||
             sbb_rm_si_w(inst_reg[4], inst_reg[3]) ||
+            inc_rm_b   (inst_reg[4], inst_reg[3]) ||
+            inc_rm_w   (inst_reg[4], inst_reg[3]) ||
             dec_rm_b   (inst_reg[4], inst_reg[3]) ||
-            dec_rm_w   (inst_reg[4], inst_reg[3])
+            dec_rm_w   (inst_reg[4], inst_reg[3]) ||
+            neg_rm_b   (inst_reg[4], inst_reg[3]) ||
+            neg_rm_w   (inst_reg[4], inst_reg[3]) 
         )) || (first_byte[4] && (
             mov_m_a_b  (inst_reg[4]) ||
             mov_m_a_w  (inst_reg[4])
@@ -819,30 +899,28 @@ module core (
         else if ((first_byte[4] && is_mem_mod(inst_reg[3]) && xchg_r_rm_w(inst_reg[4]))
             ram_wr_data_signal = register[reg_w(field_reg(inst_reg[3])) +: 16];
         else if ((first_byte[4] && is_mem_mod(inst_reg[3]) && (
-            add_rm_r_b (inst_reg[4]) ||
-            add_rm_r_w (inst_reg[4]) ||
-            adc_rm_r_b (inst_reg[4]) ||
-            adc_rm_r_w (inst_reg[4]) ||
-            sub_rm_r_b (inst_reg[4]) ||
-            sub_rm_r_w (inst_reg[4]) ||
-            sbb_rm_r_b (inst_reg[4]) ||
-            sbb_rm_r_w (inst_reg[4]) ||
+            add_rm_r_b (inst_reg[4]) || add_rm_r_w (inst_reg[4]) ||
+            adc_rm_r_b (inst_reg[4]) || adc_rm_r_w (inst_reg[4]) ||
+            sub_rm_r_b (inst_reg[4]) || sub_rm_r_w (inst_reg[4]) ||
+            sbb_rm_r_b (inst_reg[4]) || sbb_rm_r_w (inst_reg[4]) ||
             add_rm_i_b (inst_reg[4], inst_reg[3]) ||
             add_rm_zi_w(inst_reg[4], inst_reg[3]) ||
             add_rm_si_w(inst_reg[4], inst_reg[3]) ||
             adc_rm_i_b (inst_reg[4], inst_reg[3]) ||
             adc_rm_zi_w(inst_reg[4], inst_reg[3]) ||
             adc_rm_si_w(inst_reg[4], inst_reg[3]) ||
-            inc_rm_b   (inst_reg[4], inst_reg[3]) ||
-            inc_rm_w   (inst_reg[4], inst_reg[3]) ||
             sub_rm_i_b (inst_reg[4], inst_reg[3]) ||
             sub_rm_zi_w(inst_reg[4], inst_reg[3]) ||
             sub_rm_si_w(inst_reg[4], inst_reg[3]) ||
             sbb_rm_i_b (inst_reg[4], inst_reg[3]) ||
             sbb_rm_zi_w(inst_reg[4], inst_reg[3]) ||
             sbb_rm_si_w(inst_reg[4], inst_reg[3]) ||
+            inc_rm_b   (inst_reg[4], inst_reg[3]) ||
+            inc_rm_w   (inst_reg[4], inst_reg[3]) ||
             dec_rm_b   (inst_reg[4], inst_reg[3]) ||
-            dec_rm_w   (inst_reg[4], inst_reg[3])
+            dec_rm_w   (inst_reg[4], inst_reg[3]) ||
+            neg_rm_b   (inst_reg[4], inst_reg[3]) ||
+            neg_rm_w   (inst_reg[4], inst_reg[3]) 
         )))
             ram_wr_data_signal = r;
         else
