@@ -161,9 +161,15 @@ function idiv_r_rm_b    (input[7:0]i1,i2);  idiv_r_rm_b     = (i1[7:0]==8'b11110
 function idiv_r_rm_w    (input[7:0]i1,i2);  idiv_r_rm_w     = (i1[7:0]==8'b11110111&i2[5:3]==3'b111);   endfunction
 // AAD
 function aad            (input[7:0]i1,i2);  aad             = (i1[7:0]==8'b11010101&i2==8'b00001010);   endfunction
+// CBW
+function cbw            (input[7:0]i);      cbw             = (i[7:0]==8'b10011000);                    endfunction
+// CWD
+function cwd            (input[7:0]i);      cwd             = (i[7:0]==8'b10011001);                    endfunction
+
+
 
 function length1 (input [7:0] i);
-    length1 = push_r(i)|push_sr(i)|pop_r(i)|pop_sr(i)|xchg_a_r(i)|xlat(i)|lahf(i)|sahf(i)|pushf(i)|popf(i)|inc_r(i)|aaa(i)|daa(i)|dec_r(i)|aas(i)|das(i);
+    length1 = push_r(i)|push_sr(i)|pop_r(i)|pop_sr(i)|xchg_a_r(i)|xlat(i)|lahf(i)|sahf(i)|pushf(i)|popf(i)|inc_r(i)|aaa(i)|daa(i)|dec_r(i)|aas(i)|das(i)|aam(i)|aad(i)|cbw(i)|cwd(i);
 endfunction
 
 function length2 (input [7:0] i1, input [7:0] i2);
