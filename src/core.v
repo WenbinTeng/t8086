@@ -544,6 +544,8 @@ module core (
             else if (das        (inst_reg[4]))                          `AL <= `AL - (`AL & 8'h0f > 8'h09 | `AF ? 8'h6 : 8'h0) - (`AL > 8'h9f | `CF ? 8'h60 : 8'h00);
             else if (aam        (inst_reg[4]))                          {`AH, `AL} <= {`AL / 8'h0a, `AL % 8'h0a};
             else if (aad        (inst_reg[4]))                          {`AH, `AL} <= {8'h00, `AH * 8'h0a + `AL};
+            else if (cbw        (inst_reg[4]))                          `AX <= {8{`AL}, `AL};
+            else if (cwd        (inst_reg[4]))                          {`DX, `AX} <= {8{`AX}, `AX};
         end
     end
 
