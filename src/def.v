@@ -166,7 +166,42 @@ function cbw            (input[7:0]i);      cbw             = (i[7:0]==8'b100110
 // CWD
 function cwd            (input[7:0]i);      cwd             = (i[7:0]==8'b10011001);                    endfunction
 
-
+// LOGIC OPERATION
+// SHL
+function shl_rm_1_b     (input[7:0]i1,i2)   shl_rm_1_b      = (i1[7:0]==8'b11010000&i2[5:3]==3'b100);   endfunction
+function shl_rm_1_w     (input[7:0]i1,i2)   shl_rm_1_w      = (i1[7:0]==8'b11010001&i2[5:3]==3'b100);   endfunction
+function shl_rm_c_b     (input[7:0]i1,i2)   shl_rm_c_b      = (i1[7:0]==8'b11010010&i2[5:3]==3'b100);   endfunction
+function shl_rm_c_w     (input[7:0]i1,i2)   shl_rm_c_w      = (i1[7:0]==8'b11010011&i2[5:3]==3'b100);   endfunction
+// SHR
+function shr_rm_1_b     (input[7:0]i1,i2)   shr_rm_1_b      = (i1[7:0]==8'b11010000&i2[5:3]==3'b101);   endfunction
+function shr_rm_1_w     (input[7:0]i1,i2)   shr_rm_1_w      = (i1[7:0]==8'b11010001&i2[5:3]==3'b101);   endfunction
+function shr_rm_c_b     (input[7:0]i1,i2)   shr_rm_c_b      = (i1[7:0]==8'b11010010&i2[5:3]==3'b101);   endfunction
+function shr_rm_c_w     (input[7:0]i1,i2)   shr_rm_c_w      = (i1[7:0]==8'b11010011&i2[5:3]==3'b101);   endfunction
+// SAR
+function sar_rm_1_b     (input[7:0]i1,i2)   sar_rm_1_b      = (i1[7:0]==8'b11010000&i2[5:3]==3'b111);   endfunction
+function sar_rm_1_w     (input[7:0]i1,i2)   sar_rm_1_w      = (i1[7:0]==8'b11010001&i2[5:3]==3'b111);   endfunction
+function sar_rm_c_b     (input[7:0]i1,i2)   sar_rm_c_b      = (i1[7:0]==8'b11010010&i2[5:3]==3'b111);   endfunction
+function sar_rm_c_w     (input[7:0]i1,i2)   sar_rm_c_w      = (i1[7:0]==8'b11010011&i2[5:3]==3'b111);   endfunction
+// ROL
+function rol_rm_1_b     (input[7:0]i1,i2)   rol_rm_1_b      = (i1[7:0]==8'b11010000&i2[5:3]==3'b000);   endfunction
+function rol_rm_1_w     (input[7:0]i1,i2)   rol_rm_1_w      = (i1[7:0]==8'b11010001&i2[5:3]==3'b000);   endfunction
+function rol_rm_c_b     (input[7:0]i1,i2)   rol_rm_c_b      = (i1[7:0]==8'b11010010&i2[5:3]==3'b000);   endfunction
+function rol_rm_c_w     (input[7:0]i1,i2)   rol_rm_c_w      = (i1[7:0]==8'b11010011&i2[5:3]==3'b000);   endfunction
+// ROR
+function ror_rm_1_b     (input[7:0]i1,i2)   ror_rm_1_b      = (i1[7:0]==8'b11010000&i2[5:3]==3'b001);   endfunction
+function ror_rm_1_w     (input[7:0]i1,i2)   ror_rm_1_w      = (i1[7:0]==8'b11010001&i2[5:3]==3'b001);   endfunction
+function ror_rm_c_b     (input[7:0]i1,i2)   ror_rm_c_b      = (i1[7:0]==8'b11010010&i2[5:3]==3'b001);   endfunction
+function ror_rm_c_w     (input[7:0]i1,i2)   ror_rm_c_w      = (i1[7:0]==8'b11010011&i2[5:3]==3'b001);   endfunction
+// RCL
+function rcl_rm_1_b     (input[7:0]i1,i2)   rcl_rm_1_b      = (i1[7:0]==8'b11010000&i2[5:3]==3'b010);   endfunction
+function rcl_rm_1_w     (input[7:0]i1,i2)   rcl_rm_1_w      = (i1[7:0]==8'b11010001&i2[5:3]==3'b010);   endfunction
+function rcl_rm_c_b     (input[7:0]i1,i2)   rcl_rm_c_b      = (i1[7:0]==8'b11010010&i2[5:3]==3'b010);   endfunction
+function rcl_rm_c_w     (input[7:0]i1,i2)   rcl_rm_c_w      = (i1[7:0]==8'b11010011&i2[5:3]==3'b010);   endfunction
+// RCR
+function rcr_rm_1_b     (input[7:0]i1,i2)   rcr_rm_1_b      = (i1[7:0]==8'b11010000&i2[5:3]==3'b011);   endfunction
+function rcr_rm_1_w     (input[7:0]i1,i2)   rcr_rm_1_w      = (i1[7:0]==8'b11010001&i2[5:3]==3'b011);   endfunction
+function rcr_rm_c_b     (input[7:0]i1,i2)   rcr_rm_c_b      = (i1[7:0]==8'b11010010&i2[5:3]==3'b011);   endfunction
+function rcr_rm_c_w     (input[7:0]i1,i2)   rcr_rm_c_w      = (i1[7:0]==8'b11010011&i2[5:3]==3'b011);   endfunction
 
 function length1 (input [7:0] i);
     length1 = push_r(i)|push_sr(i)|pop_r(i)|pop_sr(i)|xchg_a_r(i)|xlat(i)|lahf(i)|sahf(i)|pushf(i)|popf(i)|inc_r(i)|aaa(i)|daa(i)|dec_r(i)|aas(i)|das(i)|aam(i)|aad(i)|cbw(i)|cwd(i);
@@ -183,7 +218,14 @@ function length2 (input [7:0] i1, input [7:0] i2);
               sbb_rm_r_b(i1)&disp0(i2)|sbb_r_rm_b(i1)&disp0(i2)|sbb_rm_r_w(i1)&disp0(i2)|sbb_r_rm_w(i1)&disp0(i2)|sbb_a_i_b(i1)|
               dec_rm_b(i1,i2)&disp0(i2)|dec_rm_w(i1,i2)&disp0(i2)|
               cmp_rm_r_b(i1)&disp0(i2)|cmp_r_rm_b(i1)&disp0(i2)|cmp_rm_r_w(i1)&disp0(i2)|cmp_r_rm_w(i1)&disp0(i2)|cmp_a_i_b(i1)|
-              neg_rm_b(i1)&disp0(i2)|neg_rm_w(i1)&disp0(i2)|;
+              neg_rm_b(i1)&disp0(i2)|neg_rm_w(i1)&disp0(i2)|
+              shl_rm_1_b(i1)&disp0(i2)|shl_rm_1_w(i1)&disp0(i2)|shl_rm_c_b(i1)&disp0(i2)|shl_rm_c_w(i1)&disp0(i2)|
+              shr_rm_1_b(i1)&disp0(i2)|shr_rm_1_w(i1)&disp0(i2)|shr_rm_c_b(i1)&disp0(i2)|shr_rm_c_w(i1)&disp0(i2)|
+              sar_rm_1_b(i1)&disp0(i2)|sar_rm_1_w(i1)&disp0(i2)|sar_rm_c_b(i1)&disp0(i2)|sar_rm_c_w(i1)&disp0(i2)|
+              rol_rm_1_b(i1)&disp0(i2)|rol_rm_1_w(i1)&disp0(i2)|rol_rm_c_b(i1)&disp0(i2)|rol_rm_c_w(i1)&disp0(i2)|
+              ror_rm_1_b(i1)&disp0(i2)|ror_rm_1_w(i1)&disp0(i2)|ror_rm_c_b(i1)&disp0(i2)|ror_rm_c_w(i1)&disp0(i2)|
+              rcl_rm_1_b(i1)&disp0(i2)|rcl_rm_1_w(i1)&disp0(i2)|rcl_rm_c_b(i1)&disp0(i2)|rcl_rm_c_w(i1)&disp0(i2)|
+              rcr_rm_1_b(i1)&disp0(i2)|rcr_rm_1_w(i1)&disp0(i2)|rcr_rm_c_b(i1)&disp0(i2)|rcr_rm_c_w(i1)&disp0(i2)|;
 endfunction
 
 function length3 (input [7:0] i1, input [7:0] i2);
@@ -197,7 +239,14 @@ function length3 (input [7:0] i1, input [7:0] i2);
               sbb_rm_r_b(i1)&disp1(i2)|sbb_r_rm_b(i1)&disp1(i2)|sbb_rm_r_w(i1)&disp1(i2)|sbb_r_rm_w(i1)&disp1(i2)|sbb_rm_i_b(i1,i2)&disp0(i2)|sbb_rm_si_w(i1,i2)&disp0(i2)|sbb_a_i_w(i1)|
               dec_rm_b(i1,i2)&disp1(i2)|dec_rm_w(i1,i2)&disp1(i2)|
               cmp_rm_r_b(i1)&disp1(i2)|cmp_r_rm_b(i1)&disp1(i2)|cmp_rm_r_w(i1)&disp1(i2)|cmp_r_rm_w(i1)&disp1(i2)|cmp_rm_i_b(i1,i2)&disp0(i2)|cmp_rm_si_w(i1,i2)&disp0(i2)|cmp_a_i_w(i1)|
-              neg_rm_b(i1)&disp1(i2)|neg_rm_w(i1)&disp1(i2)|;
+              neg_rm_b(i1)&disp1(i2)|neg_rm_w(i1)&disp1(i2)|
+              shl_rm_1_b(i1)&disp1(i2)|shl_rm_1_w(i1)&disp1(i2)|shl_rm_c_b(i1)&disp1(i2)|shl_rm_c_w(i1)&disp1(i2)|
+              shr_rm_1_b(i1)&disp1(i2)|shr_rm_1_w(i1)&disp1(i2)|shr_rm_c_b(i1)&disp1(i2)|shr_rm_c_w(i1)&disp1(i2)|
+              sar_rm_1_b(i1)&disp1(i2)|sar_rm_1_w(i1)&disp1(i2)|sar_rm_c_b(i1)&disp1(i2)|sar_rm_c_w(i1)&disp1(i2)|
+              rol_rm_1_b(i1)&disp1(i2)|rol_rm_1_w(i1)&disp1(i2)|rol_rm_c_b(i1)&disp1(i2)|rol_rm_c_w(i1)&disp1(i2)|
+              ror_rm_1_b(i1)&disp1(i2)|ror_rm_1_w(i1)&disp1(i2)|ror_rm_c_b(i1)&disp1(i2)|ror_rm_c_w(i1)&disp1(i2)|
+              rcl_rm_1_b(i1)&disp1(i2)|rcl_rm_1_w(i1)&disp1(i2)|rcl_rm_c_b(i1)&disp1(i2)|rcl_rm_c_w(i1)&disp1(i2)|
+              rcr_rm_1_b(i1)&disp1(i2)|rcr_rm_1_w(i1)&disp1(i2)|rcr_rm_c_b(i1)&disp1(i2)|rcr_rm_c_w(i1)&disp1(i2)|;
 endfunction
 
 function length4 (input [7:0] i1, input [7:0] i2);
@@ -211,7 +260,14 @@ function length4 (input [7:0] i1, input [7:0] i2);
               sbb_rm_r_b(i1)&disp2(i2)|sbb_r_rm_b(i1)&disp2(i2)|sbb_rm_r_w(i1)&disp2(i2)|sbb_r_rm_w(i1)&disp2(i2)|sbb_rm_i_b(i1,i2)&disp1(i2)|sbb_rm_si_w(i1,i2)&disp1(i2)|sbb_rm_zi_w(i1,i2)&disp0(i2)|
               dec_rm_b(i1,i2)&disp2(i2)|dec_rm_w(i1,i2)&disp2(i2)|
               cmp_rm_r_b(i1)&disp2(i2)|cmp_r_rm_b(i1)&disp2(i2)|cmp_rm_r_w(i1)&disp2(i2)|cmp_r_rm_w(i1)&disp2(i2)|cmp_rm_i_b(i1,i2)&disp1(i2)|cmp_rm_si_w(i1,i2)&disp1(i2)|cmp_rm_zi_w(i1,i2)&disp0(i2)|
-              neg_rm_b(i1)&disp2(i2)|neg_rm_w(i1)&disp2(i2)|;
+              neg_rm_b(i1)&disp2(i2)|neg_rm_w(i1)&disp2(i2)|
+              shl_rm_1_b(i1)&disp2(i2)|shl_rm_1_w(i1)&disp2(i2)|shl_rm_c_b(i1)&disp2(i2)|shl_rm_c_w(i1)&disp2(i2)|
+              shr_rm_1_b(i1)&disp2(i2)|shr_rm_1_w(i1)&disp2(i2)|shr_rm_c_b(i1)&disp2(i2)|shr_rm_c_w(i1)&disp2(i2)|
+              sar_rm_1_b(i1)&disp2(i2)|sar_rm_1_w(i1)&disp2(i2)|sar_rm_c_b(i1)&disp2(i2)|sar_rm_c_w(i1)&disp2(i2)|
+              rol_rm_1_b(i1)&disp2(i2)|rol_rm_1_w(i1)&disp2(i2)|rol_rm_c_b(i1)&disp2(i2)|rol_rm_c_w(i1)&disp2(i2)|
+              ror_rm_1_b(i1)&disp2(i2)|ror_rm_1_w(i1)&disp2(i2)|ror_rm_c_b(i1)&disp2(i2)|ror_rm_c_w(i1)&disp2(i2)|
+              rcl_rm_1_b(i1)&disp2(i2)|rcl_rm_1_w(i1)&disp2(i2)|rcl_rm_c_b(i1)&disp2(i2)|rcl_rm_c_w(i1)&disp2(i2)|
+              rcr_rm_1_b(i1)&disp2(i2)|rcr_rm_1_w(i1)&disp2(i2)|rcr_rm_c_b(i1)&disp2(i2)|rcr_rm_c_w(i1)&disp2(i2)|;
 endfunction
 
 function length5 (input [7:0] i1, input [7:0] i2);
