@@ -202,6 +202,45 @@ function rcr_rm_1_b     (input[7:0]i1,i2)   rcr_rm_1_b      = (i1[7:0]==8'b11010
 function rcr_rm_1_w     (input[7:0]i1,i2)   rcr_rm_1_w      = (i1[7:0]==8'b11010001&i2[5:3]==3'b011);   endfunction
 function rcr_rm_c_b     (input[7:0]i1,i2)   rcr_rm_c_b      = (i1[7:0]==8'b11010010&i2[5:3]==3'b011);   endfunction
 function rcr_rm_c_w     (input[7:0]i1,i2)   rcr_rm_c_w      = (i1[7:0]==8'b11010011&i2[5:3]==3'b011);   endfunction
+// NOT
+function not_rm_b       (input[7:0]i1,i2)   not_rm_b        = (i1[7:0]==8'b11110110&i2[5:3]==3'b010);   endfunction
+function not_rm_w       (input[7:0]i1,i2)   not_rm_w        = (i1[7:0]==8'b11110111&i2[5:3]==3'b010);   endfunction
+// AND
+function and_rm_r_b     (input[7:0]i);      and_rm_r_b      = (i[7:0]==8'b00100000);                    endfunction
+function and_r_rm_b     (input[7:0]i);      and_r_rm_b      = (i[7:0]==8'b00100010);                    endfunction
+function and_rm_r_w     (input[7:0]i);      and_rm_r_w      = (i[7:0]==8'b00100001);                    endfunction
+function and_r_rm_w     (input[7:0]i);      and_r_rm_w      = (i[7:0]==8'b00100011);                    endfunction
+function and_rm_i_b     (input[7:0]i1,i2);  and_rm_i_b      = (i1[7:0]==8'b10000000&i2[5:3]==3'b100);   endfunction
+function and_rm_i_w     (input[7:0]i1,i2);  and_rm_i_w      = (i1[7:0]==8'b10000001&i2[5:3]==3'b100);   endfunction
+function and_a_i_b      (input[7:0]i);      and_a_i_b       = (i[7:0]==8'b00100100);                    endfunction
+function and_a_i_w      (input[7:0]i);      and_a_i_w       = (i[7:0]==8'b00100101);                    endfunction
+// TEST
+function test_rm_r_b    (input[7:0]i);      test_rm_r_b     = (i[7:0]==8'b00010000);                    endfunction
+function test_r_rm_b    (input[7:0]i);      test_r_rm_b     = (i[7:0]==8'b00010010);                    endfunction
+function test_rm_r_w    (input[7:0]i);      test_rm_r_w     = (i[7:0]==8'b00010001);                    endfunction
+function test_r_rm_w    (input[7:0]i);      test_r_rm_w     = (i[7:0]==8'b00010011);                    endfunction
+function test_rm_i_b    (input[7:0]i1,i2);  test_rm_i_b     = (i1[7:0]==8'b11110110&i2[5:3]==3'b000);   endfunction
+function test_rm_i_w    (input[7:0]i1,i2);  test_rm_i_w     = (i1[7:0]==8'b11110110&i2[5:3]==3'b000);   endfunction
+function test_a_i_b     (input[7:0]i);      test_a_i_b      = (i[7:0]==8'b10101000);                    endfunction
+function test_a_i_w     (input[7:0]i);      test_a_i_w      = (i[7:0]==8'b10101001);                    endfunction
+// OR
+function or_rm_r_b      (input[7:0]i);      or_rm_r_b       = (i[7:0]==8'b00001000);                    endfunction
+function or_r_rm_b      (input[7:0]i);      or_r_rm_b       = (i[7:0]==8'b00001010);                    endfunction
+function or_rm_r_w      (input[7:0]i);      or_rm_r_w       = (i[7:0]==8'b00001001);                    endfunction
+function or_r_rm_w      (input[7:0]i);      or_r_rm_w       = (i[7:0]==8'b00001011);                    endfunction
+function or_rm_i_b      (input[7:0]i1,i2);  or_rm_i_b       = (i1[7:0]==8'b10000000&i2[5:3]==3'b001);   endfunction
+function or_rm_i_w      (input[7:0]i1,i2);  or_rm_i_w       = (i1[7:0]==8'b10000001&i2[5:3]==3'b001);   endfunction
+function or_a_i_b       (input[7:0]i);      or_a_i_b        = (i[7:0]==8'b00001100);                    endfunction
+function or_a_i_w       (input[7:0]i);      or_a_i_w        = (i[7:0]==8'b00001101);                    endfunction
+// XOR
+function xor_rm_r_b     (input[7:0]i);      xor_rm_r_b      = (i[7:0]==8'b00110000);                    endfunction
+function xor_r_rm_b     (input[7:0]i);      xor_r_rm_b      = (i[7:0]==8'b00110010);                    endfunction
+function xor_rm_r_w     (input[7:0]i);      xor_rm_r_w      = (i[7:0]==8'b00110001);                    endfunction
+function xor_r_rm_w     (input[7:0]i);      xor_r_rm_w      = (i[7:0]==8'b00110011);                    endfunction
+function xor_rm_i_b     (input[7:0]i1,i2);  xor_rm_i_b      = (i1[7:0]==8'b10000000&i2[5:3]==3'b110);   endfunction
+function xor_rm_i_w     (input[7:0]i1,i2);  xor_rm_i_w      = (i1[7:0]==8'b10000001&i2[5:3]==3'b110);   endfunction
+function xor_a_i_b      (input[7:0]i);      xor_a_i_b       = (i[7:0]==8'b00100100);                    endfunction
+function xor_a_i_w      (input[7:0]i);      xor_a_i_w       = (i[7:0]==8'b00100101);                    endfunction
 
 function length1 (input [7:0] i);
     length1 = push_r(i)|push_sr(i)|pop_r(i)|pop_sr(i)|xchg_a_r(i)|xlat(i)|lahf(i)|sahf(i)|pushf(i)|popf(i)|inc_r(i)|aaa(i)|daa(i)|dec_r(i)|aas(i)|das(i)|aam(i)|aad(i)|cbw(i)|cwd(i);
@@ -225,7 +264,12 @@ function length2 (input [7:0] i1, input [7:0] i2);
               rol_rm_1_b(i1)&disp0(i2)|rol_rm_1_w(i1)&disp0(i2)|rol_rm_c_b(i1)&disp0(i2)|rol_rm_c_w(i1)&disp0(i2)|
               ror_rm_1_b(i1)&disp0(i2)|ror_rm_1_w(i1)&disp0(i2)|ror_rm_c_b(i1)&disp0(i2)|ror_rm_c_w(i1)&disp0(i2)|
               rcl_rm_1_b(i1)&disp0(i2)|rcl_rm_1_w(i1)&disp0(i2)|rcl_rm_c_b(i1)&disp0(i2)|rcl_rm_c_w(i1)&disp0(i2)|
-              rcr_rm_1_b(i1)&disp0(i2)|rcr_rm_1_w(i1)&disp0(i2)|rcr_rm_c_b(i1)&disp0(i2)|rcr_rm_c_w(i1)&disp0(i2)|;
+              rcr_rm_1_b(i1)&disp0(i2)|rcr_rm_1_w(i1)&disp0(i2)|rcr_rm_c_b(i1)&disp0(i2)|rcr_rm_c_w(i1)&disp0(i2)|
+              not_rm_b(i1)&disp0(i2)|not_rm_w(i1)&disp0(i2)|
+              and_rm_r_b(i1)&disp0(i2)|and_r_rm_b(i1)&disp0(i2)|and_rm_r_w(i1)&disp0(i2)|and_r_rm_w(i1)&disp0(i2)|and_a_i_b(i1)|
+              test_rm_r_b(i1)&disp0(i2)|test_r_rm_b(i1)&disp0(i2)|test_rm_r_w(i1)&disp0(i2)|test_r_rm_w(i1)&disp0(i2)|test_a_i_b(i1)|
+              or_rm_r_b(i1)&disp0(i2)|or_r_rm_b(i1)&disp0(i2)|or_rm_r_w(i1)&disp0(i2)|or_r_rm_w(i1)&disp0(i2)|or_a_i_b(i1)|
+              xor_rm_r_b(i1)&disp0(i2)|xor_r_rm_b(i1)&disp0(i2)|xor_rm_r_w(i1)&disp0(i2)|xor_r_rm_w(i1)&disp0(i2)|xor_a_i_b(i1);
 endfunction
 
 function length3 (input [7:0] i1, input [7:0] i2);
@@ -246,7 +290,11 @@ function length3 (input [7:0] i1, input [7:0] i2);
               rol_rm_1_b(i1)&disp1(i2)|rol_rm_1_w(i1)&disp1(i2)|rol_rm_c_b(i1)&disp1(i2)|rol_rm_c_w(i1)&disp1(i2)|
               ror_rm_1_b(i1)&disp1(i2)|ror_rm_1_w(i1)&disp1(i2)|ror_rm_c_b(i1)&disp1(i2)|ror_rm_c_w(i1)&disp1(i2)|
               rcl_rm_1_b(i1)&disp1(i2)|rcl_rm_1_w(i1)&disp1(i2)|rcl_rm_c_b(i1)&disp1(i2)|rcl_rm_c_w(i1)&disp1(i2)|
-              rcr_rm_1_b(i1)&disp1(i2)|rcr_rm_1_w(i1)&disp1(i2)|rcr_rm_c_b(i1)&disp1(i2)|rcr_rm_c_w(i1)&disp1(i2)|;
+              rcr_rm_1_b(i1)&disp1(i2)|rcr_rm_1_w(i1)&disp1(i2)|rcr_rm_c_b(i1)&disp1(i2)|rcr_rm_c_w(i1)&disp1(i2)|
+              and_rm_r_b(i1)&disp1(i2)|and_r_rm_b(i1)&disp1(i2)|and_rm_r_w(i1)&disp1(i2)|and_r_rm_w(i1)&disp1(i2)|and_rm_i_b(i1,i2)&disp0(i2)|and_a_i_w(i1)|
+              test_rm_r_b(i1)&disp1(i2)|test_r_rm_b(i1)&disp1(i2)|test_rm_r_w(i1)&disp1(i2)|test_r_rm_w(i1)&disp1(i2)|test_rm_i_b(i1,i2)&disp0(i2)|test_a_i_w(i1)|
+              or_rm_r_b(i1)&disp1(i2)|or_r_rm_b(i1)&disp1(i2)|or_rm_r_w(i1)&disp1(i2)|or_r_rm_w(i1)&disp1(i2)|or_rm_i_b(i1,i2)&disp0(i2)|or_a_i_w(i1)|
+              xor_rm_r_b(i1)&disp1(i2)|xor_r_rm_b(i1)&disp1(i2)|xor_rm_r_w(i1)&disp1(i2)|xor_r_rm_w(i1)&disp1(i2)|xor_rm_i_b(i1,i2)&disp0(i2)|xor_a_i_w(i1);
 endfunction
 
 function length4 (input [7:0] i1, input [7:0] i2);
@@ -267,7 +315,11 @@ function length4 (input [7:0] i1, input [7:0] i2);
               rol_rm_1_b(i1)&disp2(i2)|rol_rm_1_w(i1)&disp2(i2)|rol_rm_c_b(i1)&disp2(i2)|rol_rm_c_w(i1)&disp2(i2)|
               ror_rm_1_b(i1)&disp2(i2)|ror_rm_1_w(i1)&disp2(i2)|ror_rm_c_b(i1)&disp2(i2)|ror_rm_c_w(i1)&disp2(i2)|
               rcl_rm_1_b(i1)&disp2(i2)|rcl_rm_1_w(i1)&disp2(i2)|rcl_rm_c_b(i1)&disp2(i2)|rcl_rm_c_w(i1)&disp2(i2)|
-              rcr_rm_1_b(i1)&disp2(i2)|rcr_rm_1_w(i1)&disp2(i2)|rcr_rm_c_b(i1)&disp2(i2)|rcr_rm_c_w(i1)&disp2(i2)|;
+              rcr_rm_1_b(i1)&disp2(i2)|rcr_rm_1_w(i1)&disp2(i2)|rcr_rm_c_b(i1)&disp2(i2)|rcr_rm_c_w(i1)&disp2(i2)|
+              and_rm_r_b(i1)&disp2(i2)|and_r_rm_b(i1)&disp2(i2)|and_rm_r_w(i1)&disp2(i2)|and_r_rm_w(i1)&disp2(i2)|and_rm_i_b(i1,i2)&disp1(i2)|and_rm_i_w(i1,i2)&disp0(i2)|
+              test_rm_r_b(i1)&disp2(i2)|test_r_rm_b(i1)&disp2(i2)|test_rm_r_w(i1)&disp2(i2)|test_r_rm_w(i1)&disp2(i2)|test_rm_i_b(i1,i2)&disp1(i2)|test_rm_i_w(i1,i2)&disp0(i2)|
+              or_rm_r_b(i1)&disp2(i2)|or_r_rm_b(i1)&disp2(i2)|or_rm_r_w(i1)&disp2(i2)|or_r_rm_w(i1)&disp2(i2)|or_rm_i_b(i1,i2)&disp1(i2)|or_rm_i_w(i1,i2)&disp0(i2)|
+              xor_rm_r_b(i1)&disp2(i2)|xor_r_rm_b(i1)&disp2(i2)|xor_rm_r_w(i1)&disp2(i2)|xor_r_rm_w(i1)&disp2(i2)|xor_rm_i_b(i1,i2)&disp1(i2)|xor_rm_i_w(i1,i2)&disp0(i2);
 endfunction
 
 function length5 (input [7:0] i1, input [7:0] i2);
@@ -276,11 +328,16 @@ function length5 (input [7:0] i1, input [7:0] i2);
               adc_rm_i_b(i1,i2)&disp2(i2)|adc_rm_si_w(i1,i2)&disp2(i2)|adc_rm_zi_w(i1,i2)&disp1(i2)|
               sub_rm_i_b(i1,i2)&disp2(i2)|sub_rm_si_w(i1,i2)&disp2(i2)|sub_rm_zi_w(i1,i2)&disp1(i2)|
               sbb_rm_i_b(i1,i2)&disp2(i2)|sbb_rm_si_w(i1,i2)&disp2(i2)|sbb_rm_zi_w(i1,i2)&disp1(i2)|
-              cmp_rm_i_b(i1,i2)&disp2(i2)|cmp_rm_si_w(i1,i2)&disp2(i2)|cmp_rm_zi_w(i1,i2)&disp1(i2);
+              cmp_rm_i_b(i1,i2)&disp2(i2)|cmp_rm_si_w(i1,i2)&disp2(i2)|cmp_rm_zi_w(i1,i2)&disp1(i2)|
+              and_rm_i_b(i1,i2)&disp2(i2)|and_rm_i_w(i1,i2)&disp1(i2)|
+              test_rm_i_b(i1,i2)&disp2(i2)|test_rm_i_w(i1,i2)&disp1(i2)|
+              or_rm_i_b(i1,i2)&disp2(i2)|or_rm_i_w(i1,i2)&disp1(i2)|
+              xor_rm_i_b(i1,i2)&disp2(i2)|xor_rm_i_w(i1,i2)&disp1(i2);
 endfunction
 
 function length6 (input [7:0] i1, input [7:0] i2);
-    length6 = mov_rm_i_w(i1)&disp2(i2)|add_rm_zi_w(i1,i2)&disp2(i2)|adc_rm_zi_w(i1,i2)&disp2(i2)|sub_rm_zi_w(i1,i2)&disp2(i2)|sbb_rm_zi_w(i1,i2)&disp2(i2)|cmp_rm_zi_w(i1,i2)&disp2(i2);
+    length6 = mov_rm_i_w(i1)&disp2(i2)|add_rm_zi_w(i1,i2)&disp2(i2)|adc_rm_zi_w(i1,i2)&disp2(i2)|sub_rm_zi_w(i1,i2)&disp2(i2)|sbb_rm_zi_w(i1,i2)&disp2(i2)|cmp_rm_zi_w(i1,i2)&disp2(i2)|
+              and_rm_i_w(i1,i2)&disp2(i2)|test_rm_i_w(i1,i2)&disp2(i2)|or_rm_i_w(i1,i2)&disp2(i2)|xor_rm_i_w(i1,i2)&disp2(i2);
 endfunction
 
 function disp0 (input [7:0] i2);

@@ -121,7 +121,17 @@ module core (
             rol_rm_1_b  (inst_reg[2], inst_reg[1]) || rol_rm_1_w  (inst_reg[2], inst_reg[1]) || rol_rm_c_b  (inst_reg[2], inst_reg[1]) || rol_rm_c_w  (inst_reg[2], inst_reg[1]) ||
             ror_rm_1_b  (inst_reg[2], inst_reg[1]) || ror_rm_1_w  (inst_reg[2], inst_reg[1]) || ror_rm_c_b  (inst_reg[2], inst_reg[1]) || ror_rm_c_w  (inst_reg[2], inst_reg[1]) ||
             rcl_rm_1_b  (inst_reg[2], inst_reg[1]) || rcl_rm_1_w  (inst_reg[2], inst_reg[1]) || rcl_rm_c_b  (inst_reg[2], inst_reg[1]) || rcl_rm_c_w  (inst_reg[2], inst_reg[1]) ||
-            rcr_rm_1_b  (inst_reg[2], inst_reg[1]) || rcr_rm_1_w  (inst_reg[2], inst_reg[1]) || rcr_rm_c_b  (inst_reg[2], inst_reg[1]) || rcr_rm_c_w  (inst_reg[2], inst_reg[1]) 
+            rcr_rm_1_b  (inst_reg[2], inst_reg[1]) || rcr_rm_1_w  (inst_reg[2], inst_reg[1]) || rcr_rm_c_b  (inst_reg[2], inst_reg[1]) || rcr_rm_c_w  (inst_reg[2], inst_reg[1]) ||
+            and_rm_r_b  (inst_reg[2]) || and_r_rm_b  (inst_reg[2]) || and_rm_r_w  (inst_reg[2]) || and_r_rm_w  (inst_reg[2]) ||
+            test_rm_r_b (inst_reg[2]) || test_r_rm_b (inst_reg[2]) || test_rm_r_w (inst_reg[2]) || test_r_rm_w (inst_reg[2]) ||
+            or_rm_r_b   (inst_reg[2]) || or_r_rm_b   (inst_reg[2]) || or_rm_r_w   (inst_reg[2]) || or_r_rm_w   (inst_reg[2]) ||
+            xor_rm_r_b  (inst_reg[2]) || xor_r_rm_b  (inst_reg[2]) || xor_rm_r_w  (inst_reg[2]) || xor_r_rm_w  (inst_reg[2]) ||
+            not_rm_b    (inst_reg[2], inst_reg[1]) || not_rm_w    (inst_reg[2], inst_reg[1]) ||
+            and_rm_i_b  (inst_reg[2], inst_reg[1]) || and_rm_i_w  (inst_reg[2], inst_reg[1]) ||
+            test_rm_i_b (inst_reg[2], inst_reg[1]) || test_rm_i_w (inst_reg[2], inst_reg[1]) ||
+            or_rm_i_b   (inst_reg[2], inst_reg[1]) || or_rm_i_w   (inst_reg[2], inst_reg[1]) ||
+            xor_rm_i_b  (inst_reg[2], inst_reg[1]) || xor_rm_i_w  (inst_reg[2], inst_reg[1]) 
+
         ))
             if (field_mod(inst_reg[1]) == 2'b00 && field_r_m(inst_reg[1]) == 3'b110)
                 addr_reg <= {rom_data, inst_reg[0]};
@@ -171,7 +181,16 @@ module core (
                 rol_rm_1_b  (inst_reg[3], inst_reg[2]) || rol_rm_c_b  (inst_reg[3], inst_reg[2]) ||
                 ror_rm_1_b  (inst_reg[3], inst_reg[2]) || ror_rm_c_b  (inst_reg[3], inst_reg[2]) ||
                 rcl_rm_1_b  (inst_reg[3], inst_reg[2]) || rcl_rm_c_b  (inst_reg[3], inst_reg[2]) ||
-                rcr_rm_1_b  (inst_reg[3], inst_reg[2]) || rcr_rm_c_b  (inst_reg[3], inst_reg[2]) 
+                rcr_rm_1_b  (inst_reg[3], inst_reg[2]) || rcr_rm_c_b  (inst_reg[3], inst_reg[2]) ||
+                and_rm_r_b  (inst_reg[3]) || and_r_rm_b  (inst_reg[3]) ||
+                test_rm_r_b (inst_reg[3]) || test_r_rm_b (inst_reg[3]) ||
+                or_rm_r_b   (inst_reg[3]) || or_r_rm_b   (inst_reg[3]) ||
+                xor_rm_r_b  (inst_reg[3]) || xor_r_rm_b  (inst_reg[3]) ||
+                not_rm_b    (inst_reg[3], inst_reg[2]) ||
+                and_rm_i_b  (inst_reg[3], inst_reg[2]) ||
+                test_rm_i_b (inst_reg[3], inst_reg[2]) ||
+                or_rm_i_b   (inst_reg[3], inst_reg[2]) ||
+                xor_rm_i_b  (inst_reg[3], inst_reg[2]) 
             )
                 data_reg <= register[reg_b(field_r_m(inst_reg[2])) +:  8];
             else if (
@@ -200,7 +219,16 @@ module core (
                 rol_rm_1_w  (inst_reg[3], inst_reg[2]) || rol_rm_c_w  (inst_reg[3], inst_reg[2]) ||
                 ror_rm_1_w  (inst_reg[3], inst_reg[2]) || ror_rm_c_w  (inst_reg[3], inst_reg[2]) ||
                 rcl_rm_1_w  (inst_reg[3], inst_reg[2]) || rcl_rm_c_w  (inst_reg[3], inst_reg[2]) ||
-                rcr_rm_1_w  (inst_reg[3], inst_reg[2]) || rcr_rm_c_w  (inst_reg[3], inst_reg[2]) 
+                rcr_rm_1_w  (inst_reg[3], inst_reg[2]) || rcr_rm_c_w  (inst_reg[3], inst_reg[2]) ||
+                and_rm_r_w  (inst_reg[3]) || and_r_rm_w  (inst_reg[3]) ||
+                test_rm_r_w (inst_reg[3]) || test_r_rm_w (inst_reg[3]) ||
+                or_rm_r_w   (inst_reg[3]) || or_r_rm_w   (inst_reg[3]) ||
+                xor_rm_r_w  (inst_reg[3]) || xor_r_rm_w  (inst_reg[3]) ||
+                not_rm_w    (inst_reg[3], inst_reg[2]) ||
+                and_rm_i_w  (inst_reg[3], inst_reg[2]) ||
+                test_rm_i_w (inst_reg[3], inst_reg[2]) ||
+                or_rm_i_w   (inst_reg[3], inst_reg[2]) ||
+                xor_rm_i_w  (inst_reg[3], inst_reg[2]) 
             )
                 data_reg <= register[reg_w(field_r_m(inst_reg[2])) +: 16];
         end
@@ -269,7 +297,16 @@ module core (
                 rol_rm_1_b  (inst_reg[3], inst_reg[2]) || rol_rm_c_b  (inst_reg[3], inst_reg[2]) || rol_rm_1_w  (inst_reg[3], inst_reg[2]) || rol_rm_c_w  (inst_reg[3], inst_reg[2]) ||
                 ror_rm_1_b  (inst_reg[3], inst_reg[2]) || ror_rm_c_b  (inst_reg[3], inst_reg[2]) || ror_rm_1_w  (inst_reg[3], inst_reg[2]) || ror_rm_c_w  (inst_reg[3], inst_reg[2]) ||
                 rcl_rm_1_b  (inst_reg[3], inst_reg[2]) || rcl_rm_c_b  (inst_reg[3], inst_reg[2]) || rcl_rm_1_w  (inst_reg[3], inst_reg[2]) || rcl_rm_c_w  (inst_reg[3], inst_reg[2]) ||
-                rcr_rm_1_b  (inst_reg[3], inst_reg[2]) || rcr_rm_c_b  (inst_reg[3], inst_reg[2]) || rcr_rm_1_w  (inst_reg[3], inst_reg[2]) || rcr_rm_c_w  (inst_reg[3], inst_reg[2]) 
+                rcr_rm_1_b  (inst_reg[3], inst_reg[2]) || rcr_rm_c_b  (inst_reg[3], inst_reg[2]) || rcr_rm_1_w  (inst_reg[3], inst_reg[2]) || rcr_rm_c_w  (inst_reg[3], inst_reg[2]) ||
+                and_rm_r_b  (inst_reg[3]) || and_r_rm_b  (inst_reg[3]) || and_rm_r_w  (inst_reg[3]) || and_r_rm_w  (inst_reg[3]) ||
+                test_rm_r_b (inst_reg[3]) || test_r_rm_b (inst_reg[3]) || test_rm_r_w (inst_reg[3]) || test_r_rm_w (inst_reg[3]) ||
+                or_rm_r_b   (inst_reg[3]) || or_r_rm_b   (inst_reg[3]) || or_rm_r_w   (inst_reg[3]) || or_r_rm_w   (inst_reg[3]) ||
+                xor_rm_r_b  (inst_reg[3]) || xor_r_rm_b  (inst_reg[3]) || xor_rm_r_w  (inst_reg[3]) || xor_r_rm_w  (inst_reg[3]) ||
+                not_rm_b    (inst_reg[3], inst_reg[2]) || not_rm_w    (inst_reg[3], inst_reg[2]) ||
+                and_rm_i_b  (inst_reg[3], inst_reg[2]) || and_rm_i_w  (inst_reg[3], inst_reg[2]) ||
+                test_rm_i_b (inst_reg[3], inst_reg[2]) || test_rm_i_w (inst_reg[3], inst_reg[2]) ||
+                or_rm_i_b   (inst_reg[3], inst_reg[2]) || or_rm_i_w   (inst_reg[3], inst_reg[2]) ||
+                xor_rm_i_b  (inst_reg[3], inst_reg[2]) || xor_rm_i_w  (inst_reg[3], inst_reg[2]) 
             )
                 data_reg <= ram_rd_data;
         end
@@ -288,97 +325,131 @@ module core (
             s = 'b0;
         end
         else if (first_byte[4]) begin
-            if      (add_rm_r_b (inst_reg[4]))              begin a = data_reg; b = register[reg_b(field_reg(inst_reg[3])) +:  8]; r = a + b; s = 0; end
-            else if (add_r_rm_b (inst_reg[4]))              begin a = register[reg_b(field_reg(inst_reg[3])) +:  8]; b = data_reg; r = a + b; s = 0; end
-            else if (add_rm_r_w (inst_reg[4]))              begin a = data_reg; b = register[reg_w(field_reg(inst_reg[3])) +: 16]; r = a + b; s = 0; end
-            else if (add_r_rm_w (inst_reg[4]))              begin a = register[reg_w(field_reg(inst_reg[3])) +: 16]; b = data_reg; r = a + b; s = 0; end
-            else if (add_rm_i_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b =                     inst_reg[2] ; r = a + b; s = 0; end
-            else if (add_rm_zi_w(inst_reg[4], inst_reg[3])) begin a = data_reg; b = {inst_reg[1],       inst_reg[2]}; r = a + b; s = 0; end
-            else if (add_rm_si_w(inst_reg[4], inst_reg[3])) begin a = data_reg; b = {8{inst_reg[2][7]}, inst_reg[2]}; r = a + b; s = 0; end
-            else if (add_a_i_b  (inst_reg[4]))              begin a = `AL; b = data_reg; r = a + b; s = 0; end
-            else if (add_a_i_w  (inst_reg[4]))              begin a = `AX; b = data_reg; r = a + b; s = 0; end
-            else if (adc_rm_r_b (inst_reg[4]))              begin a = data_reg; b = register[reg_b(field_reg(inst_reg[3])) +:  8]; r = a + b + `CF; s = 0; end
-            else if (adc_r_rm_b (inst_reg[4]))              begin a = register[reg_b(field_reg(inst_reg[3])) +:  8]; b = data_reg; r = a + b + `CF; s = 0; end
-            else if (adc_rm_r_w (inst_reg[4]))              begin a = data_reg; b = register[reg_w(field_reg(inst_reg[3])) +: 16]; r = a + b + `CF; s = 0; end
-            else if (adc_r_rm_w (inst_reg[4]))              begin a = register[reg_w(field_reg(inst_reg[3])) +: 16]; b = data_reg; r = a + b + `CF; s = 0; end
-            else if (adc_rm_i_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b =                     inst_reg[2] ; r = a + b + `CF; s = 0;  end
-            else if (adc_rm_zi_w(inst_reg[4], inst_reg[3])) begin a = data_reg; b = {inst_reg[1],       inst_reg[2]}; r = a + b + `CF; s = 0; end
-            else if (adc_rm_si_w(inst_reg[4], inst_reg[3])) begin a = data_reg; b = {8{inst_reg[2][7]}, inst_reg[2]}; r = a + b + `CF; s = 0; end
-            else if (adc_a_i_b  (inst_reg[4]))              begin a = `AL; b = data_reg; r = a + b + `CF; s = 0; end
-            else if (adc_a_i_w  (inst_reg[4]))              begin a = `AX; b = data_reg; r = a + b + `CF; s = 0; end
-            else if (sub_rm_r_b (inst_reg[4]))              begin a = data_reg; b = register[reg_b(field_reg(inst_reg[3])) +:  8]; r = a - b; s = 0; end
-            else if (sub_r_rm_b (inst_reg[4]))              begin a = register[reg_b(field_reg(inst_reg[3])) +:  8]; b = data_reg; r = a - b; s = 0; end
-            else if (sub_rm_r_w (inst_reg[4]))              begin a = data_reg; b = register[reg_w(field_reg(inst_reg[3])) +: 16]; r = a - b; s = 0; end
-            else if (sub_r_rm_w (inst_reg[4]))              begin a = register[reg_w(field_reg(inst_reg[3])) +: 16]; b = data_reg; r = a - b; s = 0; end
-            else if (sub_rm_i_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b =                     inst_reg[2] ; r = a - b; s = 0; end
-            else if (sub_rm_zi_w(inst_reg[4], inst_reg[3])) begin a = data_reg; b = {inst_reg[1],       inst_reg[2]}; r = a - b; s = 0; end
-            else if (sub_rm_si_w(inst_reg[4], inst_reg[3])) begin a = data_reg; b = {8{inst_reg[2][7]}, inst_reg[2]}; r = a - b; s = 0; end
-            else if (sub_a_i_b  (inst_reg[4]))              begin a = `AL; b = data_reg; r = a - b; s = 0; end
-            else if (sub_a_i_w  (inst_reg[4]))              begin a = `AX; b = data_reg; r = a - b; s = 0; end
-            else if (sbb_rm_r_b (inst_reg[4]))              begin a = data_reg; b = register[reg_b(field_reg(inst_reg[3])) +:  8]; r = a - b - `CF; s = 0; end
-            else if (sbb_r_rm_b (inst_reg[4]))              begin a = register[reg_b(field_reg(inst_reg[3])) +:  8]; b = data_reg; r = a - b - `CF; s = 0; end
-            else if (sbb_rm_r_w (inst_reg[4]))              begin a = data_reg; b = register[reg_w(field_reg(inst_reg[3])) +: 16]; r = a - b - `CF; s = 0; end
-            else if (sbb_r_rm_w (inst_reg[4]))              begin a = register[reg_w(field_reg(inst_reg[3])) +: 16]; b = data_reg; r = a - b - `CF; s = 0; end
-            else if (sbb_rm_i_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b =                     inst_reg[2] ; r = a - b - `CF; s = 0; end
-            else if (sbb_rm_zi_w(inst_reg[4], inst_reg[3])) begin a = data_reg; b = {inst_reg[1],       inst_reg[2]}; r = a - b - `CF; s = 0; end
-            else if (sbb_rm_si_w(inst_reg[4], inst_reg[3])) begin a = data_reg; b = {8{inst_reg[2][7]}, inst_reg[2]}; r = a - b - `CF; s = 0; end
-            else if (sbb_a_i_b  (inst_reg[4]))              begin a = `AL; b = data_reg; r = a - b - `CF; s = 0; end
-            else if (sbb_a_i_w  (inst_reg[4]))              begin a = `AX; b = data_reg; r = a - b - `CF; s = 0; end
-            else if (cmp_rm_r_b (inst_reg[4]))              begin a = data_reg; b = register[reg_b(field_reg(inst_reg[3])) +:  8]; r = a - b; s = 0; end
-            else if (cmp_r_rm_b (inst_reg[4]))              begin a = register[reg_b(field_reg(inst_reg[3])) +:  8]; b = data_reg; r = a - b; s = 0; end
-            else if (cmp_rm_r_w (inst_reg[4]))              begin a = data_reg; b = register[reg_w(field_reg(inst_reg[3])) +: 16]; r = a - b; s = 0; end
-            else if (cmp_r_rm_w (inst_reg[4]))              begin a = register[reg_w(field_reg(inst_reg[3])) +: 16]; b = data_reg; r = a - b; s = 0; end
-            else if (cmp_rm_i_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b =                     inst_reg[2] ; r = a - b; s = 0; end
-            else if (cmp_rm_zi_w(inst_reg[4], inst_reg[3])) begin a = data_reg; b = {inst_reg[1],       inst_reg[2]}; r = a - b; s = 0; end
-            else if (cmp_rm_si_w(inst_reg[4], inst_reg[3])) begin a = data_reg; b = {8{inst_reg[2][7]}, inst_reg[2]}; r = a - b; s = 0; end
-            else if (cmp_a_i_b  (inst_reg[4]))              begin a = `AL; b = data_reg; r = a - b; s = 0; end
-            else if (cmp_a_i_w  (inst_reg[4]))              begin a = `AX; b = data_reg; r = a - b; s = 0; end
-            else if (inc_rm_b   (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 16'b1; r = a + b; s = 0; end
-            else if (inc_rm_w   (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 16'b1; r = a + b; s = 0; end
-            else if (inc_r      (inst_reg[4], inst_reg[3])) begin a = register[reg_w(field_r_m(inst_reg[4])) +: 16]; b = 16'b1; r = a + b; s = 0; end
-            else if (dec_rm_b   (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 16'b1; r = a - b; s = 0; end
-            else if (dec_rm_w   (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 16'b1; r = a - b; s = 0; end
-            else if (dec_r      (inst_reg[4], inst_reg[3])) begin a = register[reg_w(field_r_m(inst_reg[4])) +: 16]; b = 16'b1; r = a - b; s = 0; end
-            else if (neg_rm_b   (inst_reg[4], inst_reg[3])) begin a = 'b0; b = data_reg; r = a - b; s = 0; end
-            else if (neg_rm_w   (inst_reg[4], inst_reg[3])) begin a = 'b0; b = data_reg; r = a - b; s = 0; end
-            else if (neg_r      (inst_reg[4], inst_reg[3])) begin a = 'b0; b = register[reg_w(field_r_m(inst_reg[4])) +: 16]; r = a - b; s = 0; end
-            else if (mul_r_rm_b (inst_reg[4], inst_reg[3])) begin a = `AL; b = data_reg; r = fmul_b(a,b); s = 0; end
-            else if (mul_r_rm_w (inst_reg[4], inst_reg[3])) begin a = `AX; b = data_reg; {s,r} = fmul_w(a,b); end
-            else if (imul_r_rm_b(inst_reg[4], inst_reg[3])) begin a = `AL; b = data_reg; r = fmul_b(a,b); s = 0; end
-            else if (imul_r_rm_w(inst_reg[4], inst_reg[3])) begin a = `AX; b = data_reg; {s,r} = fmul_w(a,b); end
-            else if (div_r_rm_b (inst_reg[4], inst_reg[3])) begin a = `AL; b = data_reg; r = fdiv_b(a,b); s = 0; end
-            else if (div_r_rm_w (inst_reg[4], inst_reg[3])) begin a = `AX; b = data_reg; {s,r} = fdiv_w(a,b); end
-            else if (idiv_r_rm_b(inst_reg[4], inst_reg[3])) begin a = `AL; b = data_reg; r = fdiv_b(a,b); s = 0; end
-            else if (idiv_r_rm_w(inst_reg[4], inst_reg[3])) begin a = `AX; b = data_reg; {s,r} = fdiv_w(a,b); end
-            else if (shl_rm_1_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = a << b; s = a[ 7]; end
-            else if (shl_rm_1_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = a << b; s = a[15]; end
-            else if (shl_rm_c_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = a << b; s = {a << (b > 0 ? b - 1 : 0)}[ 7]; end
-            else if (shl_rm_c_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = a << b; s = {a << (b > 0 ? b - 1 : 0)}[15]; end
-            else if (shr_rm_1_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = a >> b; s = a[0]; end
-            else if (shr_rm_1_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = a >> b; s = a[0]; end
-            else if (shr_rm_c_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = a >> b; s = {a >> (b > 0 ? b - 1 : 0)}[0]; end
-            else if (shr_rm_c_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = a >> b; s = {a >> (b > 0 ? b - 1 : 0)}[0]; end
-            else if (sar_rm_1_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = a[ 7:0] >>> b; s = a[0]; end
-            else if (sar_rm_1_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = a[15:0] >>> b; s = a[0]; end
-            else if (sar_rm_c_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = a[ 7:0] >>> b; s = {a >> (b > 0 ? b - 1 : 0)}[0]; end
-            else if (sar_rm_c_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = a[15:0] >>> b; s = {a >> (b > 0 ? b - 1 : 0)}[0]; end
-            else if (rol_rm_1_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = {a[ 6:0], a[ 7]}; s = r[0]; end
-            else if (rol_rm_1_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = {a[14:0], a[15]}; s = r[0]; end
-            else if (rol_rm_c_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = {(a[ 7:0] << b) | (a[ 7:0] >> ('d8  - b))}; s = r[0]; end
-            else if (rol_rm_c_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = {(a[15:0] << b) | (a[15:0] >> ('d16 - b))}; s = r[0]; end
-            else if (ror_rm_1_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = {a[0], a[ 7:1]}; s = r[15]; end
-            else if (ror_rm_1_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = {a[0], a[15:1]}; s = r[15]; end
-            else if (ror_rm_c_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = {(a[ 7:0] >> b) | (a[ 7:0] << ('d8  - b))}; s = r[15]; end
-            else if (ror_rm_c_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = {(a[15:0] >> b) | (a[15:0] << ('d16 - b))}; s = r[15]; end
-            else if (rcl_rm_1_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = {a[ 6:0], `CF}; s = a[ 7]; end
-            else if (rcl_rm_1_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = {a[14:0], `CF}; s = a[15]; end
-            else if (rcl_rm_c_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = b > 0 ? {(a[ 7:0] << b) | ({`CF, a[ 7:1]} >> ('d7  - b))} : a; s = r[0]; end
-            else if (rcl_rm_c_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = b > 0 ? {(a[15:0] << b) | ({`CF, a[15:1]} >> ('d15 - b))} : a; s = r[0]; end
-            else if (rcr_rm_1_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = {`CF, a[ 7:1]}; s = a[0]; end
-            else if (rcr_rm_1_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = {`CF, a[15:1]}; s = a[0]; end
-            else if (rcr_rm_c_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = {(a[ 7:0] >> b) | (a[ 7:0] << ('d8  - b))}; s = r[15]; end
-            else if (rcr_rm_c_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = {(a[15:0] >> b) | (a[15:0] << ('d16 - b))}; s = r[15]; end
-            else                                            begin a = 'b0; b = 'b0; r = 'b0; end
+            if      (add_rm_r_b  (inst_reg[4]))              begin a = data_reg; b = register[reg_b(field_reg(inst_reg[3])) +:  8]; r = a + b; s = 0; end
+            else if (add_r_rm_b  (inst_reg[4]))              begin a = register[reg_b(field_reg(inst_reg[3])) +:  8]; b = data_reg; r = a + b; s = 0; end
+            else if (add_rm_r_w  (inst_reg[4]))              begin a = data_reg; b = register[reg_w(field_reg(inst_reg[3])) +: 16]; r = a + b; s = 0; end
+            else if (add_r_rm_w  (inst_reg[4]))              begin a = register[reg_w(field_reg(inst_reg[3])) +: 16]; b = data_reg; r = a + b; s = 0; end
+            else if (add_rm_i_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b =                     inst_reg[2] ; r = a + b; s = 0; end
+            else if (add_rm_zi_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = {inst_reg[1],       inst_reg[2]}; r = a + b; s = 0; end
+            else if (add_rm_si_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = {8{inst_reg[2][7]}, inst_reg[2]}; r = a + b; s = 0; end
+            else if (add_a_i_b   (inst_reg[4]))              begin a = `AL; b = data_reg; r = a + b; s = 0; end
+            else if (add_a_i_w   (inst_reg[4]))              begin a = `AX; b = data_reg; r = a + b; s = 0; end
+            else if (adc_rm_r_b  (inst_reg[4]))              begin a = data_reg; b = register[reg_b(field_reg(inst_reg[3])) +:  8]; r = a + b + `CF; s = 0; end
+            else if (adc_r_rm_b  (inst_reg[4]))              begin a = register[reg_b(field_reg(inst_reg[3])) +:  8]; b = data_reg; r = a + b + `CF; s = 0; end
+            else if (adc_rm_r_w  (inst_reg[4]))              begin a = data_reg; b = register[reg_w(field_reg(inst_reg[3])) +: 16]; r = a + b + `CF; s = 0; end
+            else if (adc_r_rm_w  (inst_reg[4]))              begin a = register[reg_w(field_reg(inst_reg[3])) +: 16]; b = data_reg; r = a + b + `CF; s = 0; end
+            else if (adc_rm_i_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b =                     inst_reg[2] ; r = a + b + `CF; s = 0;  end
+            else if (adc_rm_zi_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = {inst_reg[1],       inst_reg[2]}; r = a + b + `CF; s = 0; end
+            else if (adc_rm_si_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = {8{inst_reg[2][7]}, inst_reg[2]}; r = a + b + `CF; s = 0; end
+            else if (adc_a_i_b   (inst_reg[4]))              begin a = `AL; b = data_reg; r = a + b + `CF; s = 0; end
+            else if (adc_a_i_w   (inst_reg[4]))              begin a = `AX; b = data_reg; r = a + b + `CF; s = 0; end
+            else if (sub_rm_r_b  (inst_reg[4]))              begin a = data_reg; b = register[reg_b(field_reg(inst_reg[3])) +:  8]; r = a - b; s = 0; end
+            else if (sub_r_rm_b  (inst_reg[4]))              begin a = register[reg_b(field_reg(inst_reg[3])) +:  8]; b = data_reg; r = a - b; s = 0; end
+            else if (sub_rm_r_w  (inst_reg[4]))              begin a = data_reg; b = register[reg_w(field_reg(inst_reg[3])) +: 16]; r = a - b; s = 0; end
+            else if (sub_r_rm_w  (inst_reg[4]))              begin a = register[reg_w(field_reg(inst_reg[3])) +: 16]; b = data_reg; r = a - b; s = 0; end
+            else if (sub_rm_i_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b =                     inst_reg[2] ; r = a - b; s = 0; end
+            else if (sub_rm_zi_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = {inst_reg[1],       inst_reg[2]}; r = a - b; s = 0; end
+            else if (sub_rm_si_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = {8{inst_reg[2][7]}, inst_reg[2]}; r = a - b; s = 0; end
+            else if (sub_a_i_b   (inst_reg[4]))              begin a = `AL; b = data_reg; r = a - b; s = 0; end
+            else if (sub_a_i_w   (inst_reg[4]))              begin a = `AX; b = data_reg; r = a - b; s = 0; end
+            else if (sbb_rm_r_b  (inst_reg[4]))              begin a = data_reg; b = register[reg_b(field_reg(inst_reg[3])) +:  8]; r = a - b - `CF; s = 0; end
+            else if (sbb_r_rm_b  (inst_reg[4]))              begin a = register[reg_b(field_reg(inst_reg[3])) +:  8]; b = data_reg; r = a - b - `CF; s = 0; end
+            else if (sbb_rm_r_w  (inst_reg[4]))              begin a = data_reg; b = register[reg_w(field_reg(inst_reg[3])) +: 16]; r = a - b - `CF; s = 0; end
+            else if (sbb_r_rm_w  (inst_reg[4]))              begin a = register[reg_w(field_reg(inst_reg[3])) +: 16]; b = data_reg; r = a - b - `CF; s = 0; end
+            else if (sbb_rm_i_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b =                     inst_reg[2] ; r = a - b - `CF; s = 0; end
+            else if (sbb_rm_zi_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = {inst_reg[1],       inst_reg[2]}; r = a - b - `CF; s = 0; end
+            else if (sbb_rm_si_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = {8{inst_reg[2][7]}, inst_reg[2]}; r = a - b - `CF; s = 0; end
+            else if (sbb_a_i_b   (inst_reg[4]))              begin a = `AL; b = data_reg; r = a - b - `CF; s = 0; end
+            else if (sbb_a_i_w   (inst_reg[4]))              begin a = `AX; b = data_reg; r = a - b - `CF; s = 0; end
+            else if (cmp_rm_r_b  (inst_reg[4]))              begin a = data_reg; b = register[reg_b(field_reg(inst_reg[3])) +:  8]; r = a - b; s = 0; end
+            else if (cmp_r_rm_b  (inst_reg[4]))              begin a = register[reg_b(field_reg(inst_reg[3])) +:  8]; b = data_reg; r = a - b; s = 0; end
+            else if (cmp_rm_r_w  (inst_reg[4]))              begin a = data_reg; b = register[reg_w(field_reg(inst_reg[3])) +: 16]; r = a - b; s = 0; end
+            else if (cmp_r_rm_w  (inst_reg[4]))              begin a = register[reg_w(field_reg(inst_reg[3])) +: 16]; b = data_reg; r = a - b; s = 0; end
+            else if (cmp_rm_i_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b =                     inst_reg[2] ; r = a - b; s = 0; end
+            else if (cmp_rm_zi_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = {inst_reg[1],       inst_reg[2]}; r = a - b; s = 0; end
+            else if (cmp_rm_si_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = {8{inst_reg[2][7]}, inst_reg[2]}; r = a - b; s = 0; end
+            else if (cmp_a_i_b   (inst_reg[4]))              begin a = `AL; b = data_reg; r = a - b; s = 0; end
+            else if (cmp_a_i_w   (inst_reg[4]))              begin a = `AX; b = data_reg; r = a - b; s = 0; end
+            else if (inc_rm_b    (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 16'b1; r = a + b; s = 0; end
+            else if (inc_rm_w    (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 16'b1; r = a + b; s = 0; end
+            else if (inc_r       (inst_reg[4], inst_reg[3])) begin a = register[reg_w(field_r_m(inst_reg[4])) +: 16]; b = 16'b1; r = a + b; s = 0; end
+            else if (dec_rm_b    (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 16'b1; r = a - b; s = 0; end
+            else if (dec_rm_w    (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 16'b1; r = a - b; s = 0; end
+            else if (dec_r       (inst_reg[4], inst_reg[3])) begin a = register[reg_w(field_r_m(inst_reg[4])) +: 16]; b = 16'b1; r = a - b; s = 0; end
+            else if (neg_rm_b    (inst_reg[4], inst_reg[3])) begin a = 'b0; b = data_reg; r = a - b; s = 0; end
+            else if (neg_rm_w    (inst_reg[4], inst_reg[3])) begin a = 'b0; b = data_reg; r = a - b; s = 0; end
+            else if (neg_r       (inst_reg[4], inst_reg[3])) begin a = 'b0; b = register[reg_w(field_r_m(inst_reg[4])) +: 16]; r = a - b; s = 0; end
+            else if (mul_r_rm_b  (inst_reg[4], inst_reg[3])) begin a = `AL; b = data_reg; r = fmul_b(a,b); s = 0; end
+            else if (mul_r_rm_w  (inst_reg[4], inst_reg[3])) begin a = `AX; b = data_reg; {s,r} = fmul_w(a,b); end
+            else if (imul_r_rm_b (inst_reg[4], inst_reg[3])) begin a = `AL; b = data_reg; r = fmul_b(a,b); s = 0; end
+            else if (imul_r_rm_w (inst_reg[4], inst_reg[3])) begin a = `AX; b = data_reg; {s,r} = fmul_w(a,b); end
+            else if (div_r_rm_b  (inst_reg[4], inst_reg[3])) begin a = `AL; b = data_reg; r = fdiv_b(a,b); s = 0; end
+            else if (div_r_rm_w  (inst_reg[4], inst_reg[3])) begin a = `AX; b = data_reg; {s,r} = fdiv_w(a,b); end
+            else if (idiv_r_rm_b (inst_reg[4], inst_reg[3])) begin a = `AL; b = data_reg; r = fdiv_b(a,b); s = 0; end
+            else if (idiv_r_rm_w (inst_reg[4], inst_reg[3])) begin a = `AX; b = data_reg; {s,r} = fdiv_w(a,b); end
+            else if (shl_rm_1_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = a << b; s = a[ 7]; end
+            else if (shl_rm_1_w  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = a << b; s = a[15]; end
+            else if (shl_rm_c_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = a << b; s = {a << (b > 0 ? b - 1 : 0)}[ 7]; end
+            else if (shl_rm_c_w  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = a << b; s = {a << (b > 0 ? b - 1 : 0)}[15]; end
+            else if (shr_rm_1_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = a >> b; s = a[0]; end
+            else if (shr_rm_1_w  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = a >> b; s = a[0]; end
+            else if (shr_rm_c_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = a >> b; s = {a >> (b > 0 ? b - 1 : 0)}[0]; end
+            else if (shr_rm_c_w  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = a >> b; s = {a >> (b > 0 ? b - 1 : 0)}[0]; end
+            else if (sar_rm_1_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = a[ 7:0] >>> b; s = a[0]; end
+            else if (sar_rm_1_w  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = a[15:0] >>> b; s = a[0]; end
+            else if (sar_rm_c_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = a[ 7:0] >>> b; s = {a >> (b > 0 ? b - 1 : 0)}[0]; end
+            else if (sar_rm_c_w  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = a[15:0] >>> b; s = {a >> (b > 0 ? b - 1 : 0)}[0]; end
+            else if (rol_rm_1_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = {a[ 6:0], a[ 7]}; s = r[0]; end
+            else if (rol_rm_1_w  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = {a[14:0], a[15]}; s = r[0]; end
+            else if (rol_rm_c_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = {(a[ 7:0] << b) | (a[ 7:0] >> ('d8  - b))}; s = r[0]; end
+            else if (rol_rm_c_w  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = {(a[15:0] << b) | (a[15:0] >> ('d16 - b))}; s = r[0]; end
+            else if (ror_rm_1_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = {a[0], a[ 7:1]}; s = r[15]; end
+            else if (ror_rm_1_w  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = {a[0], a[15:1]}; s = r[15]; end
+            else if (ror_rm_c_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = {(a[ 7:0] >> b) | (a[ 7:0] << ('d8  - b))}; s = r[15]; end
+            else if (ror_rm_c_w  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = {(a[15:0] >> b) | (a[15:0] << ('d16 - b))}; s = r[15]; end
+            else if (rcl_rm_1_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = {a[ 6:0], `CF}; s = a[ 7]; end
+            else if (rcl_rm_1_w  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = {a[14:0], `CF}; s = a[15]; end
+            else if (rcl_rm_c_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = b > 0 ? {(a[ 7:0] << b) | ({`CF, a[ 7:1]} >> ('d7  - b))} : a; s = r[0]; end
+            else if (rcl_rm_c_w  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = b > 0 ? {(a[15:0] << b) | ({`CF, a[15:1]} >> ('d15 - b))} : a; s = r[0]; end
+            else if (rcr_rm_1_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = {`CF, a[ 7:1]}; s = a[0]; end
+            else if (rcr_rm_1_w  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = 'b1; r = {`CF, a[15:1]}; s = a[0]; end
+            else if (rcr_rm_c_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = {(a[ 7:0] >> b) | (a[ 7:0] << ('d8  - b))}; s = r[15]; end
+            else if (rcr_rm_c_w  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = `CL; r = {(a[15:0] >> b) | (a[15:0] << ('d16 - b))}; s = r[15]; end
+            else if (not_rm_b    (inst_reg[4]))              begin a = data_reg; b = 'b0; r = ~a[ 7:0]; s = 0; end
+            else if (not_rm_w    (inst_reg[4]))              begin a = data_reg; b = 'b0; r = ~a[15:0]; s = 0; end
+            else if (and_rm_r_b  (inst_reg[4]))              begin a = data_reg; b = register[reg_b(field_reg(inst_reg[3])) +:  8]; r = a & b; s = 0; end
+            else if (and_r_rm_b  (inst_reg[4]))              begin a = register[reg_b(field_reg(inst_reg[3])) +:  8]; b = data_reg; r = a & b; s = 0; end
+            else if (and_rm_r_w  (inst_reg[4]))              begin a = data_reg; b = register[reg_w(field_reg(inst_reg[3])) +: 16]; r = a & b; s = 0; end
+            else if (and_r_rm_w  (inst_reg[4]))              begin a = register[reg_w(field_reg(inst_reg[3])) +: 16]; b = data_reg; r = a & b; s = 0; end
+            else if (and_rm_i_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b =               inst_reg[2] ; r = a & b; s = 0; end
+            else if (and_rm_i_w  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = {inst_reg[1], inst_reg[2]}; r = a & b; s = 0; end
+            else if (and_a_i_b   (inst_reg[4]))              begin a = `AL; b = data_reg; r = a & b; s = 0; end
+            else if (and_a_i_w   (inst_reg[4]))              begin a = `AX; b = data_reg; r = a & b; s = 0; end
+            else if (test_rm_r_b (inst_reg[4]))              begin a = data_reg; b = register[reg_b(field_reg(inst_reg[3])) +:  8]; r = a & b; s = 0; end
+            else if (test_r_rm_b (inst_reg[4]))              begin a = register[reg_b(field_reg(inst_reg[3])) +:  8]; b = data_reg; r = a & b; s = 0; end
+            else if (test_rm_r_w (inst_reg[4]))              begin a = data_reg; b = register[reg_w(field_reg(inst_reg[3])) +: 16]; r = a & b; s = 0; end
+            else if (test_r_rm_w (inst_reg[4]))              begin a = register[reg_w(field_reg(inst_reg[3])) +: 16]; b = data_reg; r = a & b; s = 0; end
+            else if (test_rm_i_b (inst_reg[4], inst_reg[3])) begin a = data_reg; b =               inst_reg[2] ; r = a & b; s = 0; end
+            else if (test_rm_i_w (inst_reg[4], inst_reg[3])) begin a = data_reg; b = {inst_reg[1], inst_reg[2]}; r = a & b; s = 0; end
+            else if (test_a_i_b  (inst_reg[4]))              begin a = `AL; b = data_reg; r = a & b; s = 0; end
+            else if (test_a_i_w  (inst_reg[4]))              begin a = `AX; b = data_reg; r = a & b; s = 0; end
+            else if (or_rm_r_b   (inst_reg[4]))              begin a = data_reg; b = register[reg_b(field_reg(inst_reg[3])) +:  8]; r = a | b; s = 0; end
+            else if (or_r_rm_b   (inst_reg[4]))              begin a = register[reg_b(field_reg(inst_reg[3])) +:  8]; b = data_reg; r = a | b; s = 0; end
+            else if (or_rm_r_w   (inst_reg[4]))              begin a = data_reg; b = register[reg_w(field_reg(inst_reg[3])) +: 16]; r = a | b; s = 0; end
+            else if (or_r_rm_w   (inst_reg[4]))              begin a = register[reg_w(field_reg(inst_reg[3])) +: 16]; b = data_reg; r = a | b; s = 0; end
+            else if (or_rm_i_b   (inst_reg[4], inst_reg[3])) begin a = data_reg; b =               inst_reg[2] ; r = a | b; s = 0; end
+            else if (or_rm_i_w   (inst_reg[4], inst_reg[3])) begin a = data_reg; b = {inst_reg[1], inst_reg[2]}; r = a | b; s = 0; end
+            else if (or_a_i_b    (inst_reg[4]))              begin a = `AL; b = data_reg; r = a | b; s = 0; end
+            else if (or_a_i_w    (inst_reg[4]))              begin a = `AX; b = data_reg; r = a | b; s = 0; end
+            else if (xor_rm_r_b  (inst_reg[4]))              begin a = data_reg; b = register[reg_b(field_reg(inst_reg[3])) +:  8]; r = a ^ b; s = 0; end
+            else if (xor_r_rm_b  (inst_reg[4]))              begin a = register[reg_b(field_reg(inst_reg[3])) +:  8]; b = data_reg; r = a ^ b; s = 0; end
+            else if (xor_rm_r_w  (inst_reg[4]))              begin a = data_reg; b = register[reg_w(field_reg(inst_reg[3])) +: 16]; r = a ^ b; s = 0; end
+            else if (xor_r_rm_w  (inst_reg[4]))              begin a = register[reg_w(field_reg(inst_reg[3])) +: 16]; b = data_reg; r = a ^ b; s = 0; end
+            else if (xor_rm_i_b  (inst_reg[4], inst_reg[3])) begin a = data_reg; b =               inst_reg[2] ; r = a ^ b; s = 0; end
+            else if (xor_rm_i_w  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = {inst_reg[1], inst_reg[2]}; r = a ^ b; s = 0; end
+            else if (xor_a_i_b   (inst_reg[4]))              begin a = `AL; b = data_reg; r = a ^ b; s = 0; end
+            else if (xor_a_i_w   (inst_reg[4]))              begin a = `AX; b = data_reg; r = a ^ b; s = 0; end
+            else                                             begin a = 'b0; b = 'b0; r = 'b0; end
         end
     end
 
@@ -420,7 +491,14 @@ module core (
                 rol_rm_1_b  (inst_reg[4], inst_reg[3]) || rol_rm_c_b  (inst_reg[4], inst_reg[3]) ||
                 ror_rm_1_b  (inst_reg[4], inst_reg[3]) || ror_rm_c_b  (inst_reg[4], inst_reg[3]) ||
                 rcl_rm_1_b  (inst_reg[4], inst_reg[3]) || rcl_rm_c_b  (inst_reg[4], inst_reg[3]) ||
-                rcr_rm_1_b  (inst_reg[4], inst_reg[3]) || rcr_rm_c_b  (inst_reg[4], inst_reg[3]) 
+                rcr_rm_1_b  (inst_reg[4], inst_reg[3]) || rcr_rm_c_b  (inst_reg[4], inst_reg[3]) ||
+                not_rm_b    (inst_reg[4]) ||
+                and_rm_r_b  (inst_reg[4]) ||
+                or_rm_r_b   (inst_reg[4]) ||
+                xor_rm_r_b  (inst_reg[4]) ||
+                and_rm_i_b  (inst_reg[4], inst_reg[3]) ||
+                or_rm_i_b   (inst_reg[4], inst_reg[3]) ||
+                xor_rm_i_b  (inst_reg[4], inst_reg[3]) 
             )
                 register[reg_b(field_r_m(inst_reg[3])) +:  8] <= r[7:0];
             else if (
@@ -441,7 +519,14 @@ module core (
                 rol_rm_1_w  (inst_reg[4], inst_reg[3]) || rol_rm_c_w  (inst_reg[4], inst_reg[3]) ||
                 ror_rm_1_w  (inst_reg[4], inst_reg[3]) || ror_rm_c_w  (inst_reg[4], inst_reg[3]) ||
                 rcl_rm_1_w  (inst_reg[4], inst_reg[3]) || rcl_rm_c_w  (inst_reg[4], inst_reg[3]) ||
-                rcr_rm_1_w  (inst_reg[4], inst_reg[3]) || rcr_rm_c_w  (inst_reg[4], inst_reg[3]) 
+                rcr_rm_1_w  (inst_reg[4], inst_reg[3]) || rcr_rm_c_w  (inst_reg[4], inst_reg[3]) ||
+                not_rm_w    (inst_reg[4]) ||
+                and_rm_r_w  (inst_reg[4]) ||
+                or_rm_r_w   (inst_reg[4]) ||
+                xor_rm_r_w  (inst_reg[4]) ||
+                and_rm_i_w  (inst_reg[4], inst_reg[3]) ||
+                or_rm_i_w   (inst_reg[4], inst_reg[3]) ||
+                xor_rm_i_w  (inst_reg[4], inst_reg[3]) 
             )
                 register[reg_w(field_r_m(inst_reg[3])) +: 16] <= r;
             else if (pop_rm     (inst_reg[4]))                          begin register[reg_w(field_r_m(inst_reg[3])) +: 16] <= data_reg; `SP <= `SP + 'h2; end
@@ -497,21 +582,32 @@ module core (
                 add_r_rm_b  (inst_reg[4]) ||
                 adc_r_rm_b  (inst_reg[4]) ||
                 sub_r_rm_b  (inst_reg[4]) ||
-                sbb_r_rm_b  (inst_reg[4]) 
+                sbb_r_rm_b  (inst_reg[4]) ||
+                not_rm_b    (inst_reg[4]) ||
+                and_r_rm_b  (inst_reg[4]) ||
+                or_r_rm_b   (inst_reg[4]) ||
+                xor_r_rm_b  (inst_reg[4]) 
             )
                 register[reg_b(field_reg(inst_reg[3])) +:  8] <= r[7:0];
             else if (
                 add_r_rm_w  (inst_reg[4]) ||
                 adc_r_rm_w  (inst_reg[4]) ||
                 sub_r_rm_w  (inst_reg[4]) ||
-                sbb_r_rm_w  (inst_reg[4]) 
+                sbb_r_rm_w  (inst_reg[4]) ||
+                not_rm_w    (inst_reg[4]) ||
+                and_r_rm_w  (inst_reg[4]) ||
+                or_r_rm_w   (inst_reg[4]) ||
+                xor_r_rm_w  (inst_reg[4]) 
             )
                 register[reg_w(field_reg(inst_reg[3])) +: 16] <= r;
             else if (
                 add_a_i_b   (inst_reg[4]) ||
                 adc_a_i_b   (inst_reg[4]) ||
                 sub_a_i_b   (inst_reg[4]) ||
-                sbb_a_i_b   (inst_reg[4]) 
+                sbb_a_i_b   (inst_reg[4]) ||
+                and_a_i_b   (inst_reg[4]) ||
+                or_a_i_b    (inst_reg[4]) ||
+                xor_a_i_b   (inst_reg[4]) 
             )                                                           `AL <= r[7:0];
             else if (
                 add_a_i_w   (inst_reg[4]) ||
@@ -521,7 +617,10 @@ module core (
                 mul_r_rm_b  (inst_reg[4], inst_reg[3]) ||
                 imul_r_rm_b (inst_reg[4], inst_reg[3]) ||
                 div_r_rm_b  (inst_reg[4], inst_reg[3]) ||
-                idiv_r_rm_b (inst_reg[4], inst_reg[3]) 
+                idiv_r_rm_b (inst_reg[4], inst_reg[3]) ||
+                and_a_i_w   (inst_reg[4]) ||
+                or_a_i_w    (inst_reg[4]) ||
+                xor_a_i_w   (inst_reg[4]) 
             )                                                           `AX <= r;               
             else if (
                 inc_r       (inst_reg[4], inst_reg[3]) ||
@@ -624,6 +723,32 @@ module core (
                 `OF <= of_b(a,b,r); `CF <= s[0];
             end
             else if (
+                and_rm_r_b  (inst_reg[4]) || and_r_rm_b  (inst_reg[4]) ||
+                test_rm_r_b (inst_reg[4]) || test_r_rm_b (inst_reg[4]) ||
+                or_rm_r_b   (inst_reg[4]) || or_r_rm_b   (inst_reg[4]) ||
+                xor_rm_r_b  (inst_reg[4]) || xor_r_rm_b  (inst_reg[4]) ||
+                not_rm_b    (inst_reg[4], inst_reg[3]) ||
+                and_rm_i_b  (inst_reg[4], inst_reg[3]) ||
+                test_rm_i_b (inst_reg[4], inst_reg[3]) ||
+                or_rm_i_b   (inst_reg[4], inst_reg[3]) ||
+                xor_rm_i_b  (inst_reg[4], inst_reg[3]) ||
+            ) begin
+                `OF <= 0; `SF <= sf_b(r); `ZF <= zf_b(r); `PF <= pf_b(r); `CF <= 0;
+            end
+            else if (
+                and_rm_r_w  (inst_reg[4]) || and_r_rm_w  (inst_reg[4]) ||
+                test_rm_r_w (inst_reg[4]) || test_r_rm_w (inst_reg[4]) ||
+                or_rm_r_w   (inst_reg[4]) || or_r_rm_w   (inst_reg[4]) ||
+                xor_rm_r_w  (inst_reg[4]) || xor_r_rm_w  (inst_reg[4]) ||
+                not_rm_w    (inst_reg[4], inst_reg[3]) ||
+                and_rm_i_w  (inst_reg[4], inst_reg[3]) ||
+                test_rm_i_w (inst_reg[4], inst_reg[3]) ||
+                or_rm_i_w   (inst_reg[4], inst_reg[3]) ||
+                xor_rm_i_w  (inst_reg[4], inst_reg[3]) ||
+            ) begin
+                `OF <= 0; `SF <= sf_w(r); `ZF <= zf_w(r); `PF <= pf_w(r); `CF <= 0;
+            end
+            else if (
                 mul_r_rm_b  (inst_reg[4], inst_reg[3]) || mul_r_rm_w  (inst_reg[4], inst_reg[3]) ||
                 imul_r_rm_b (inst_reg[4], inst_reg[3]) || imul_r_rm_w (inst_reg[4], inst_reg[3]) ||
                 div_r_rm_b  (inst_reg[4], inst_reg[3]) || div_r_rm_w  (inst_reg[4], inst_reg[3]) ||
@@ -670,7 +795,16 @@ module core (
         rol_rm_1_b  (inst_reg[3], inst_reg[2]) || rol_rm_c_b  (inst_reg[3], inst_reg[2]) || rol_rm_1_w  (inst_reg[3], inst_reg[2]) || rol_rm_c_w  (inst_reg[3], inst_reg[2]) ||
         ror_rm_1_b  (inst_reg[3], inst_reg[2]) || ror_rm_c_b  (inst_reg[3], inst_reg[2]) || ror_rm_1_w  (inst_reg[3], inst_reg[2]) || ror_rm_c_w  (inst_reg[3], inst_reg[2]) ||
         rcl_rm_1_b  (inst_reg[3], inst_reg[2]) || rcl_rm_c_b  (inst_reg[3], inst_reg[2]) || rcl_rm_1_w  (inst_reg[3], inst_reg[2]) || rcl_rm_c_w  (inst_reg[3], inst_reg[2]) ||
-        rcr_rm_1_b  (inst_reg[3], inst_reg[2]) || rcr_rm_c_b  (inst_reg[3], inst_reg[2]) || rcr_rm_1_w  (inst_reg[3], inst_reg[2]) || rcr_rm_c_w  (inst_reg[3], inst_reg[2]) 
+        rcr_rm_1_b  (inst_reg[3], inst_reg[2]) || rcr_rm_c_b  (inst_reg[3], inst_reg[2]) || rcr_rm_1_w  (inst_reg[3], inst_reg[2]) || rcr_rm_c_w  (inst_reg[3], inst_reg[2]) ||
+        and_rm_r_b  (inst_reg[3]) || and_r_rm_b  (inst_reg[3]) || and_rm_r_w  (inst_reg[3]) || and_r_rm_w  (inst_reg[3]) ||
+        test_rm_r_b (inst_reg[3]) || test_r_rm_b (inst_reg[3]) || test_rm_r_w (inst_reg[3]) || test_r_rm_w (inst_reg[3]) ||
+        or_rm_r_b   (inst_reg[3]) || or_r_rm_b   (inst_reg[3]) || or_rm_r_w   (inst_reg[3]) || or_r_rm_w   (inst_reg[3]) ||
+        xor_rm_r_b  (inst_reg[3]) || xor_r_rm_b  (inst_reg[3]) || xor_rm_r_w  (inst_reg[3]) || xor_r_rm_w  (inst_reg[3]) ||
+        not_rm_b    (inst_reg[3], inst_reg[2]) || not_rm_w    (inst_reg[3], inst_reg[2]) ||
+        and_rm_i_b  (inst_reg[3], inst_reg[2]) || and_rm_i_w  (inst_reg[3], inst_reg[2]) ||
+        test_rm_i_b (inst_reg[3], inst_reg[2]) || test_rm_i_w (inst_reg[3], inst_reg[2]) ||
+        or_rm_i_b   (inst_reg[3], inst_reg[2]) || or_rm_i_w   (inst_reg[3], inst_reg[2]) ||
+        xor_rm_i_b  (inst_reg[3], inst_reg[2]) || xor_rm_i_w  (inst_reg[3], inst_reg[2]) 
     )) || (first_byte[3] && (
         mov_a_m_b  (inst_reg[3]) || mov_a_m_w  (inst_reg[3]) ||
         pop_rm     (inst_reg[3]) ||
@@ -712,7 +846,16 @@ module core (
         rol_rm_1_w  (inst_reg[3], inst_reg[2]) || rol_rm_c_w  (inst_reg[3], inst_reg[2]) ||
         ror_rm_1_w  (inst_reg[3], inst_reg[2]) || ror_rm_c_w  (inst_reg[3], inst_reg[2]) ||
         rcl_rm_1_w  (inst_reg[3], inst_reg[2]) || rcl_rm_c_w  (inst_reg[3], inst_reg[2]) ||
-        rcr_rm_1_w  (inst_reg[3], inst_reg[2]) || rcr_rm_c_w  (inst_reg[3], inst_reg[2])
+        rcr_rm_1_w  (inst_reg[3], inst_reg[2]) || rcr_rm_c_w  (inst_reg[3], inst_reg[2]) ||
+        and_rm_r_w  (inst_reg[3]) || and_r_rm_w  (inst_reg[3]) ||
+        test_rm_r_w (inst_reg[3]) || test_r_rm_w (inst_reg[3]) ||
+        or_rm_r_w   (inst_reg[3]) || or_r_rm_w   (inst_reg[3]) ||
+        xor_rm_r_w  (inst_reg[3]) || xor_r_rm_w  (inst_reg[3]) ||
+        not_rm_w    (inst_reg[3], inst_reg[2]) ||
+        and_rm_i_w  (inst_reg[3], inst_reg[2]) ||
+        test_rm_i_w (inst_reg[3], inst_reg[2]) ||
+        or_rm_i_w   (inst_reg[3], inst_reg[2]) ||
+        xor_rm_i_w  (inst_reg[3], inst_reg[2]) 
     )) || (first_byte[3] && (
         mov_a_m_w  (inst_reg[3]) ||
         pop_rm     (inst_reg[3]) ||
@@ -763,7 +906,16 @@ module core (
             rol_rm_1_b  (inst_reg[3], inst_reg[2]) || rol_rm_c_b  (inst_reg[3], inst_reg[2]) || rol_rm_1_w  (inst_reg[3], inst_reg[2]) || rol_rm_c_w  (inst_reg[3], inst_reg[2]) ||
             ror_rm_1_b  (inst_reg[3], inst_reg[2]) || ror_rm_c_b  (inst_reg[3], inst_reg[2]) || ror_rm_1_w  (inst_reg[3], inst_reg[2]) || ror_rm_c_w  (inst_reg[3], inst_reg[2]) ||
             rcl_rm_1_b  (inst_reg[3], inst_reg[2]) || rcl_rm_c_b  (inst_reg[3], inst_reg[2]) || rcl_rm_1_w  (inst_reg[3], inst_reg[2]) || rcl_rm_c_w  (inst_reg[3], inst_reg[2]) ||
-            rcr_rm_1_b  (inst_reg[3], inst_reg[2]) || rcr_rm_c_b  (inst_reg[3], inst_reg[2]) || rcr_rm_1_w  (inst_reg[3], inst_reg[2]) || rcr_rm_c_w  (inst_reg[3], inst_reg[2]) 
+            rcr_rm_1_b  (inst_reg[3], inst_reg[2]) || rcr_rm_c_b  (inst_reg[3], inst_reg[2]) || rcr_rm_1_w  (inst_reg[3], inst_reg[2]) || rcr_rm_c_w  (inst_reg[3], inst_reg[2]) ||
+            and_rm_r_b  (inst_reg[3]) || and_r_rm_b  (inst_reg[3]) || and_rm_r_w  (inst_reg[3]) || and_r_rm_w  (inst_reg[3]) ||
+            test_rm_r_b (inst_reg[3]) || test_r_rm_b (inst_reg[3]) || test_rm_r_w (inst_reg[3]) || test_r_rm_w (inst_reg[3]) ||
+            or_rm_r_b   (inst_reg[3]) || or_r_rm_b   (inst_reg[3]) || or_rm_r_w   (inst_reg[3]) || or_r_rm_w   (inst_reg[3]) ||
+            xor_rm_r_b  (inst_reg[3]) || xor_r_rm_b  (inst_reg[3]) || xor_rm_r_w  (inst_reg[3]) || xor_r_rm_w  (inst_reg[3]) ||
+            not_rm_b    (inst_reg[3], inst_reg[2]) || not_rm_w    (inst_reg[3], inst_reg[2]) ||
+            and_rm_i_b  (inst_reg[3], inst_reg[2]) || and_rm_i_w  (inst_reg[3], inst_reg[2]) ||
+            test_rm_i_b (inst_reg[3], inst_reg[2]) || test_rm_i_w (inst_reg[3], inst_reg[2]) ||
+            or_rm_i_b   (inst_reg[3], inst_reg[2]) || or_rm_i_w   (inst_reg[3], inst_reg[2]) ||
+            xor_rm_i_b  (inst_reg[3], inst_reg[2]) || xor_rm_i_w  (inst_reg[3], inst_reg[2]) 
         )) || (first_byte[3] && (
             mov_a_m_b   (inst_reg[3]) || mov_a_m_w   (inst_reg[3])
         )))
@@ -812,7 +964,14 @@ module core (
         rol_rm_1_b  (inst_reg[4], inst_reg[3]) || rol_rm_c_b  (inst_reg[4], inst_reg[3]) || rol_rm_1_w  (inst_reg[4], inst_reg[3]) || rol_rm_c_w  (inst_reg[4], inst_reg[3]) ||
         ror_rm_1_b  (inst_reg[4], inst_reg[3]) || ror_rm_c_b  (inst_reg[4], inst_reg[3]) || ror_rm_1_w  (inst_reg[4], inst_reg[3]) || ror_rm_c_w  (inst_reg[4], inst_reg[3]) ||
         rcl_rm_1_b  (inst_reg[4], inst_reg[3]) || rcl_rm_c_b  (inst_reg[4], inst_reg[3]) || rcl_rm_1_w  (inst_reg[4], inst_reg[3]) || rcl_rm_c_w  (inst_reg[4], inst_reg[3]) ||
-        rcr_rm_1_b  (inst_reg[4], inst_reg[3]) || rcr_rm_c_b  (inst_reg[4], inst_reg[3]) || rcr_rm_1_w  (inst_reg[4], inst_reg[3]) || rcr_rm_c_w  (inst_reg[4], inst_reg[3])
+        rcr_rm_1_b  (inst_reg[4], inst_reg[3]) || rcr_rm_c_b  (inst_reg[4], inst_reg[3]) || rcr_rm_1_w  (inst_reg[4], inst_reg[3]) || rcr_rm_c_w  (inst_reg[4], inst_reg[3]) ||
+        not_rm_b    (inst_reg[4]) || not_rm_w    (inst_reg[4]) ||
+        and_rm_r_b  (inst_reg[4]) || and_rm_r_w  (inst_reg[4]) ||
+        or_rm_r_b   (inst_reg[4]) || or_rm_r_w   (inst_reg[4]) ||
+        xor_rm_r_b  (inst_reg[4]) || xor_rm_r_w  (inst_reg[4]) ||
+        and_rm_i_b  (inst_reg[4], inst_reg[3]) || and_rm_i_w  (inst_reg[4], inst_reg[3]) ||
+        or_rm_i_b   (inst_reg[4], inst_reg[3]) || or_rm_i_w   (inst_reg[4], inst_reg[3]) ||
+        xor_rm_i_b  (inst_reg[4], inst_reg[3]) || xor_rm_i_w  (inst_reg[4], inst_reg[3])
     )) || (first_byte[4] && (
         mov_m_a_b   (inst_reg[4]) || mov_m_a_w   (inst_reg[4]) ||
         push_rm     (inst_reg[4]) ||
@@ -842,7 +1001,14 @@ module core (
         rol_rm_1_w  (inst_reg[4], inst_reg[3]) || rol_rm_c_w  (inst_reg[4], inst_reg[3]) ||
         ror_rm_1_w  (inst_reg[4], inst_reg[3]) || ror_rm_c_w  (inst_reg[4], inst_reg[3]) ||
         rcl_rm_1_w  (inst_reg[4], inst_reg[3]) || rcl_rm_c_w  (inst_reg[4], inst_reg[3]) ||
-        rcr_rm_1_w  (inst_reg[4], inst_reg[3]) || rcr_rm_c_w  (inst_reg[4], inst_reg[3]) 
+        rcr_rm_1_w  (inst_reg[4], inst_reg[3]) || rcr_rm_c_w  (inst_reg[4], inst_reg[3]) ||
+        not_rm_w    (inst_reg[4]) ||
+        and_rm_r_w  (inst_reg[4]) ||
+        or_rm_r_w   (inst_reg[4]) ||
+        xor_rm_r_w  (inst_reg[4]) ||
+        and_rm_i_w  (inst_reg[4], inst_reg[3]) ||
+        or_rm_i_w   (inst_reg[4], inst_reg[3]) ||
+        xor_rm_i_w  (inst_reg[4], inst_reg[3]) 
     )) || (first_byte[4] && (
         mov_m_a_w   (inst_reg[4]) ||
         push_rm     (inst_reg[4]) ||
@@ -877,7 +1043,14 @@ module core (
             rol_rm_1_b  (inst_reg[4], inst_reg[3]) || rol_rm_c_b  (inst_reg[4], inst_reg[3]) || rol_rm_1_w  (inst_reg[4], inst_reg[3]) || rol_rm_c_w  (inst_reg[4], inst_reg[3]) ||
             ror_rm_1_b  (inst_reg[4], inst_reg[3]) || ror_rm_c_b  (inst_reg[4], inst_reg[3]) || ror_rm_1_w  (inst_reg[4], inst_reg[3]) || ror_rm_c_w  (inst_reg[4], inst_reg[3]) ||
             rcl_rm_1_b  (inst_reg[4], inst_reg[3]) || rcl_rm_c_b  (inst_reg[4], inst_reg[3]) || rcl_rm_1_w  (inst_reg[4], inst_reg[3]) || rcl_rm_c_w  (inst_reg[4], inst_reg[3]) ||
-            rcr_rm_1_b  (inst_reg[4], inst_reg[3]) || rcr_rm_c_b  (inst_reg[4], inst_reg[3]) || rcr_rm_1_w  (inst_reg[4], inst_reg[3]) || rcr_rm_c_w  (inst_reg[4], inst_reg[3])
+            rcr_rm_1_b  (inst_reg[4], inst_reg[3]) || rcr_rm_c_b  (inst_reg[4], inst_reg[3]) || rcr_rm_1_w  (inst_reg[4], inst_reg[3]) || rcr_rm_c_w  (inst_reg[4], inst_reg[3]) ||
+            not_rm_b    (inst_reg[4]) || not_rm_w    (inst_reg[4]) ||
+            and_rm_r_b  (inst_reg[4]) || and_rm_r_w  (inst_reg[4]) ||
+            or_rm_r_b   (inst_reg[4]) || or_rm_r_w   (inst_reg[4]) ||
+            xor_rm_r_b  (inst_reg[4]) || xor_rm_r_w  (inst_reg[4]) ||
+            and_rm_i_b  (inst_reg[4], inst_reg[3]) || and_rm_i_w  (inst_reg[4], inst_reg[3]) ||
+            or_rm_i_b   (inst_reg[4], inst_reg[3]) || or_rm_i_w   (inst_reg[4], inst_reg[3]) ||
+            xor_rm_i_b  (inst_reg[4], inst_reg[3]) || xor_rm_i_w  (inst_reg[4], inst_reg[3])
         )) || (first_byte[4] && (
             mov_m_a_b   (inst_reg[4]) || mov_m_a_w   (inst_reg[4])
         )))
@@ -946,7 +1119,14 @@ module core (
             rol_rm_1_b  (inst_reg[4], inst_reg[3]) || rol_rm_c_b  (inst_reg[4], inst_reg[3]) || rol_rm_1_w  (inst_reg[4], inst_reg[3]) || rol_rm_c_w  (inst_reg[4], inst_reg[3]) ||
             ror_rm_1_b  (inst_reg[4], inst_reg[3]) || ror_rm_c_b  (inst_reg[4], inst_reg[3]) || ror_rm_1_w  (inst_reg[4], inst_reg[3]) || ror_rm_c_w  (inst_reg[4], inst_reg[3]) ||
             rcl_rm_1_b  (inst_reg[4], inst_reg[3]) || rcl_rm_c_b  (inst_reg[4], inst_reg[3]) || rcl_rm_1_w  (inst_reg[4], inst_reg[3]) || rcl_rm_c_w  (inst_reg[4], inst_reg[3]) ||
-            rcr_rm_1_b  (inst_reg[4], inst_reg[3]) || rcr_rm_c_b  (inst_reg[4], inst_reg[3]) || rcr_rm_1_w  (inst_reg[4], inst_reg[3]) || rcr_rm_c_w  (inst_reg[4], inst_reg[3])
+            rcr_rm_1_b  (inst_reg[4], inst_reg[3]) || rcr_rm_c_b  (inst_reg[4], inst_reg[3]) || rcr_rm_1_w  (inst_reg[4], inst_reg[3]) || rcr_rm_c_w  (inst_reg[4], inst_reg[3]) ||
+            not_rm_b    (inst_reg[4]) || not_rm_w    (inst_reg[4]) ||
+            and_rm_r_b  (inst_reg[4]) || and_rm_r_w  (inst_reg[4]) ||
+            or_rm_r_b   (inst_reg[4]) || or_rm_r_w   (inst_reg[4]) ||
+            xor_rm_r_b  (inst_reg[4]) || xor_rm_r_w  (inst_reg[4]) ||
+            and_rm_i_b  (inst_reg[4], inst_reg[3]) || and_rm_i_w  (inst_reg[4], inst_reg[3]) ||
+            or_rm_i_b   (inst_reg[4], inst_reg[3]) || or_rm_i_w   (inst_reg[4], inst_reg[3]) ||
+            xor_rm_i_b  (inst_reg[4], inst_reg[3]) || xor_rm_i_w  (inst_reg[4], inst_reg[3])
         )))
             ram_wr_data_signal = r;
         else
