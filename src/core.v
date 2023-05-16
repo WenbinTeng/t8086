@@ -29,6 +29,10 @@ module core (
     always @(posedge clk or negedge rst) begin
         if (~rst)
             program_counter <= 'b0;
+        else if (first_byte[4] && (
+            movs_b  (inst_reg[4]) || movs_w  (inst_reg[4])
+        ))
+            program_counter <= program_counter;
         else
             program_counter <= program_counter + 'b1;
     end
@@ -131,7 +135,6 @@ module core (
             test_rm_i_b (inst_reg[2], inst_reg[1]) || test_rm_i_w (inst_reg[2], inst_reg[1]) ||
             or_rm_i_b   (inst_reg[2], inst_reg[1]) || or_rm_i_w   (inst_reg[2], inst_reg[1]) ||
             xor_rm_i_b  (inst_reg[2], inst_reg[1]) || xor_rm_i_w  (inst_reg[2], inst_reg[1]) 
-
         ))
             if (field_mod(inst_reg[1]) == 2'b00 && field_r_m(inst_reg[1]) == 3'b110)
                 addr_reg <= {rom_data, inst_reg[0]};
@@ -306,7 +309,11 @@ module core (
                 and_rm_i_b  (inst_reg[3], inst_reg[2]) || and_rm_i_w  (inst_reg[3], inst_reg[2]) ||
                 test_rm_i_b (inst_reg[3], inst_reg[2]) || test_rm_i_w (inst_reg[3], inst_reg[2]) ||
                 or_rm_i_b   (inst_reg[3], inst_reg[2]) || or_rm_i_w   (inst_reg[3], inst_reg[2]) ||
-                xor_rm_i_b  (inst_reg[3], inst_reg[2]) || xor_rm_i_w  (inst_reg[3], inst_reg[2]) 
+                xor_rm_i_b  (inst_reg[3], inst_reg[2]) || xor_rm_i_w  (inst_reg[3], inst_reg[2]) ||
+                movs_b      (inst_reg[3]) || movs_w      (inst_reg[3]) ||
+                cmps_b      (inst_reg[3]) || cmps_w      (inst_reg[3]) ||
+                scas_b      (inst_reg[3]) || scas_w      (inst_reg[3]) ||
+                lods_b      (inst_reg[3]) || lods_w      (inst_reg[3])
             )
                 data_reg <= ram_rd_data;
         end
@@ -449,6 +456,10 @@ module core (
             else if (xor_rm_i_w  (inst_reg[4], inst_reg[3])) begin a = data_reg; b = {inst_reg[1], inst_reg[2]}; r = a ^ b; s = 0; end
             else if (xor_a_i_b   (inst_reg[4]))              begin a = `AL; b = data_reg; r = a ^ b; s = 0; end
             else if (xor_a_i_w   (inst_reg[4]))              begin a = `AX; b = data_reg; r = a ^ b; s = 0; end
+            else if (cmps_b      (inst_reg[4]))              begin a = data_reg; b = ram_rd_data; r = a - b; s = 0; end
+            else if (cmps_w      (inst_reg[4]))              begin a = data_reg; b = ram_rd_data; r = a - b; s = 0; end
+            else if (scas_b      (inst_reg[4]))              begin a = `AL ; b = data_reg; r = a - b; s = 0; end
+            else if (scas_w      (inst_reg[4]))              begin a = `AX ; b = data_reg; r = a - b; s = 0; end
             else                                             begin a = 'b0; b = 'b0; r = 'b0; end
         end
     end
@@ -537,14 +548,14 @@ module core (
         else if (first_byte[4]) begin
             if      (
                 mov_r_rm_b  (inst_reg[4]) ||
-                xchg_r_rm_b (inst_reg[4])
+                xchg_r_rm_b (inst_reg[4]) 
             )
                 register[reg_b(field_reg(inst_reg[3])) +:  8] <= data_reg[7:0];
             else if (
                 mov_r_rm_w  (inst_reg[4]) ||
                 xchg_r_rm_w (inst_reg[4]) ||
                 lds         (inst_reg[4]) ||
-                les         (inst_reg[4])
+                les         (inst_reg[4]) 
             )
                 register[reg_w(field_reg(inst_reg[3])) +: 16] <= data_reg;
             else if (
@@ -557,15 +568,17 @@ module core (
                 register[reg_w(field_r_m(inst_reg[3])) +: 16] <= data_reg;
             else if (
                 mov_a_m_b   (inst_reg[4]) ||
-                xlat        (inst_reg[4])
+                xlat        (inst_reg[4]) ||
+                lods_b      (inst_reg[4])
             )
                 `AL <= data_reg[7:0];
             else if (
-                lahf        (inst_reg[4])
+                lahf        (inst_reg[4]) 
             )
                 `AH <= data_reg[7:0];
             else if (
-                mov_a_m_w   (inst_reg[4])
+                mov_a_m_w   (inst_reg[4]) ||
+                lods_w      (inst_reg[4])
             )
                 `AX <= data_reg;
             else if (
@@ -575,9 +588,12 @@ module core (
                 pushf       (inst_reg[4])
             )
                 `SP <= `SP - 'h2;
-            else if (pop_r      (inst_reg[4]))                          begin register[reg_w(field_r_m(inst_reg[4])) +: 16] <= data_reg; `SP <= `SP + 'h2; end
-            else if (pop_sr     (inst_reg[4]))                          begin segment_register[field_reg(inst_reg[4])[1:0]] <= data_reg; `SP <= `SP + 'h2; end
-            else if (popf       (inst_reg[4]))                          `SP <= `SP + 'h2;
+            else if (pop_r      (inst_reg[4]))
+                begin register[reg_w(field_r_m(inst_reg[4])) +: 16] <= data_reg; `SP <= `SP + 'h2; end
+            else if (pop_sr     (inst_reg[4]))
+                begin segment_register[field_reg(inst_reg[4])[1:0]] <= data_reg; `SP <= `SP + 'h2; end
+            else if (popf       (inst_reg[4]))
+                `SP <= `SP + 'h2;
             else if (
                 add_r_rm_b  (inst_reg[4]) ||
                 adc_r_rm_b  (inst_reg[4]) ||
@@ -608,7 +624,8 @@ module core (
                 and_a_i_b   (inst_reg[4]) ||
                 or_a_i_b    (inst_reg[4]) ||
                 xor_a_i_b   (inst_reg[4]) 
-            )                                                           `AL <= r[7:0];
+            )
+                `AL <= r[7:0];
             else if (
                 add_a_i_w   (inst_reg[4]) ||
                 adc_a_i_w   (inst_reg[4]) ||
@@ -621,17 +638,22 @@ module core (
                 and_a_i_w   (inst_reg[4]) ||
                 or_a_i_w    (inst_reg[4]) ||
                 xor_a_i_w   (inst_reg[4]) 
-            )                                                           `AX <= r;               
+            )
+                `AX <= r;               
             else if (
                 inc_r       (inst_reg[4], inst_reg[3]) ||
                 dec_r       (inst_reg[4], inst_reg[3]) ||
-            )                                                           register[reg_w(field_r_m(inst_reg[4])) +: 16] <= r;                                         
+            )
+                register[reg_w(field_r_m(inst_reg[4])) +: 16] <= r;                                         
             else if (
                 mul_r_rm_w  (inst_reg[4], inst_reg[3]) ||
                 imul_r_rm_w (inst_reg[4], inst_reg[3]) ||
                 div_r_rm_w  (inst_reg[4], inst_reg[3]) ||
                 idiv_r_rm_w (inst_reg[4], inst_reg[3]) 
-            )                                                           {`DX, `AX} <= {s, r};
+            )
+                {`DX, `AX} <= {s, r};
+            else if (movs_b(inst_reg[4]))                               begin `DF ? (`SI <= `SI - 'h1; `DI <= `DI - 'h1) : (`SI <= `SI + 'h1; `DI <= `DI + 'h1); end
+            else if (movs_w(inst_reg[4]))                               begin `DF ? (`SI <= `SI - 'h2; `DI <= `DI - 'h2) : (`SI <= `SI + 'h2; `DI <= `DI + 'h2); end
             else if (lea        (inst_reg[4]))                          register[reg_w(field_reg(inst_reg[3])) +: 16] <= addr_reg;
             else if (aaa        (inst_reg[4]))                          {`AH, `AL} <= `AL & 8'h0f > 8'h09 | `AF ? {`AH + 8'h1, `AL + 8'h6} : {`AH, `AL};
             else if (daa        (inst_reg[4]))                          `AL <= `AL + (`AL & 8'h0f > 8'h09 | `AF ? 8'h6 : 8'h0) + (`AL > 8'h9f | `CF ? 8'h60 : 8'h00);
@@ -669,47 +691,70 @@ module core (
             else if (popf       (inst_reg[4]))                  flags[15:0] <= data_reg[15:0];
             else if (
                 add_rm_r_b  (inst_reg[4]) || add_r_rm_b  (inst_reg[4]) || add_a_i_b   (inst_reg[4]) ||
-                adc_rm_r_b  (inst_reg[4]) || adc_r_rm_b  (inst_reg[4]) || adc_a_i_b   (inst_reg[4]) ||
                 add_rm_i_b  (inst_reg[4], inst_reg[3]) ||
-                adc_rm_i_b  (inst_reg[4], inst_reg[3]) ||
                 inc_rm_b    (inst_reg[4], inst_reg[3])
             ) begin
-                `OF <= of_b(a,b,r); `SF <= sf_b(r); `ZF <= zf_b(r); `AF <= af_b(a,b,'d0); `PF <= pf_b(r); `CF <= cf_b(a,b,'d0)
+                `OF <= of_b(a,b,r); `SF <= sf_b(r); `ZF <= zf_b(r); `AF <= af_b(a,b,'d0); `PF <= pf_b(r); `CF <= cf_b(a,b,'d0);
+            end
+            else if (
+                adc_rm_r_b  (inst_reg[4]) || adc_r_rm_b  (inst_reg[4]) || adc_a_i_b   (inst_reg[4]) ||
+                adc_rm_i_b  (inst_reg[4], inst_reg[3])
+            ) begin
+                `OF <= of_b(a,b,r); `SF <= sf_b(r); `ZF <= zf_b(r); `AF <= af_b(a,b,`CF); `PF <= pf_b(r); `CF <= cf_b(a,b,`CF);
             end
             else if (
                 add_rm_r_w  (inst_reg[4]) || add_r_rm_w  (inst_reg[4]) || add_a_i_w   (inst_reg[4]) ||
-                adc_rm_r_w  (inst_reg[4]) || adc_r_rm_w  (inst_reg[4]) || adc_a_i_w   (inst_reg[4]) ||
-                add_rm_zi_w (inst_reg[4], inst_reg[3]) || add_rm_si_w (inst_reg[4], inst_reg[3]) ||
-                adc_rm_zi_w (inst_reg[4], inst_reg[3]) || adc_rm_si_w (inst_reg[4], inst_reg[3]) ||
+                add_rm_zi_w (inst_reg[4], inst_reg[3]) ||
+                add_rm_si_w (inst_reg[4], inst_reg[3]) ||
                 inc_rm_w    (inst_reg[4], inst_reg[3]) ||
                 inc_r       (inst_reg[4], inst_reg[3])
             ) begin
-                `OF <= of_w(a,b,r); `SF <= sf_w(r); `ZF <= zf_w(r); `AF <= af_w(a,b,'d1); `PF <= pf_w(r); `CF <= cf_w(a,b,'d1)
+                `OF <= of_w(a,b,r); `SF <= sf_w(r); `ZF <= zf_w(r); `AF <= af_w(a,b,'d0); `PF <= pf_w(r); `CF <= cf_w(a,b,'d0);
+            end
+            else if (
+                adc_rm_r_w  (inst_reg[4]) || adc_r_rm_w  (inst_reg[4]) || adc_a_i_w   (inst_reg[4]) ||
+                adc_rm_zi_w (inst_reg[4], inst_reg[3]) ||
+                adc_rm_si_w (inst_reg[4], inst_reg[3])
+            ) begin
+                `OF <= of_w(a,b,r); `SF <= sf_w(r); `ZF <= zf_w(r); `AF <= af_w(a,b,`CF); `PF <= pf_w(r); `CF <= cf_w(a,b,`CF);
             end
             else if (
                 sub_rm_r_b  (inst_reg[4]) || sub_r_rm_b  (inst_reg[4]) || sub_a_i_b   (inst_reg[4]) ||
-                sbb_rm_r_b  (inst_reg[4]) || sbb_r_rm_b  (inst_reg[4]) || sbb_a_i_b   (inst_reg[4]) ||
                 cmp_rm_r_b  (inst_reg[4]) || cmp_r_rm_b  (inst_reg[4]) || cmp_a_i_b   (inst_reg[4]) ||
                 sub_rm_i_b  (inst_reg[4], inst_reg[3]) ||
-                sbb_rm_i_b  (inst_reg[4], inst_reg[3]) ||
                 cmp_rm_b    (inst_reg[4], inst_reg[3]) ||
                 dec_rm_b    (inst_reg[4], inst_reg[3]) ||
-                neg_rm_b    (inst_reg[4], inst_reg[3]) 
+                neg_rm_b    (inst_reg[4], inst_reg[3]) ||
+                cmps_b      (inst_reg[4]) ||
+                scas_b      (inst_reg[4])
             ) begin
                 `OF <= of_b(a,-b,r); `SF <= sf_b(r); `ZF <= zf_b(r); `AF <= af_b(a,-b,'d0); `PF <= pf_b(r); `CF <= cf_b(a,-b,'d0);
             end
             else if (
+                sbb_rm_r_b  (inst_reg[4]) || sbb_r_rm_b  (inst_reg[4]) || sbb_a_i_b   (inst_reg[4]) ||
+                sbb_rm_i_b  (inst_reg[4], inst_reg[3]) 
+            ) begin
+                `OF <= of_b(a,-b,r); `SF <= sf_b(r); `ZF <= zf_b(r); `AF <= af_b(a,-b,-`CF); `PF <= pf_b(r); `CF <= cf_b(a,-b,-`CF);
+            end
+            else if (
                 sub_rm_r_w  (inst_reg[4]) || sub_r_rm_w  (inst_reg[4]) || sub_a_i_w   (inst_reg[4]) ||
-                sbb_rm_r_w  (inst_reg[4]) || sbb_r_rm_w  (inst_reg[4]) || sbb_a_i_w   (inst_reg[4]) ||
                 cmp_rm_r_w  (inst_reg[4]) || cmp_r_rm_w  (inst_reg[4]) || cmp_a_i_w   (inst_reg[4]) ||
                 sub_rm_zi_w (inst_reg[4], inst_reg[3]) || sub_rm_si_w (inst_reg[4], inst_reg[3]) ||
-                sbb_rm_zi_w (inst_reg[4], inst_reg[3]) || sbb_rm_si_w (inst_reg[4], inst_reg[3]) ||
                 cmp_rm_zi_w (inst_reg[4], inst_reg[3]) || cmp_rm_si_w (inst_reg[4], inst_reg[3]) ||
                 dec_rm_w    (inst_reg[4], inst_reg[3]) ||
                 dec_r       (inst_reg[4], inst_reg[3]) ||
-                neg_rm_w    (inst_reg[4], inst_reg[3]) 
+                neg_rm_w    (inst_reg[4], inst_reg[3]) ||
+                cmps_w      (inst_reg[4]) ||
+                scas_w      (inst_reg[4])
             ) begin
-                `OF <= of_w(a,-b,r); `SF <= sf_w(r); `ZF <= zf_w(r); `AF <= af_w(a,-b,-'d1); `PF <= pf_w(r); `CF <= cf_w(a,-b,-'d1);
+                `OF <= of_w(a,-b,r); `SF <= sf_w(r); `ZF <= zf_w(r); `AF <= af_w(a,-b,'d0); `PF <= pf_w(r); `CF <= cf_w(a,-b,'d0);
+            end
+            else if (
+                sbb_rm_r_w  (inst_reg[4]) || sbb_r_rm_w  (inst_reg[4]) || sbb_a_i_w   (inst_reg[4]) ||
+                sbb_rm_zi_w (inst_reg[4], inst_reg[3]) ||
+                sbb_rm_si_w (inst_reg[4], inst_reg[3]) 
+            ) begin
+                `OF <= of_w(a,-b,r); `SF <= sf_w(r); `ZF <= zf_w(r); `AF <= af_w(a,-b,-`CF); `PF <= pf_w(r); `CF <= cf_w(a,-b,-`CF);
             end
             else if (
                 shl_rm_1_b  (inst_reg[4], inst_reg[3]) || shl_rm_c_b  (inst_reg[4], inst_reg[3]) || shl_rm_1_w  (inst_reg[4], inst_reg[3]) || shl_rm_c_w  (inst_reg[4], inst_reg[3]) ||
@@ -806,17 +851,23 @@ module core (
         or_rm_i_b   (inst_reg[3], inst_reg[2]) || or_rm_i_w   (inst_reg[3], inst_reg[2]) ||
         xor_rm_i_b  (inst_reg[3], inst_reg[2]) || xor_rm_i_w  (inst_reg[3], inst_reg[2]) 
     )) || (first_byte[3] && (
-        mov_a_m_b  (inst_reg[3]) || mov_a_m_w  (inst_reg[3]) ||
-        pop_rm     (inst_reg[3]) ||
-        pop_r      (inst_reg[3]) ||
-        pop_sr     (inst_reg[3]) ||
-        popf       (inst_reg[3]) ||
-        xlat       (inst_reg[3]) ||
-        lds        (inst_reg[3]) ||
-        les        (inst_reg[3])
+        mov_a_m_b   (inst_reg[3]) || mov_a_m_w   (inst_reg[3]) ||
+        pop_rm      (inst_reg[3]) ||
+        pop_r       (inst_reg[3]) ||
+        pop_sr      (inst_reg[3]) ||
+        popf        (inst_reg[3]) ||
+        xlat        (inst_reg[3]) ||
+        lds         (inst_reg[3]) ||
+        les         (inst_reg[3]) ||
+        movs_b      (inst_reg[3]) || movs_w      (inst_reg[3]) ||
+        cmps_b      (inst_reg[3]) || cmps_w      (inst_reg[3]) ||
+        scas_b      (inst_reg[3]) || scas_w      (inst_reg[3]) ||
+        lods_b      (inst_reg[3]) || lods_w      (inst_reg[3])
     )) || (first_byte[4] && (
-        lds        (inst_reg[4]) ||
-        les        (inst_reg[4])
+        lds         (inst_reg[4]) ||
+        les         (inst_reg[4]) ||
+        cmps_b      (inst_reg[4]) ||
+        cmps_w      (inst_reg[4]) 
     ));
 
     assign ram_rd_we = (first_byte[3] && is_mem_mod(inst_reg[2]) && (
@@ -857,16 +908,21 @@ module core (
         or_rm_i_w   (inst_reg[3], inst_reg[2]) ||
         xor_rm_i_w  (inst_reg[3], inst_reg[2]) 
     )) || (first_byte[3] && (
-        mov_a_m_w  (inst_reg[3]) ||
-        pop_rm     (inst_reg[3]) ||
-        pop_r      (inst_reg[3]) ||
-        pop_sr     (inst_reg[3]) ||
-        lds        (inst_reg[3]) ||
-        les        (inst_reg[3]) ||
-        popf       (inst_reg[3])
+        mov_a_m_w   (inst_reg[3]) ||
+        pop_rm      (inst_reg[3]) ||
+        pop_r       (inst_reg[3]) ||
+        pop_sr      (inst_reg[3]) ||
+        popf        (inst_reg[3]) ||
+        lds         (inst_reg[3]) ||
+        les         (inst_reg[3]) ||
+        movs_w      (inst_reg[3]) ||
+        cmps_w      (inst_reg[3]) ||
+        scas_w      (inst_reg[3]) ||
+        lods_w      (inst_reg[3])
     )) || (first_byte[4] && (
-        lds        (inst_reg[4]) ||
-        les        (inst_reg[4])
+        lds         (inst_reg[4]) ||
+        les         (inst_reg[4]) ||
+        cmps_w      (inst_reg[4])
     ));
 
     reg [19:0] ram_rd_addr_signal;
@@ -937,6 +993,20 @@ module core (
             ram_rd_addr_signal = {`DS, 4'b0} + addr_reg + 'h2;
         else if (first_byte[4] && les(inst_reg[4]))
             ram_rd_addr_signal = {`ES, 4'b0} + addr_reg + 'h2;
+        else if (first_byte[3] && (
+            movs_b      (inst_reg[3]) || movs_w      (inst_reg[3]) ||
+            cmps_b      (inst_reg[3]) || cmps_w      (inst_reg[3]) ||
+            lods_b      (inst_reg[3]) || lods_w      (inst_reg[3])
+        ))
+            ram_rd_addr_signal = {`DS, 4'b0} + `SI;
+        else if (first_byte[3] && (
+            scas_b      (inst_reg[3]) || scas_w      (inst_reg[3])
+        ))
+            ram_rd_addr_signal = {`ES, 4'b0} + `DI;
+        else if (first_byte[4] && (
+            cmps_b      (inst_reg[4]) || cmps_w      (inst_reg[4])
+        ))
+            ram_rd_addr_signal = {`ES, 4'b0} + `DI;
         else
             ram_rd_addr_signal = 'b0;
     end
@@ -977,7 +1047,11 @@ module core (
         push_rm     (inst_reg[4]) ||
         push_r      (inst_reg[4]) ||
         push_sr     (inst_reg[4]) ||
-        pushf       (inst_reg[4])
+        pushf       (inst_reg[4]) ||
+        movs_b      (inst_reg[4]) ||
+        movs_w      (inst_reg[4]) ||
+        stos_b      (inst_reg[4]) ||
+        stos_w      (inst_reg[4])
     ));
     
     assign ram_wr_we = (first_byte[4] && is_mem_mod(inst_reg[3]) && (
@@ -1014,7 +1088,9 @@ module core (
         push_rm     (inst_reg[4]) ||
         push_r      (inst_reg[4]) ||
         push_sr     (inst_reg[4]) ||
-        pushf       (inst_reg[4])
+        pushf       (inst_reg[4]) ||
+        movs_w      (inst_reg[4]) ||
+        stos_w      (inst_reg[4])
     ));
 
     reg [19:0] ram_wr_addr_signal;
@@ -1056,12 +1132,19 @@ module core (
         )))
             ram_wr_addr_signal = {`DS, 4'b0} + addr_reg;
         else if (first_byte[4] && (
-            push_rm    (inst_reg[4]) ||
-            push_r     (inst_reg[4]) ||
-            push_sr    (inst_reg[4]) ||
-            pushf      (inst_reg[4])
+            push_rm     (inst_reg[4]) ||
+            push_r      (inst_reg[4]) ||
+            push_sr     (inst_reg[4]) ||
+            pushf       (inst_reg[4])
         ))
             ram_wr_addr_signal = {`SS, 4'b0} + `SP - 'h2;
+        else if (first_byte[4] && (
+            movs_b      (inst_reg[4]) ||
+            movs_w      (inst_reg[4]) ||
+            stos_b      (inst_reg[4]) ||
+            stos_w      (inst_reg[4])
+        ))
+            ram_wr_addr_signal = {`ES, 4'b0} + `DI;
         else
             ram_wr_addr_signal = 'b0;
     end
@@ -1081,7 +1164,9 @@ module core (
             push_rm     (inst_reg[4]) ||
             push_r      (inst_reg[4]) ||
             push_sr     (inst_reg[4]) ||
-            pushf       (inst_reg[4])
+            pushf       (inst_reg[4]) ||
+            movs_b      (inst_reg[4]) ||
+            movs_w      (inst_reg[4])
         )))
             ram_wr_data_signal = data_reg;
         else if ((first_byte[4] && is_mem_mod(inst_reg[3]) && mov_rm_i_b(inst_reg[4], inst_reg[3])))
@@ -1129,6 +1214,10 @@ module core (
             xor_rm_i_b  (inst_reg[4], inst_reg[3]) || xor_rm_i_w  (inst_reg[4], inst_reg[3])
         )))
             ram_wr_data_signal = r;
+        else if (first_byte[4] && stos_b(inst_reg[4]))
+            ram_wr_data_signal = `AL;
+        else if (first_byte[4] && stos_w(inst_reg[4]))
+            ram_wr_data_signal = `AX;
         else
             ram_wr_data_signal = 'b0;
     end

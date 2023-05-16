@@ -166,7 +166,7 @@ function cbw            (input[7:0]i);      cbw             = (i[7:0]==8'b100110
 // CWD
 function cwd            (input[7:0]i);      cwd             = (i[7:0]==8'b10011001);                    endfunction
 
-// LOGIC OPERATION
+// LOGIC OPERATIONS
 // SHL
 function shl_rm_1_b     (input[7:0]i1,i2)   shl_rm_1_b      = (i1[7:0]==8'b11010000&i2[5:3]==3'b100);   endfunction
 function shl_rm_1_w     (input[7:0]i1,i2)   shl_rm_1_w      = (i1[7:0]==8'b11010001&i2[5:3]==3'b100);   endfunction
@@ -242,8 +242,28 @@ function xor_rm_i_w     (input[7:0]i1,i2);  xor_rm_i_w      = (i1[7:0]==8'b10000
 function xor_a_i_b      (input[7:0]i);      xor_a_i_b       = (i[7:0]==8'b00100100);                    endfunction
 function xor_a_i_w      (input[7:0]i);      xor_a_i_w       = (i[7:0]==8'b00100101);                    endfunction
 
+// STRING MANUPULATE OPERATIONS
+// REP
+function rep            (input[7:0]i);      rep             = (i[7:1]==7'b1111001);                     endfunction
+// MOVS
+function movs_b         (input[7:0]i);      movs_b          = (i[7:0]==8'b10100100);                    endfunction
+function movs_w         (input[7:0]i);      movs_w          = (i[7:0]==8'b10100101);                    endfunction
+// CMPS
+function cmps_b         (input[7:0]i);      cmps_b          = (i[7:0]==8'b10100110);                    endfunction
+function cmps_w         (input[7:0]i);      cmps_w          = (i[7:0]==8'b10100111);                    endfunction
+// SCAS
+function scas_b         (input[7:0]i);      scas_b          = (i[7:0]==8'b10101110);                    endfunction
+function scas_w         (input[7:0]i);      scas_w          = (i[7:0]==8'b10101111);                    endfunction
+// LODS
+function lods_b         (input[7:0]i);      lods_b          = (i[7:0]==8'b10101100);                    endfunction
+function lods_w         (input[7:0]i);      lods_w          = (i[7:0]==8'b10101101);                    endfunction
+// STDS
+function stos_b         (input[7:0]i);      stos_b          = (i[7:0]==8'b10101010);                    endfunction
+function stos_w         (input[7:0]i);      stos_w          = (i[7:0]==8'b10101011);                    endfunction
+
 function length1 (input [7:0] i);
-    length1 = push_r(i)|push_sr(i)|pop_r(i)|pop_sr(i)|xchg_a_r(i)|xlat(i)|lahf(i)|sahf(i)|pushf(i)|popf(i)|inc_r(i)|aaa(i)|daa(i)|dec_r(i)|aas(i)|das(i)|aam(i)|aad(i)|cbw(i)|cwd(i);
+    length1 = push_r(i)|push_sr(i)|pop_r(i)|pop_sr(i)|xchg_a_r(i)|xlat(i)|lahf(i)|sahf(i)|pushf(i)|popf(i)|inc_r(i)|aaa(i)|daa(i)|dec_r(i)|aas(i)|das(i)|aam(i)|aad(i)|cbw(i)|cwd(i)|
+              rep(i)|movs_b(i)|movs_w(i)|cmps_b(i)|cmps_w(i)|scas_b(i)|scas_w(i)|lods_b(i)|lods_w(i)|stds_b(i)|stds_w(i);
 endfunction
 
 function length2 (input [7:0] i1, input [7:0] i2);
@@ -269,7 +289,8 @@ function length2 (input [7:0] i1, input [7:0] i2);
               and_rm_r_b(i1)&disp0(i2)|and_r_rm_b(i1)&disp0(i2)|and_rm_r_w(i1)&disp0(i2)|and_r_rm_w(i1)&disp0(i2)|and_a_i_b(i1)|
               test_rm_r_b(i1)&disp0(i2)|test_r_rm_b(i1)&disp0(i2)|test_rm_r_w(i1)&disp0(i2)|test_r_rm_w(i1)&disp0(i2)|test_a_i_b(i1)|
               or_rm_r_b(i1)&disp0(i2)|or_r_rm_b(i1)&disp0(i2)|or_rm_r_w(i1)&disp0(i2)|or_r_rm_w(i1)&disp0(i2)|or_a_i_b(i1)|
-              xor_rm_r_b(i1)&disp0(i2)|xor_r_rm_b(i1)&disp0(i2)|xor_rm_r_w(i1)&disp0(i2)|xor_r_rm_w(i1)&disp0(i2)|xor_a_i_b(i1);
+              xor_rm_r_b(i1)&disp0(i2)|xor_r_rm_b(i1)&disp0(i2)|xor_rm_r_w(i1)&disp0(i2)|xor_r_rm_w(i1)&disp0(i2)|xor_a_i_b(i1)|
+              cmps_b(i)|cmps_w(i);
 endfunction
 
 function length3 (input [7:0] i1, input [7:0] i2);
