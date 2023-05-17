@@ -244,7 +244,8 @@ function xor_a_i_w      (input[7:0]i);      xor_a_i_w       = (i[7:0]==8'b001001
 
 // STRING MANUPULATE OPERATIONS
 // REP
-function rep            (input[7:0]i);      rep             = (i[7:1]==7'b1111001);                     endfunction
+function rep_z          (input[7:0]i);      rep_z           = (i[7:1]==7'b11110011);                    endfunction
+function rep_nz         (input[7:0]i);      rep_nz          = (i[7:1]==7'b11110010);                    endfunction
 // MOVS
 function movs_b         (input[7:0]i);      movs_b          = (i[7:0]==8'b10100100);                    endfunction
 function movs_w         (input[7:0]i);      movs_w          = (i[7:0]==8'b10100101);                    endfunction

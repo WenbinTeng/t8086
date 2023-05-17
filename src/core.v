@@ -33,6 +33,11 @@ module core (
             movs_b  (inst_reg[4]) || movs_w  (inst_reg[4])
         ))
             program_counter <= program_counter;
+        else if (
+            rep_z   (pref_reg) && ~`CX &&  `ZF ||
+            rep_nz  (pref_reg) && ~`CX && ~`ZF
+        )
+            program_counter <= program_counter;
         else
             program_counter <= program_counter + 'b1;
     end
@@ -45,12 +50,37 @@ module core (
                 inst_reg[i] <= 'b0;
             end
         end
+        else if (
+            rep_z   (pref_reg) && ~`CX &&  `ZF ||
+            rep_nz  (pref_reg) && ~`CX && ~`ZF
+        ) begin
+
+        end
         else begin
             for (i = 1; i < 5; i = i + 1) begin
                 inst_reg[i] <= inst_reg[i-1];
             end
             inst_reg[0] <= rom_data;
         end
+    end
+
+    reg [7:0] pref_reg;
+
+    always @(posedge clk or negedge rst) begin
+        if (~rst)
+            pref_reg <= 'b0;
+        else if (first_byte[4] && (
+            rep_z   (inst_reg[4]) && ~`CX &&  `ZF ||
+            rep_nz  (inst_reg[4]) && ~`CX && ~`ZF
+        ))
+            pref_reg <= inst_reg[4];
+        else if (
+            rep_z   (pref_reg) && ~`CX &&  `ZF ||
+            rep_nz  (pref_reg) && ~`CX && ~`ZF
+        )
+            pref_reg <= pref_reg;
+        else
+            pref_reg <= 'b0;
     end
 
     reg [4:0] clear_byte;
@@ -652,6 +682,11 @@ module core (
                 idiv_r_rm_w (inst_reg[4], inst_reg[3]) 
             )
                 {`DX, `AX} <= {s, r};
+            else if (
+                rep_z (pref_reg) ||
+                rep_nz(pref_reg)
+            )
+                `CX <= `CX - 'b1;
             else if (movs_b(inst_reg[4]))                               begin `DF ? (`SI <= `SI - 'h1; `DI <= `DI - 'h1) : (`SI <= `SI + 'h1; `DI <= `DI + 'h1); end
             else if (movs_w(inst_reg[4]))                               begin `DF ? (`SI <= `SI - 'h2; `DI <= `DI - 'h2) : (`SI <= `SI + 'h2; `DI <= `DI + 'h2); end
             else if (lea        (inst_reg[4]))                          register[reg_w(field_reg(inst_reg[3])) +: 16] <= addr_reg;
