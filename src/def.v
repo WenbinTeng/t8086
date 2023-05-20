@@ -265,9 +265,15 @@ function stos_w         (input[7:0]i);      stos_w          = (i[7:0]==8'b101010
 // CONTROL TRANSFER OPERATIONS
 // CALL
 function call_i_dir     (input[7:0]i);      call_i_dir      = (i[7:0]==8'b11101000);                    endfunction
-function call_i_ptr     (input[7:0]i);      call_i_dir      = (i[7:0]==8'b10011010);                    endfunction
+function call_i_ptr     (input[7:0]i);      call_i_ptr      = (i[7:0]==8'b10011010);                    endfunction
 function call_rm_dir    (input[7:0]i1,i2);  call_rm_dir     = (i1[7:0]==8'b11111111&i2[5:3]==3'b010);   endfunction
-function call_rm_ptr    (input[7:0]i1,i2);  call_rm_dir     = (i1[7:0]==8'b11111111&i2[5:3]==3'b011);   endfunction
+function call_rm_ptr    (input[7:0]i1,i2);  call_rm_ptr     = (i1[7:0]==8'b11111111&i2[5:3]==3'b011);   endfunction
+// JMP
+function jmp_i_dir_b    (input[7:0]i);      jmp_i_dir_b     = (i[7:0]==8'b11101011);                    endfunction
+function jmp_i_dir_w    (input[7:0]i);      jmp_i_dir_w     = (i[7:0]==8'b11101001);                    endfunction
+function jmp_i_ptr      (input[7:0]i);      jmp_i_ptr       = (i[7:0]==8'b11101010);                    endfunction
+function jmp_rm_dir     (input[7:0]i1,i2);  jmp_rm_dir      = (i1[7:0]==8'b11111111&i2[5:3]==3'b100);   endfunction
+function jmp_rm_ptr     (input[7:0]i1,i2);  jmp_rm_ptr      = (i1[7:0]==8'b11111111&i2[5:3]==3'b101);   endfunction
 
 
 
@@ -300,7 +306,8 @@ function length2 (input [7:0] i1, input [7:0] i2);
               test_rm_r_b(i1)&disp0(i2)|test_r_rm_b(i1)&disp0(i2)|test_rm_r_w(i1)&disp0(i2)|test_r_rm_w(i1)&disp0(i2)|test_a_i_b(i1)|
               or_rm_r_b(i1)&disp0(i2)|or_r_rm_b(i1)&disp0(i2)|or_rm_r_w(i1)&disp0(i2)|or_r_rm_w(i1)&disp0(i2)|or_a_i_b(i1)|
               xor_rm_r_b(i1)&disp0(i2)|xor_r_rm_b(i1)&disp0(i2)|xor_rm_r_w(i1)&disp0(i2)|xor_r_rm_w(i1)&disp0(i2)|xor_a_i_b(i1)|
-              cmps_b(i)|cmps_w(i);
+              cmps_b(i1)|cmps_w(i1)|
+              call_rm_dir(i1)&disp0(i2)|call_rm_ptr(i1)&disp0(i2)|jmp_i_dir_b(i1)|jmp_rm_dir(i1)&disp0(i2)|jmp_rm_ptr(i1)&disp0(i2);
 endfunction
 
 function length3 (input [7:0] i1, input [7:0] i2);
@@ -325,7 +332,8 @@ function length3 (input [7:0] i1, input [7:0] i2);
               and_rm_r_b(i1)&disp1(i2)|and_r_rm_b(i1)&disp1(i2)|and_rm_r_w(i1)&disp1(i2)|and_r_rm_w(i1)&disp1(i2)|and_rm_i_b(i1,i2)&disp0(i2)|and_a_i_w(i1)|
               test_rm_r_b(i1)&disp1(i2)|test_r_rm_b(i1)&disp1(i2)|test_rm_r_w(i1)&disp1(i2)|test_r_rm_w(i1)&disp1(i2)|test_rm_i_b(i1,i2)&disp0(i2)|test_a_i_w(i1)|
               or_rm_r_b(i1)&disp1(i2)|or_r_rm_b(i1)&disp1(i2)|or_rm_r_w(i1)&disp1(i2)|or_r_rm_w(i1)&disp1(i2)|or_rm_i_b(i1,i2)&disp0(i2)|or_a_i_w(i1)|
-              xor_rm_r_b(i1)&disp1(i2)|xor_r_rm_b(i1)&disp1(i2)|xor_rm_r_w(i1)&disp1(i2)|xor_r_rm_w(i1)&disp1(i2)|xor_rm_i_b(i1,i2)&disp0(i2)|xor_a_i_w(i1);
+              xor_rm_r_b(i1)&disp1(i2)|xor_r_rm_b(i1)&disp1(i2)|xor_rm_r_w(i1)&disp1(i2)|xor_r_rm_w(i1)&disp1(i2)|xor_rm_i_b(i1,i2)&disp0(i2)|xor_a_i_w(i1)|
+              call_i_dir(i1)|call_rm_dir(i1)&disp1(i2)|call_rm_ptr(i1)&disp1(i2)|jmp_i_dir_w(i1)|jmp_rm_dir(i1)&disp1(i2)|jmp_rm_ptr(i1)&disp1(i2);
 endfunction
 
 function length4 (input [7:0] i1, input [7:0] i2);
@@ -350,7 +358,8 @@ function length4 (input [7:0] i1, input [7:0] i2);
               and_rm_r_b(i1)&disp2(i2)|and_r_rm_b(i1)&disp2(i2)|and_rm_r_w(i1)&disp2(i2)|and_r_rm_w(i1)&disp2(i2)|and_rm_i_b(i1,i2)&disp1(i2)|and_rm_i_w(i1,i2)&disp0(i2)|
               test_rm_r_b(i1)&disp2(i2)|test_r_rm_b(i1)&disp2(i2)|test_rm_r_w(i1)&disp2(i2)|test_r_rm_w(i1)&disp2(i2)|test_rm_i_b(i1,i2)&disp1(i2)|test_rm_i_w(i1,i2)&disp0(i2)|
               or_rm_r_b(i1)&disp2(i2)|or_r_rm_b(i1)&disp2(i2)|or_rm_r_w(i1)&disp2(i2)|or_r_rm_w(i1)&disp2(i2)|or_rm_i_b(i1,i2)&disp1(i2)|or_rm_i_w(i1,i2)&disp0(i2)|
-              xor_rm_r_b(i1)&disp2(i2)|xor_r_rm_b(i1)&disp2(i2)|xor_rm_r_w(i1)&disp2(i2)|xor_r_rm_w(i1)&disp2(i2)|xor_rm_i_b(i1,i2)&disp1(i2)|xor_rm_i_w(i1,i2)&disp0(i2);
+              xor_rm_r_b(i1)&disp2(i2)|xor_r_rm_b(i1)&disp2(i2)|xor_rm_r_w(i1)&disp2(i2)|xor_r_rm_w(i1)&disp2(i2)|xor_rm_i_b(i1,i2)&disp1(i2)|xor_rm_i_w(i1,i2)&disp0(i2)|
+              call_rm_dir(i1)&disp2(i2)|call_rm_ptr(i1)&disp2(i2)|jmp_rm_dir(i1)&disp2(i2)|jmp_rm_ptr(i1)&disp2(i2);
 endfunction
 
 function length5 (input [7:0] i1, input [7:0] i2);
@@ -363,7 +372,8 @@ function length5 (input [7:0] i1, input [7:0] i2);
               and_rm_i_b(i1,i2)&disp2(i2)|and_rm_i_w(i1,i2)&disp1(i2)|
               test_rm_i_b(i1,i2)&disp2(i2)|test_rm_i_w(i1,i2)&disp1(i2)|
               or_rm_i_b(i1,i2)&disp2(i2)|or_rm_i_w(i1,i2)&disp1(i2)|
-              xor_rm_i_b(i1,i2)&disp2(i2)|xor_rm_i_w(i1,i2)&disp1(i2);
+              xor_rm_i_b(i1,i2)&disp2(i2)|xor_rm_i_w(i1,i2)&disp1(i2)|
+              call_i_ptr(i1)|jmp_i_ptr(i1);
 endfunction
 
 function length6 (input [7:0] i1, input [7:0] i2);
