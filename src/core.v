@@ -29,15 +29,21 @@ module core (
     always @(posedge clk or negedge rst) begin
         if (~rst)
             program_counter <= 'b0;
-        else if (first_byte[4] && (
-            movs_b  (inst_reg[4]) || movs_w  (inst_reg[4])
-        ))
+        else if (first_byte[4] && (movs_b(inst_reg[4]) || movs_w(inst_reg[4])))
             program_counter <= program_counter;
         else if (
-            rep_z   (pref_reg) && ~`CX &&  `ZF ||
-            rep_nz  (pref_reg) && ~`CX && ~`ZF
+            rep_z (pref_reg) && ~`CX &&  `ZF ||
+            rep_nz(pref_reg) && ~`CX && ~`ZF
         )
             program_counter <= program_counter;
+        else if (first_byte[4] && call_i_dir(inst_reg[4]))
+            program_counter <= program_counter + {inst_reg[2], inst_reg[3]};
+        else if (first_byte[4] && call_rm_dir(inst_reg[4], inst_reg[3]))
+            program_counter <= data_reg;
+        else if (call_i_ptr(pref_reg))
+            program_counter <= {inst_reg[3], inst_reg[4]};
+        else if (call_rm_ptr(pref_reg, inst_reg[4]))
+            program_counter <= data_reg;
         else
             program_counter <= program_counter + 'b1;
     end
@@ -70,13 +76,15 @@ module core (
         if (~rst)
             pref_reg <= 'b0;
         else if (first_byte[4] && (
-            rep_z   (inst_reg[4]) && ~`CX &&  `ZF ||
-            rep_nz  (inst_reg[4]) && ~`CX && ~`ZF
+            rep_z       (inst_reg[4]) && ~`CX &&  `ZF ||
+            rep_nz      (inst_reg[4]) && ~`CX && ~`ZF ||
+            call_i_ptr  (inst_reg[4]) ||
+            call_rm_ptr (inst_reg[4])
         ))
             pref_reg <= inst_reg[4];
         else if (
-            rep_z   (pref_reg) && ~`CX &&  `ZF ||
-            rep_nz  (pref_reg) && ~`CX && ~`ZF
+            rep_z       (pref_reg) && ~`CX &&  `ZF ||
+            rep_nz      (pref_reg) && ~`CX && ~`ZF
         )
             pref_reg <= pref_reg;
         else
@@ -86,7 +94,15 @@ module core (
     reg [4:0] clear_byte;
 
     always @(*) begin
-        
+        if (~rst)
+            clear_byte = 5'b11111;
+        else if (first_byte[4] && (
+            call_i_dir(inst_reg[4]) || call_rm_dir(inst_reg[4], inst_reg[3]) ||
+            call_i_ptr(pref_reg   ) || call_rm_ptr(pref_reg,    inst_reg[4])
+        ))
+            clear_byte = 5'b11111;
+        else
+            clear_byte = 'b0;
     end
 
     reg [4:0] first_byte;
@@ -713,6 +729,8 @@ module core (
             if      (mov_sr_rm  (inst_reg[4]))                  segment_register[field_reg(inst_reg[3])[1:0]] <= data_reg;
             else if (lds        (inst_reg[4]))                  `DS <= ram_rd_data;
             else if (les        (inst_reg[4]))                  `ES <= ram_rd_data;
+            else if (call_i_ptr (inst_reg[4]))                  `CS <= {inst_reg[0], inst_reg[1]};
+            else if (call_rm_ptr(inst_reg[4]))                  `CS <= ram_rd_data;
         end
     end
 
@@ -884,7 +902,8 @@ module core (
         and_rm_i_b  (inst_reg[3], inst_reg[2]) || and_rm_i_w  (inst_reg[3], inst_reg[2]) ||
         test_rm_i_b (inst_reg[3], inst_reg[2]) || test_rm_i_w (inst_reg[3], inst_reg[2]) ||
         or_rm_i_b   (inst_reg[3], inst_reg[2]) || or_rm_i_w   (inst_reg[3], inst_reg[2]) ||
-        xor_rm_i_b  (inst_reg[3], inst_reg[2]) || xor_rm_i_w  (inst_reg[3], inst_reg[2]) 
+        xor_rm_i_b  (inst_reg[3], inst_reg[2]) || xor_rm_i_w  (inst_reg[3], inst_reg[2]) ||
+        call_rm_dir (inst_reg[3], inst_reg[2]) || call_rm_ptr (inst_reg[3], inst_reg[2])
     )) || (first_byte[3] && (
         mov_a_m_b   (inst_reg[3]) || mov_a_m_w   (inst_reg[3]) ||
         pop_rm      (inst_reg[3]) ||
@@ -897,7 +916,9 @@ module core (
         movs_b      (inst_reg[3]) || movs_w      (inst_reg[3]) ||
         cmps_b      (inst_reg[3]) || cmps_w      (inst_reg[3]) ||
         scas_b      (inst_reg[3]) || scas_w      (inst_reg[3]) ||
-        lods_b      (inst_reg[3]) || lods_w      (inst_reg[3])
+        lods_b      (inst_reg[3]) || lods_w      (inst_reg[3]) 
+    )) || (first_byte[4] && is_mem_mod(inst_reg[3]) && (
+        call_rm_ptr (inst_reg[4], inst_reg[3])
     )) || (first_byte[4] && (
         lds         (inst_reg[4]) ||
         les         (inst_reg[4]) ||
@@ -941,7 +962,8 @@ module core (
         and_rm_i_w  (inst_reg[3], inst_reg[2]) ||
         test_rm_i_w (inst_reg[3], inst_reg[2]) ||
         or_rm_i_w   (inst_reg[3], inst_reg[2]) ||
-        xor_rm_i_w  (inst_reg[3], inst_reg[2]) 
+        xor_rm_i_w  (inst_reg[3], inst_reg[2]) ||
+        call_rm_dir (inst_reg[3], inst_reg[2]) || call_rm_ptr (inst_reg[3], inst_reg[2]) 
     )) || (first_byte[3] && (
         mov_a_m_w   (inst_reg[3]) ||
         pop_rm      (inst_reg[3]) ||
@@ -954,6 +976,8 @@ module core (
         cmps_w      (inst_reg[3]) ||
         scas_w      (inst_reg[3]) ||
         lods_w      (inst_reg[3])
+    )) || (first_byte[4] && is_mem_mod(inst_reg[3]) && (
+        call_rm_ptr (inst_reg[4], inst_reg[3])
     )) || (first_byte[4] && (
         lds         (inst_reg[4]) ||
         les         (inst_reg[4]) ||
@@ -1006,7 +1030,8 @@ module core (
             and_rm_i_b  (inst_reg[3], inst_reg[2]) || and_rm_i_w  (inst_reg[3], inst_reg[2]) ||
             test_rm_i_b (inst_reg[3], inst_reg[2]) || test_rm_i_w (inst_reg[3], inst_reg[2]) ||
             or_rm_i_b   (inst_reg[3], inst_reg[2]) || or_rm_i_w   (inst_reg[3], inst_reg[2]) ||
-            xor_rm_i_b  (inst_reg[3], inst_reg[2]) || xor_rm_i_w  (inst_reg[3], inst_reg[2]) 
+            xor_rm_i_b  (inst_reg[3], inst_reg[2]) || xor_rm_i_w  (inst_reg[3], inst_reg[2]) ||
+            call_rm_dir (inst_reg[3], inst_reg[2]) || call_rm_ptr (inst_reg[3], inst_reg[2])
         )) || (first_byte[3] && (
             mov_a_m_b   (inst_reg[3]) || mov_a_m_w   (inst_reg[3])
         )))
@@ -1028,19 +1053,17 @@ module core (
             ram_rd_addr_signal = {`DS, 4'b0} + addr_reg + 'h2;
         else if (first_byte[4] && les(inst_reg[4]))
             ram_rd_addr_signal = {`ES, 4'b0} + addr_reg + 'h2;
+        else if (first_byte[4] && is_mem_mod(inst_reg[3]) && call_rm_ptr(inst_reg[4], inst_reg[3]))
+            ram_rd_addr_signal = {`ES, 4'b0} + addr_reg + 'h2;
         else if (first_byte[3] && (
             movs_b      (inst_reg[3]) || movs_w      (inst_reg[3]) ||
             cmps_b      (inst_reg[3]) || cmps_w      (inst_reg[3]) ||
             lods_b      (inst_reg[3]) || lods_w      (inst_reg[3])
         ))
             ram_rd_addr_signal = {`DS, 4'b0} + `SI;
-        else if (first_byte[3] && (
-            scas_b      (inst_reg[3]) || scas_w      (inst_reg[3])
-        ))
+        else if (first_byte[3] && (scas_b(inst_reg[3]) || scas_w(inst_reg[3])))
             ram_rd_addr_signal = {`ES, 4'b0} + `DI;
-        else if (first_byte[4] && (
-            cmps_b      (inst_reg[4]) || cmps_w      (inst_reg[4])
-        ))
+        else if (first_byte[4] && (cmps_b(inst_reg[4]) || cmps_w(inst_reg[4])))
             ram_rd_addr_signal = {`ES, 4'b0} + `DI;
         else
             ram_rd_addr_signal = 'b0;
@@ -1076,18 +1099,21 @@ module core (
         xor_rm_r_b  (inst_reg[4]) || xor_rm_r_w  (inst_reg[4]) ||
         and_rm_i_b  (inst_reg[4], inst_reg[3]) || and_rm_i_w  (inst_reg[4], inst_reg[3]) ||
         or_rm_i_b   (inst_reg[4], inst_reg[3]) || or_rm_i_w   (inst_reg[4], inst_reg[3]) ||
-        xor_rm_i_b  (inst_reg[4], inst_reg[3]) || xor_rm_i_w  (inst_reg[4], inst_reg[3])
+        xor_rm_i_b  (inst_reg[4], inst_reg[3]) || xor_rm_i_w  (inst_reg[4], inst_reg[3]) ||
     )) || (first_byte[4] && (
         mov_m_a_b   (inst_reg[4]) || mov_m_a_w   (inst_reg[4]) ||
         push_rm     (inst_reg[4]) ||
         push_r      (inst_reg[4]) ||
         push_sr     (inst_reg[4]) ||
         pushf       (inst_reg[4]) ||
-        movs_b      (inst_reg[4]) ||
-        movs_w      (inst_reg[4]) ||
-        stos_b      (inst_reg[4]) ||
-        stos_w      (inst_reg[4])
-    ));
+        movs_b      (inst_reg[4]) || movs_w      (inst_reg[4]) ||
+        stos_b      (inst_reg[4]) || stos_w      (inst_reg[4]) ||
+        call_i_dir  (inst_reg[4]) || call_rm_dir (inst_reg[4], inst_reg[3]) ||
+        call_i_ptr  (inst_reg[4]) || call_rm_ptr (inst_reg[4], inst_reg[3])
+    )) || (
+        call_i_ptr  (pref_reg) ||
+        call_rm_ptr (pref_reg, inst_reg[4])
+    );
     
     assign ram_wr_we = (first_byte[4] && is_mem_mod(inst_reg[3]) && (
         mov_rm_r_w  (inst_reg[4]) ||
@@ -1125,8 +1151,13 @@ module core (
         push_sr     (inst_reg[4]) ||
         pushf       (inst_reg[4]) ||
         movs_w      (inst_reg[4]) ||
-        stos_w      (inst_reg[4])
-    ));
+        stos_w      (inst_reg[4]) ||
+        call_i_dir  (inst_reg[4]) || call_rm_dir (inst_reg[4], inst_reg[3]) ||
+        call_i_ptr  (inst_reg[4]) || call_rm_ptr (inst_reg[4], inst_reg[3])
+    )) || (
+        call_i_ptr  (pref_reg) ||
+        call_rm_ptr (pref_reg, inst_reg[4])
+    );
 
     reg [19:0] ram_wr_addr_signal;
 
@@ -1170,16 +1201,21 @@ module core (
             push_rm     (inst_reg[4]) ||
             push_r      (inst_reg[4]) ||
             push_sr     (inst_reg[4]) ||
-            pushf       (inst_reg[4])
+            pushf       (inst_reg[4]) ||
+            call_i_dir  (inst_reg[4]) || call_rm_dir (inst_reg[4], inst_reg[3]) ||
+            call_i_ptr  (inst_reg[4]) || call_rm_ptr (inst_reg[4], inst_reg[3])
         ))
             ram_wr_addr_signal = {`SS, 4'b0} + `SP - 'h2;
         else if (first_byte[4] && (
-            movs_b      (inst_reg[4]) ||
-            movs_w      (inst_reg[4]) ||
-            stos_b      (inst_reg[4]) ||
-            stos_w      (inst_reg[4])
+            movs_b      (inst_reg[4]) || movs_w      (inst_reg[4]) ||
+            stos_b      (inst_reg[4]) || stos_w      (inst_reg[4])
         ))
             ram_wr_addr_signal = {`ES, 4'b0} + `DI;
+        else if (
+            call_i_ptr  (pref_reg) ||
+            call_rm_ptr (pref_reg, inst_reg[4])
+        )
+            ram_wr_addr_signal = {`SS, 4'b0} + `SP;
         else
             ram_wr_addr_signal = 'b0;
     end
@@ -1195,13 +1231,12 @@ module core (
             mov_rm_r_b  (inst_reg[4]) ||
             mov_rm_r_w  (inst_reg[4])
         )) || (first_byte[4] && (
-            mov_m_a_b   (inst_reg[4]) || mov_m_a_w  (inst_reg[4]) ||
+            mov_m_a_b   (inst_reg[4]) || mov_m_a_w   (inst_reg[4]) ||
             push_rm     (inst_reg[4]) ||
             push_r      (inst_reg[4]) ||
             push_sr     (inst_reg[4]) ||
             pushf       (inst_reg[4]) ||
-            movs_b      (inst_reg[4]) ||
-            movs_w      (inst_reg[4])
+            movs_b      (inst_reg[4]) || movs_w      (inst_reg[4])
         )))
             ram_wr_data_signal = data_reg;
         else if ((first_byte[4] && is_mem_mod(inst_reg[3]) && mov_rm_i_b(inst_reg[4], inst_reg[3])))
@@ -1253,6 +1288,19 @@ module core (
             ram_wr_data_signal = `AL;
         else if (first_byte[4] && stos_w(inst_reg[4]))
             ram_wr_data_signal = `AX;
+        else if (first_byte[4] && (
+            call_i_dir  (inst_reg[4]) || call_rm_dir (inst_reg[4], inst_reg[3]) ||
+            call_i_ptr  (inst_reg[4]) || call_rm_ptr (inst_reg[4], inst_reg[3])
+        ))
+            ram_wr_data_signal = `CS;
+        else if (call_i_ptr  (pref_reg))
+            ram_wr_data_signal = program_counter - 'h1;
+        else if (call_rm_ptr (pref_reg))
+            ram_wr_data_signal = program_counter -
+                disp0(inst_reg[4]) ? 'h5 :
+                disp1(inst_reg[4]) ? 'h4 :
+                disp2(inst_reg[4]) ? 'h3 :
+                'h0;
         else
             ram_wr_data_signal = 'b0;
     end

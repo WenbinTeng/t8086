@@ -244,8 +244,8 @@ function xor_a_i_w      (input[7:0]i);      xor_a_i_w       = (i[7:0]==8'b001001
 
 // STRING MANUPULATE OPERATIONS
 // REP
-function rep_z          (input[7:0]i);      rep_z           = (i[7:1]==7'b11110011);                    endfunction
-function rep_nz         (input[7:0]i);      rep_nz          = (i[7:1]==7'b11110010);                    endfunction
+function rep_z          (input[7:0]i);      rep_z           = (i[7:1]==8'b11110011);                    endfunction
+function rep_nz         (input[7:0]i);      rep_nz          = (i[7:1]==8'b11110010);                    endfunction
 // MOVS
 function movs_b         (input[7:0]i);      movs_b          = (i[7:0]==8'b10100100);                    endfunction
 function movs_w         (input[7:0]i);      movs_w          = (i[7:0]==8'b10100101);                    endfunction
@@ -262,9 +262,18 @@ function lods_w         (input[7:0]i);      lods_w          = (i[7:0]==8'b101011
 function stos_b         (input[7:0]i);      stos_b          = (i[7:0]==8'b10101010);                    endfunction
 function stos_w         (input[7:0]i);      stos_w          = (i[7:0]==8'b10101011);                    endfunction
 
+// CONTROL TRANSFER OPERATIONS
+// CALL
+function call_i_dir     (input[7:0]i);      call_i_dir      = (i[7:0]==8'b11101000);                    endfunction
+function call_i_ptr     (input[7:0]i);      call_i_dir      = (i[7:0]==8'b10011010);                    endfunction
+function call_rm_dir    (input[7:0]i1,i2);  call_rm_dir     = (i1[7:0]==8'b11111111&i2[5:3]==3'b010);   endfunction
+function call_rm_ptr    (input[7:0]i1,i2);  call_rm_dir     = (i1[7:0]==8'b11111111&i2[5:3]==3'b011);   endfunction
+
+
+
 function length1 (input [7:0] i);
     length1 = push_r(i)|push_sr(i)|pop_r(i)|pop_sr(i)|xchg_a_r(i)|xlat(i)|lahf(i)|sahf(i)|pushf(i)|popf(i)|inc_r(i)|aaa(i)|daa(i)|dec_r(i)|aas(i)|das(i)|aam(i)|aad(i)|cbw(i)|cwd(i)|
-              rep(i)|movs_b(i)|movs_w(i)|cmps_b(i)|cmps_w(i)|scas_b(i)|scas_w(i)|lods_b(i)|lods_w(i)|stds_b(i)|stds_w(i);
+              rep_z(i)|rep_nz(i)|movs_b(i)|movs_w(i)|scas_b(i)|scas_w(i)|lods_b(i)|lods_w(i)|stds_b(i)|stds_w(i);
 endfunction
 
 function length2 (input [7:0] i1, input [7:0] i2);
