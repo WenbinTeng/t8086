@@ -31,20 +31,27 @@ module core (
     always @(posedge clk or negedge rst) begin
         if (~rst) ip <= 'b0;
         else if (first_byte[4] && (
-            call_rm_dir (ir[4], ir[3]) ||
-            call_rm_ptr (ir[4], ir[3]) ||
-            jmp_rm_dir  (ir[4], ir[3]) ||
-            jmp_rm_ptr  (ir[4], ir[3]) ||
-            ret         (ir[4], ir[3]) ||
-            ret_i       (ir[4], ir[3]) ||
-            retf        (ir[4], ir[3]) ||
-            retf_i      (ir[4], ir[3])              
+            call_rm_dir (ir[4], ir[3]) || call_rm_ptr (ir[4], ir[3]) ||
+            ret         (ir[4], ir[3]) || ret_i       (ir[4], ir[3]) ||
+            retf        (ir[4], ir[3]) || retf_i      (ir[4], ir[3]) ||
+            jmp_rm_dir  (ir[4], ir[3]) || jmp_rm_ptr  (ir[4], ir[3]) 
         )) ip <= data_reg;
         else if (first_byte[4] && call_i_dir  (ir[4], ir[3])) ip <= ip + {ir[2], ir[3]};
         else if (first_byte[4] && call_i_ptr  (ir[4], ir[3])) ip <=      {ir[3], ir[4]};
         else if (first_byte[4] && jmp_i_dir_b (ir[4], ir[3])) ip <= ip + {8'h00, ir[3]};
         else if (first_byte[4] && jmp_i_dir_w (ir[4], ir[3])) ip <= ip + {ir[2], ir[3]};
         else if (first_byte[4] && jmp_i_ptr   (ir[4], ir[3])) ip <=      {ir[2], ir[3]};
+        else if (first_byte[4] && (
+            je          (ir[4], ir[3]) || jne         (ir[4], ir[3]) ||
+            jl          (ir[4], ir[3]) || jnl         (ir[4], ir[3]) ||
+            jle         (ir[4], ir[3]) || jnle        (ir[4], ir[3]) ||
+            jb          (ir[4], ir[3]) || jnb         (ir[4], ir[3]) ||
+            jbe         (ir[4], ir[3]) || jnbe        (ir[4], ir[3]) ||
+            jp          (ir[4], ir[3]) || jnp         (ir[4], ir[3]) ||
+            jo          (ir[4], ir[3]) || jno         (ir[4], ir[3]) ||
+            js          (ir[4], ir[3]) || jns         (ir[4], ir[3])
+        ))
+            ip <= ip + {8'h00, ir[3]};
         else if (first_byte[0] && (
             cmps_b(ir[0], rom_data) ||
             cmps_w(ir[0], rom_data)
@@ -101,19 +108,21 @@ module core (
         if (~rst)
             clear_byte = 5'b11111;
         else if (first_byte[4] && (
-            call_i_dir  (ir[4], ir[3]) ||
-            call_i_ptr  (ir[4], ir[3]) ||
-            call_rm_dir (ir[4], ir[3]) ||
-            call_rm_ptr (ir[4], ir[3]) ||
-            jmp_i_dir_b (ir[4], ir[3]) ||
-            jmp_i_dir_w (ir[4], ir[3]) ||
-            jmp_i_ptr   (ir[4], ir[3]) ||
-            jmp_rm_dir  (ir[4], ir[3]) ||
-            jmp_rm_ptr  (ir[4], ir[3]) ||
-            ret         (ir[4], ir[3]) ||
-            ret_i       (ir[4], ir[3]) ||
-            retf        (ir[4], ir[3]) ||
-            retf_i      (ir[4], ir[3]) 
+            call_i_dir  (ir[4], ir[3]) || call_i_ptr  (ir[4], ir[3]) ||
+            call_rm_dir (ir[4], ir[3]) || call_rm_ptr (ir[4], ir[3]) ||
+            ret         (ir[4], ir[3]) || ret_i       (ir[4], ir[3]) ||
+            retf        (ir[4], ir[3]) || retf_i      (ir[4], ir[3]) ||
+            jmp_i_dir_b (ir[4], ir[3]) || jmp_i_dir_w (ir[4], ir[3]) ||
+            jmp_i_ptr   (ir[4], ir[3]) || jmp_i_ptr   (ir[4], ir[3]) ||
+            jmp_rm_dir  (ir[4], ir[3]) || jmp_rm_ptr  (ir[4], ir[3]) ||
+            je          (ir[4], ir[3]) || jne         (ir[4], ir[3]) ||
+            jl          (ir[4], ir[3]) || jnl         (ir[4], ir[3]) ||
+            jle         (ir[4], ir[3]) || jnle        (ir[4], ir[3]) ||
+            jb          (ir[4], ir[3]) || jnb         (ir[4], ir[3]) ||
+            jbe         (ir[4], ir[3]) || jnbe        (ir[4], ir[3]) ||
+            jp          (ir[4], ir[3]) || jnp         (ir[4], ir[3]) ||
+            jo          (ir[4], ir[3]) || jno         (ir[4], ir[3]) ||
+            js          (ir[4], ir[3]) || jns         (ir[4], ir[3]) 
         ))
             clear_byte = 5'b01111;
         else
@@ -1077,18 +1086,18 @@ module core (
         if (~rst)
             ram_rd_addr_signal = 'b0;
         else if ((first_byte[3] && is_mem_mod(ir[2], ir[1]) && (
-            mov_r_rm_b  (ir[3], ir[2]) || mov_r_rm_w (ir[3], ir[2]) ||
-            xchg_r_rm_b (ir[3], ir[2]) || xchg_r_rm_w(ir[3], ir[2]) ||
-            add_rm_r_b  (ir[3], ir[2]) || add_r_rm_b (ir[3], ir[2]) ||
-            add_rm_r_w  (ir[3], ir[2]) || add_r_rm_w (ir[3], ir[2]) ||
-            adc_rm_r_b  (ir[3], ir[2]) || adc_r_rm_b (ir[3], ir[2]) ||
-            adc_rm_r_w  (ir[3], ir[2]) || adc_r_rm_w (ir[3], ir[2]) ||
-            sub_rm_r_b  (ir[3], ir[2]) || sub_r_rm_b (ir[3], ir[2]) ||
-            sub_rm_r_w  (ir[3], ir[2]) || sub_r_rm_w (ir[3], ir[2]) ||
-            sbb_rm_r_b  (ir[3], ir[2]) || sbb_r_rm_b (ir[3], ir[2]) ||
-            sbb_rm_r_w  (ir[3], ir[2]) || sbb_r_rm_w (ir[3], ir[2]) ||
-            cmp_rm_r_b  (ir[3], ir[2]) || cmp_r_rm_b (ir[3], ir[2]) ||
-            cmp_rm_r_w  (ir[3], ir[2]) || cmp_r_rm_w (ir[3], ir[2]) ||
+            mov_r_rm_b  (ir[3], ir[2]) || mov_r_rm_w  (ir[3], ir[2]) ||
+            xchg_r_rm_b (ir[3], ir[2]) || xchg_r_rm_w (ir[3], ir[2]) ||
+            add_rm_r_b  (ir[3], ir[2]) || add_r_rm_b  (ir[3], ir[2]) ||
+            add_rm_r_w  (ir[3], ir[2]) || add_r_rm_w  (ir[3], ir[2]) ||
+            adc_rm_r_b  (ir[3], ir[2]) || adc_r_rm_b  (ir[3], ir[2]) ||
+            adc_rm_r_w  (ir[3], ir[2]) || adc_r_rm_w  (ir[3], ir[2]) ||
+            sub_rm_r_b  (ir[3], ir[2]) || sub_r_rm_b  (ir[3], ir[2]) ||
+            sub_rm_r_w  (ir[3], ir[2]) || sub_r_rm_w  (ir[3], ir[2]) ||
+            sbb_rm_r_b  (ir[3], ir[2]) || sbb_r_rm_b  (ir[3], ir[2]) ||
+            sbb_rm_r_w  (ir[3], ir[2]) || sbb_r_rm_w  (ir[3], ir[2]) ||
+            cmp_rm_r_b  (ir[3], ir[2]) || cmp_r_rm_b  (ir[3], ir[2]) ||
+            cmp_rm_r_w  (ir[3], ir[2]) || cmp_r_rm_w  (ir[3], ir[2]) ||
             push_rm     (ir[3], ir[2]) ||
             add_rm_i_b  (ir[3], ir[2]) || add_rm_zi_w (ir[3], ir[2]) || add_rm_si_w (ir[3], ir[2]) ||
             adc_rm_i_b  (ir[3], ir[2]) || adc_rm_zi_w (ir[3], ir[2]) || adc_rm_si_w (ir[3], ir[2]) ||

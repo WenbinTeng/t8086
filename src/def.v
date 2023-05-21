@@ -268,19 +268,49 @@ function call_i_dir     (input[7:0]i1,i2); call_i_dir   = (i1[7:0]==8'b11101000)
 function call_i_ptr     (input[7:0]i1,i2); call_i_ptr   = (i1[7:0]==8'b10011010);                   endfunction
 function call_rm_dir    (input[7:0]i1,i2); call_rm_dir  = (i1[7:0]==8'b11111111&i2[5:3]==3'b010);   endfunction
 function call_rm_ptr    (input[7:0]i1,i2); call_rm_ptr  = (i1[7:0]==8'b11111111&i2[5:3]==3'b011);   endfunction
+// RET
+function ret            (input[7:0]i1,i2); ret          = (i1[7:0]==8'b11000011);                   endfunction
+function ret_i          (input[7:0]i1,i2); ret_i        = (i1[7:0]==8'b11000010);                   endfunction
+function retf           (input[7:0]i1,i2); retf         = (i1[7:0]==8'b11001011);                   endfunction
+function retf_i         (input[7:0]i1,i2); retf_i       = (i1[7:0]==8'b11001010);                   endfunction
 // JMP
 function jmp_i_dir_b    (input[7:0]i1,i2); jmp_i_dir_b  = (i1[7:0]==8'b11101011);                   endfunction
 function jmp_i_dir_w    (input[7:0]i1,i2); jmp_i_dir_w  = (i1[7:0]==8'b11101001);                   endfunction
 function jmp_i_ptr      (input[7:0]i1,i2); jmp_i_ptr    = (i1[7:0]==8'b11101010);                   endfunction
 function jmp_rm_dir     (input[7:0]i1,i2); jmp_rm_dir   = (i1[7:0]==8'b11111111&i2[5:3]==3'b100);   endfunction
 function jmp_rm_ptr     (input[7:0]i1,i2); jmp_rm_ptr   = (i1[7:0]==8'b11111111&i2[5:3]==3'b101);   endfunction
-// RET
-function ret            (input[7:0]i1,i2); ret          = (i1[7:0]==8'b11000011);                   endfunction
-function ret_i          (input[7:0]i1,i2); ret_i        = (i1[7:0]==8'b11000010);                   endfunction
-function retf           (input[7:0]i1,i2); retf         = (i1[7:0]==8'b11001011);                   endfunction
-function retf_i         (input[7:0]i1,i2); retf_i       = (i1[7:0]==8'b11001010);                   endfunction
-
-
+// JE
+function je             (input[7:0]i1,i2); je           = (i1[7:0]==8'b01110100);                   endfunction
+// JL
+function jl             (input[7:0]i1,i2); jl           = (i1[7:0]==8'b01111100);                   endfunction
+// JLE
+function jle            (input[7:0]i1,i2); jle          = (i1[7:0]==8'b01111110);                   endfunction
+// JB
+function jb             (input[7:0]i1,i2); jb           = (i1[7:0]==8'b01110010);                   endfunction
+// JBE
+function jbe            (input[7:0]i1,i2); jbe          = (i1[7:0]==8'b01110110);                   endfunction
+// JP
+function jp             (input[7:0]i1,i2); jp           = (i1[7:0]==8'b01111010);                   endfunction
+// JO
+function jo             (input[7:0]i1,i2); jo           = (i1[7:0]==8'b01110000);                   endfunction
+// JS
+function js             (input[7:0]i1,i2); js           = (i1[7:0]==8'b01111000);                   endfunction
+// JNE
+function jne            (input[7:0]i1,i2); jne          = (i1[7:0]==8'b01110101);                   endfunction
+// JNL
+function jnl            (input[7:0]i1,i2); jnl          = (i1[7:0]==8'b01111101);                   endfunction
+// JNLE
+function jnle           (input[7:0]i1,i2); jnle         = (i1[7:0]==8'b01111111);                   endfunction
+// JNB
+function jnb            (input[7:0]i1,i2); jnb          = (i1[7:0]==8'b01110011);                   endfunction
+// JNBE
+function jnbe           (input[7:0]i1,i2); jnbe         = (i1[7:0]==8'b01110111);                   endfunction
+// JNP
+function jnp            (input[7:0]i1,i2); jnp          = (i1[7:0]==8'b01111011);                   endfunction
+// JNO
+function jno            (input[7:0]i1,i2); jno          = (i1[7:0]==8'b01110001);                   endfunction
+// JNS
+function jns            (input[7:0]i1,i2); jns          = (i1[7:0]==8'b01111001);                   endfunction
 
 function length1 (input [7:0] i1, input [7:0] i2);
     length1 = push_r(i1,i2)|push_sr(i1,i2)|pop_r(i1,i2)|pop_sr(i1,i2)|xchg_a_r(i1,i2)|xlat(i1,i2)|lahf(i1,i2)|sahf(i1,i2)|pushf(i1,i2)|popf(i1,i2)|
@@ -313,7 +343,9 @@ function length2 (input [7:0] i1, input [7:0] i2);
               or_rm_r_b(i1,i2)&disp0(i2)|or_r_rm_b(i1,i2)&disp0(i2)|or_rm_r_w(i1,i2)&disp0(i2)|or_r_rm_w(i1,i2)&disp0(i2)|or_a_i_b(i1,i2)|
               xor_rm_r_b(i1,i2)&disp0(i2)|xor_r_rm_b(i1,i2)&disp0(i2)|xor_rm_r_w(i1,i2)&disp0(i2)|xor_r_rm_w(i1,i2)&disp0(i2)|xor_a_i_b(i1,i2)|
               cmps_b(i1,i2)|cmps_w(i1,i2)|
-              call_rm_dir(i1,i2)&disp0(i2)|call_rm_ptr(i1,i2)&disp0(i2)|jmp_i_dir_b(i1,i2)|jmp_rm_dir(i1,i2)&disp0(i2)|jmp_rm_ptr(i1,i2)&disp0(i2);
+              call_rm_dir(i1,i2)&disp0(i2)|call_rm_ptr(i1,i2)&disp0(i2)|jmp_i_dir_b(i1,i2)|jmp_rm_dir(i1,i2)&disp0(i2)|jmp_rm_ptr(i1,i2)&disp0(i2)|
+              je(i1,i2)|jl(i1,i2)|jle(i1,i2)|jb(i1,i2)|jbe(i1,i2)|jp(i1,i2)|jo(i1,i2)|js(i1,i2)|
+              jne(i1,i2)|jnl(i1,i2)|jnle(i1,i2)|jnb(i1,i2)|jnbe(i1,i2)|jnp(i1,i2)|jno(i1,i2)|jns(i1,i2);
 endfunction
 
 function length3 (input [7:0] i1, input [7:0] i2);
