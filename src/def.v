@@ -32,338 +32,344 @@
 
 // DATA TRANSFER OPERATIONS
 // MOV
-function mov_rm_r_b     (input[7:0]i);      mov_rm_r_b      = (i[7:0]==8'b10001000);                    endfunction
-function mov_r_rm_b     (input[7:0]i);      mov_r_rm_b      = (i[7:0]==8'b10001010);                    endfunction
-function mov_rm_r_w     (input[7:0]i);      mov_rm_r_w      = (i[7:0]==8'b10001001);                    endfunction
-function mov_r_rm_w     (input[7:0]i);      mov_r_rm_w      = (i[7:0]==8'b10001011);                    endfunction
-function mov_rm_i_b     (input[7:0]i1,i2);  mov_rm_i_b      = (i1[7:0]==8'b11000110&i2[5:3]==3'b000);   endfunction
-function mov_rm_i_w     (input[7:0]i1,i2);  mov_rm_i_w      = (i1[7:0]==8'b11000111&i2[5:3]==3'b000);   endfunction
-function mov_r_i_b      (input[7:0]i);      mov_r_i_b       = (i[7:3]==5'b10110);                       endfunction
-function mov_r_i_w      (input[7:0]i);      mov_r_i_w       = (i[7:3]==5'b10111);                       endfunction
-function mov_a_m_b      (input[7:0]i);      mov_a_m_b       = (i[7:0]==8'b10100000);                    endfunction
-function mov_a_m_w      (input[7:0]i);      mov_a_m_w       = (i[7:0]==8'b10100001);                    endfunction
-function mov_m_a_b      (input[7:0]i);      mov_m_a_b       = (i[7:0]==8'b10100010);                    endfunction
-function mov_m_a_w      (input[7:0]i);      mov_m_a_w       = (i[7:0]==8'b10100011);                    endfunction
-function mov_sr_rm      (input[7:0]i);      mov_sr_rm       = (i[7:0]==8'b10001110);                    endfunction
-function mov_rm_sr      (input[7:0]i);      mov_rm_sr       = (i[7:0]==8'b10001100);                    endfunction
+function mov_rm_r_b     (input[7:0]i1,i2); mov_rm_r_b   = (i1[7:0]==8'b10001000);                   endfunction
+function mov_r_rm_b     (input[7:0]i1,i2); mov_r_rm_b   = (i1[7:0]==8'b10001010);                   endfunction
+function mov_rm_r_w     (input[7:0]i1,i2); mov_rm_r_w   = (i1[7:0]==8'b10001001);                   endfunction
+function mov_r_rm_w     (input[7:0]i1,i2); mov_r_rm_w   = (i1[7:0]==8'b10001011);                   endfunction
+function mov_rm_i_b     (input[7:0]i1,i2); mov_rm_i_b   = (i1[7:0]==8'b11000110&i2[5:3]==3'b000);   endfunction
+function mov_rm_i_w     (input[7:0]i1,i2); mov_rm_i_w   = (i1[7:0]==8'b11000111&i2[5:3]==3'b000);   endfunction
+function mov_r_i_b      (input[7:0]i1,i2); mov_r_i_b    = (i1[7:3]==5'b10110);                      endfunction
+function mov_r_i_w      (input[7:0]i1,i2); mov_r_i_w    = (i1[7:3]==5'b10111);                      endfunction
+function mov_a_m_b      (input[7:0]i1,i2); mov_a_m_b    = (i1[7:0]==8'b10100000);                   endfunction
+function mov_a_m_w      (input[7:0]i1,i2); mov_a_m_w    = (i1[7:0]==8'b10100001);                   endfunction
+function mov_m_a_b      (input[7:0]i1,i2); mov_m_a_b    = (i1[7:0]==8'b10100010);                   endfunction
+function mov_m_a_w      (input[7:0]i1,i2); mov_m_a_w    = (i1[7:0]==8'b10100011);                   endfunction
+function mov_sr_rm      (input[7:0]i1,i2); mov_sr_rm    = (i1[7:0]==8'b10001110);                   endfunction
+function mov_rm_sr      (input[7:0]i1,i2); mov_rm_sr    = (i1[7:0]==8'b10001100);                   endfunction
 // PUSH
-function push_rm        (input[7:0]i1,i2);  push_rm         = (i1[7:0]==8'b11111111&i2[5:3]==3'b110);   endfunction
-function push_r         (input[7:0]i);      push_r          = (i[7:3]==5'b01010);                       endfunction
-function push_sr        (input[7:0]i);      push_sr         = (i&'he7==8'b00000110);                    endfunction
+function push_rm        (input[7:0]i1,i2); push_rm      = (i1[7:0]==8'b11111111&i2[5:3]==3'b110);   endfunction
+function push_r         (input[7:0]i1,i2); push_r       = (i1[7:3]==5'b01010);                      endfunction
+function push_sr        (input[7:0]i1,i2); push_sr      = (i1&'he7==8'b00000110);                   endfunction
 // POP
-function pop_rm         (input[7:0]i1,i2);  pop_rm          = (i1[7:0]==8'b10001111&i2[5:3]==3'b000);   endfunction
-function pop_r          (input[7:0]i);      pop_r           = (i[7:3]==5'b01011);                       endfunction
-function pop_sr         (input[7:0]i);      pop_sr          = (i&'he7==8'b00000111);                    endfunction
+function pop_rm         (input[7:0]i1,i2); pop_rm       = (i1[7:0]==8'b10001111&i2[5:3]==3'b000);   endfunction
+function pop_r          (input[7:0]i1,i2); pop_r        = (i1[7:3]==5'b01011);                      endfunction
+function pop_sr         (input[7:0]i1,i2); pop_sr       = (i1&'he7==8'b00000111);                   endfunction
 // XCHG
-function xchg_r_rm_b    (input[7:0]i);      xchg_r_rm_b     = (i[7:0]==8'b10000110);                    endfunction
-function xchg_r_rm_w    (input[7:0]i);      xchg_r_rm_w     = (i[7:0]==8'b10000111);                    endfunction
-function xchg_a_r       (input[7:0]i);      xchg_a_r        = (i[7:3]==5'b10010);                       endfunction
+function xchg_r_rm_b    (input[7:0]i1,i2); xchg_r_rm_b  = (i1[7:0]==8'b10000110);                   endfunction
+function xchg_r_rm_w    (input[7:0]i1,i2); xchg_r_rm_w  = (i1[7:0]==8'b10000111);                   endfunction
+function xchg_a_r       (input[7:0]i1,i2); xchg_a_r     = (i1[7:3]==5'b10010);                      endfunction
 // XLAT
-function xlat           (input[7:0]i);      xlat            = (i[7:0]==8'b11010111);                    endfunction
+function xlat           (input[7:0]i1,i2); xlat         = (i1[7:0]==8'b11010111);                   endfunction
 // LEA
-function lea            (input[7:0]i);      lea             = (i[7:0]==8'b10001101);                    endfunction
+function lea            (input[7:0]i1,i2); lea          = (i1[7:0]==8'b10001101);                   endfunction
 // LDS
-function lds            (input[7:0]i);      lds             = (i[7:0]==8'b11000101);                    endfunction
+function lds            (input[7:0]i1,i2); lds          = (i1[7:0]==8'b11000101);                   endfunction
 // LES
-function les            (input[7:0]i);      les             = (i[7:0]==8'b11000100);                    endfunction
+function les            (input[7:0]i1,i2); les          = (i1[7:0]==8'b11000100);                   endfunction
 // LAHF
-function lahf           (input[7:0]i);      lahf            = (i[7:0]==8'b10011111);                    endfunction
+function lahf           (input[7:0]i1,i2); lahf         = (i1[7:0]==8'b10011111);                   endfunction
 // SAHF
-function sahf           (input[7:0]i);      sahf            = (i[7:0]==8'b10011110);                    endfunction
+function sahf           (input[7:0]i1,i2); sahf         = (i1[7:0]==8'b10011110);                   endfunction
 // PUSHF
-function pushf          (input[7:0]i);      pushf           = (i[7:0]==8'b10011100);                    endfunction
+function pushf          (input[7:0]i1,i2); pushf        = (i1[7:0]==8'b10011100);                   endfunction
 // POPF
-function popf           (input[7:0]i);      popf            = (i[7:0]==8'b10011101);                    endfunction
+function popf           (input[7:0]i1,i2); popf         = (i1[7:0]==8'b10011101);                   endfunction
 
 // ARITHMETIC OPERATIONS
 // ADD
-function add_rm_r_b     (input[7:0]i);      add_rm_r_b      = (i[7:0]==8'b00000000);                    endfunction
-function add_r_rm_b     (input[7:0]i);      add_r_rm_b      = (i[7:0]==8'b00000010);                    endfunction
-function add_rm_r_w     (input[7:0]i);      add_rm_r_w      = (i[7:0]==8'b00000001);                    endfunction
-function add_r_rm_w     (input[7:0]i);      add_r_rm_w      = (i[7:0]==8'b00000011);                    endfunction
-function add_rm_i_b     (input[7:0]i1,i2);  add_rm_i_b      = (i1[7:0]==8'b10000000&i2[5:3]==3'b000);   endfunction
-function add_rm_zi_w    (input[7:0]i1,i2);  add_rm_zi_w     = (i1[7:0]==8'b10000001&i2[5:3]==3'b000);   endfunction
-function add_rm_si_w    (input[7:0]i1,i2);  add_rm_si_w     = (i1[7:0]==8'b10000011&i2[5:3]==3'b000);   endfunction
-function add_a_i_b      (input[7:0]i);      add_a_i_b       = (i[7:0]==8'b00010100);                    endfunction
-function add_a_i_w      (input[7:0]i);      add_a_i_w       = (i[7:0]==8'b00010101);                    endfunction
+function add_rm_r_b     (input[7:0]i1,i2); add_rm_r_b   = (i1[7:0]==8'b00000000);                   endfunction
+function add_r_rm_b     (input[7:0]i1,i2); add_r_rm_b   = (i1[7:0]==8'b00000010);                   endfunction
+function add_rm_r_w     (input[7:0]i1,i2); add_rm_r_w   = (i1[7:0]==8'b00000001);                   endfunction
+function add_r_rm_w     (input[7:0]i1,i2); add_r_rm_w   = (i1[7:0]==8'b00000011);                   endfunction
+function add_rm_i_b     (input[7:0]i1,i2); add_rm_i_b   = (i1[7:0]==8'b10000000&i2[5:3]==3'b000);   endfunction
+function add_rm_zi_w    (input[7:0]i1,i2); add_rm_zi_w  = (i1[7:0]==8'b10000001&i2[5:3]==3'b000);   endfunction
+function add_rm_si_w    (input[7:0]i1,i2); add_rm_si_w  = (i1[7:0]==8'b10000011&i2[5:3]==3'b000);   endfunction
+function add_a_i_b      (input[7:0]i1,i2); add_a_i_b    = (i1[7:0]==8'b00010100);                   endfunction
+function add_a_i_w      (input[7:0]i1,i2); add_a_i_w    = (i1[7:0]==8'b00010101);                   endfunction
 // ADC
-function adc_rm_r_b     (input[7:0]i);      adc_rm_r_b      = (i[7:0]==8'b00010000);                    endfunction
-function adc_r_rm_b     (input[7:0]i);      adc_r_rm_b      = (i[7:0]==8'b00010010);                    endfunction
-function adc_rm_r_w     (input[7:0]i);      adc_rm_r_w      = (i[7:0]==8'b00010001);                    endfunction
-function adc_r_rm_w     (input[7:0]i);      adc_r_rm_w      = (i[7:0]==8'b00010011);                    endfunction
-function adc_rm_i_b     (input[7:0]i1,i2);  adc_rm_i_b      = (i[7:0]==8'b10000000&i2[5:3]==3'b010);    endfunction
-function adc_rm_zi_w    (input[7:0]i1,i2);  adc_rm_zi_w     = (i[7:0]==8'b10000001&i2[5:3]==3'b010);    endfunction
-function adc_rm_si_w    (input[7:0]i1,i2);  adc_rm_si_w     = (i[7:0]==8'b10000011&i2[5:3]==3'b010);    endfunction
-function adc_a_i_b      (input[7:0]i);      adc_a_i_b       = (i[7:0]==8'b00010100);                    endfunction
-function adc_a_i_w      (input[7:0]i);      adc_a_i_w       = (i[7:0]==8'b00010101);                    endfunction
+function adc_rm_r_b     (input[7:0]i1,i2); adc_rm_r_b   = (i1[7:0]==8'b00010000);                   endfunction
+function adc_r_rm_b     (input[7:0]i1,i2); adc_r_rm_b   = (i1[7:0]==8'b00010010);                   endfunction
+function adc_rm_r_w     (input[7:0]i1,i2); adc_rm_r_w   = (i1[7:0]==8'b00010001);                   endfunction
+function adc_r_rm_w     (input[7:0]i1,i2); adc_r_rm_w   = (i1[7:0]==8'b00010011);                   endfunction
+function adc_rm_i_b     (input[7:0]i1,i2); adc_rm_i_b   = (i1[7:0]==8'b10000000&i2[5:3]==3'b010);   endfunction
+function adc_rm_zi_w    (input[7:0]i1,i2); adc_rm_zi_w  = (i1[7:0]==8'b10000001&i2[5:3]==3'b010);   endfunction
+function adc_rm_si_w    (input[7:0]i1,i2); adc_rm_si_w  = (i1[7:0]==8'b10000011&i2[5:3]==3'b010);   endfunction
+function adc_a_i_b      (input[7:0]i1,i2); adc_a_i_b    = (i1[7:0]==8'b00010100);                   endfunction
+function adc_a_i_w      (input[7:0]i1,i2); adc_a_i_w    = (i1[7:0]==8'b00010101);                   endfunction
 // INC
-function inc_rm_b       (input[7:0]i1,i2);  inc_rm_b        = (i1[7:0]==8'b11111110&i2[5:3]==3'b000);   endfunction
-function inc_rm_w       (input[7:0]i1,i2);  inc_rm_w        = (i1[7:0]==8'b11111111&i2[5:3]==3'b000);   endfunction
-function inc_r          (input[7:0]i);      inc_r           = (i[7:3]==5'b01000);                       endfunction
+function inc_rm_b       (input[7:0]i1,i2); inc_rm_b     = (i1[7:0]==8'b11111110&i2[5:3]==3'b000);   endfunction
+function inc_rm_w       (input[7:0]i1,i2); inc_rm_w     = (i1[7:0]==8'b11111111&i2[5:3]==3'b000);   endfunction
+function inc_r          (input[7:0]i1,i2); inc_r        = (i1[7:3]==5'b01000);                      endfunction
 // AAA
-function aaa            (input[7:0]i);      aaa             = (i[7:0]==8'b00110111);                    endfunction
+function aaa            (input[7:0]i1,i2); aaa          = (i1[7:0]==8'b00110111);                   endfunction
 // DAA
-function daa            (input[7:0]i);      daa             = (i[7:0]==8'b00100111);                    endfunction
+function daa            (input[7:0]i1,i2); daa          = (i1[7:0]==8'b00100111);                   endfunction
 // SUB
-function sub_rm_r_b     (input[7:0]i);      sub_rm_r_b      = (i[7:0]==8'b00101000);                    endfunction
-function sub_r_rm_b     (input[7:0]i);      sub_r_rm_b      = (i[7:0]==8'b00101010);                    endfunction
-function sub_rm_r_w     (input[7:0]i);      sub_rm_r_w      = (i[7:0]==8'b00101001);                    endfunction
-function sub_r_rm_w     (input[7:0]i);      sub_r_rm_w      = (i[7:0]==8'b00101011);                    endfunction
-function sub_rm_i_b     (input[7:0]i1,i2);  sub_rm_i_b      = (i1[7:0]==8'b10000000&i2[5:3]==3'b101);   endfunction
-function sub_rm_zi_w    (input[7:0]i1,i2);  sub_rm_zi_w     = (i1[7:0]==8'b10000001&i2[5:3]==3'b101);   endfunction
-function sub_rm_si_w    (input[7:0]i1,i2);  sub_rm_si_w     = (i1[7:0]==8'b10000011&i2[5:3]==3'b101);   endfunction
-function sub_a_i_b      (input[7:0]i);      sub_a_i_b       = (i[7:0]==8'b00101100);                    endfunction
-function sub_a_i_w      (input[7:0]i);      sub_a_i_w       = (i[7:0]==8'b00101101);                    endfunction
+function sub_rm_r_b     (input[7:0]i1,i2); sub_rm_r_b   = (i1[7:0]==8'b00101000);                   endfunction
+function sub_r_rm_b     (input[7:0]i1,i2); sub_r_rm_b   = (i1[7:0]==8'b00101010);                   endfunction
+function sub_rm_r_w     (input[7:0]i1,i2); sub_rm_r_w   = (i1[7:0]==8'b00101001);                   endfunction
+function sub_r_rm_w     (input[7:0]i1,i2); sub_r_rm_w   = (i1[7:0]==8'b00101011);                   endfunction
+function sub_rm_i_b     (input[7:0]i1,i2); sub_rm_i_b   = (i1[7:0]==8'b10000000&i2[5:3]==3'b101);   endfunction
+function sub_rm_zi_w    (input[7:0]i1,i2); sub_rm_zi_w  = (i1[7:0]==8'b10000001&i2[5:3]==3'b101);   endfunction
+function sub_rm_si_w    (input[7:0]i1,i2); sub_rm_si_w  = (i1[7:0]==8'b10000011&i2[5:3]==3'b101);   endfunction
+function sub_a_i_b      (input[7:0]i1,i2); sub_a_i_b    = (i1[7:0]==8'b00101100);                   endfunction
+function sub_a_i_w      (input[7:0]i1,i2); sub_a_i_w    = (i1[7:0]==8'b00101101);                   endfunction
 // SBB
-function sbb_rm_r_b     (input[7:0]i);      sbb_rm_r_b      = (i[7:0]==8'b00011000);                    endfunction
-function sbb_r_rm_b     (input[7:0]i);      sbb_r_rm_b      = (i[7:0]==8'b00011010);                    endfunction
-function sbb_rm_r_w     (input[7:0]i);      sbb_rm_r_w      = (i[7:0]==8'b00011001);                    endfunction
-function sbb_r_rm_w     (input[7:0]i);      sbb_r_rm_w      = (i[7:0]==8'b00011011);                    endfunction
-function sbb_rm_i_b     (input[7:0]i1,i2);  sbb_rm_i_b      = (i1[7:0]==8'b10000000&i2[5:3]==3'b011);   endfunction
-function sbb_rm_zi_w    (input[7:0]i1,i2);  sbb_rm_zi_w     = (i1[7:0]==8'b10000001&i2[5:3]==3'b011);   endfunction
-function sbb_rm_si_w    (input[7:0]i1,i2);  sbb_rm_si_w     = (i1[7:0]==8'b10000011&i2[5:3]==3'b011);   endfunction
-function sbb_a_i_b      (input[7:0]i);      sbb_a_i_b       = (i[7:0]==8'b00011100);                    endfunction
-function sbb_a_i_w      (input[7:0]i);      sbb_a_i_w       = (i[7:0]==8'b00011101);                    endfunction
+function sbb_rm_r_b     (input[7:0]i1,i2); sbb_rm_r_b   = (i1[7:0]==8'b00011000);                   endfunction
+function sbb_r_rm_b     (input[7:0]i1,i2); sbb_r_rm_b   = (i1[7:0]==8'b00011010);                   endfunction
+function sbb_rm_r_w     (input[7:0]i1,i2); sbb_rm_r_w   = (i1[7:0]==8'b00011001);                   endfunction
+function sbb_r_rm_w     (input[7:0]i1,i2); sbb_r_rm_w   = (i1[7:0]==8'b00011011);                   endfunction
+function sbb_rm_i_b     (input[7:0]i1,i2); sbb_rm_i_b   = (i1[7:0]==8'b10000000&i2[5:3]==3'b011);   endfunction
+function sbb_rm_zi_w    (input[7:0]i1,i2); sbb_rm_zi_w  = (i1[7:0]==8'b10000001&i2[5:3]==3'b011);   endfunction
+function sbb_rm_si_w    (input[7:0]i1,i2); sbb_rm_si_w  = (i1[7:0]==8'b10000011&i2[5:3]==3'b011);   endfunction
+function sbb_a_i_b      (input[7:0]i1,i2); sbb_a_i_b    = (i1[7:0]==8'b00011100);                   endfunction
+function sbb_a_i_w      (input[7:0]i1,i2); sbb_a_i_w    = (i1[7:0]==8'b00011101);                   endfunction
 // DEC
-function dec_rm_b       (input[7:0]i1,i2);  dec_rm_b        = (i1[7:0]==8'b11111110&i2[5:3]==3'b001);   endfunction
-function dec_rm_w       (input[7:0]i1,i2);  dec_rm_w        = (i1[7:0]==8'b11111111&i2[5:3]==3'b001);   endfunction
-function dec_r          (input[7:0]i);      dec_r           = (i[7:3]==5'b01001);                       endfunction
+function dec_rm_b       (input[7:0]i1,i2); dec_rm_b     = (i1[7:0]==8'b11111110&i2[5:3]==3'b001);   endfunction
+function dec_rm_w       (input[7:0]i1,i2); dec_rm_w     = (i1[7:0]==8'b11111111&i2[5:3]==3'b001);   endfunction
+function dec_r          (input[7:0]i1,i2); dec_r        = (i1[7:3]==5'b01001);                      endfunction
 // CMP
-function cmp_rm_r_b     (input[7:0]i);      cmp_rm_r_b      = (i[7:0]==8'b00011000);                    endfunction
-function cmp_r_rm_b     (input[7:0]i);      cmp_r_rm_b      = (i[7:0]==8'b00011010);                    endfunction
-function cmp_rm_r_w     (input[7:0]i);      cmp_rm_r_w      = (i[7:0]==8'b00011001);                    endfunction
-function cmp_r_rm_w     (input[7:0]i);      cmp_r_rm_w      = (i[7:0]==8'b00011011);                    endfunction
-function cmp_rm_i_b     (input[7:0]i1,i2);  cmp_rm_i_b      = (i1[7:0]==8'b10000000&i2[5:3]==3'b011);   endfunction
-function cmp_rm_zi_w    (input[7:0]i1,i2);  cmp_rm_zi_w     = (i1[7:0]==8'b10000001&i2[5:3]==3'b011);   endfunction
-function cmp_rm_si_w    (input[7:0]i1,i2);  cmp_rm_si_w     = (i1[7:0]==8'b10000011&i2[5:3]==3'b011);   endfunction
-function cmp_a_i_b      (input[7:0]i);      cmp_a_i_b       = (i[7:0]==8'b00011100);                    endfunction
-function cmp_a_i_w      (input[7:0]i);      cmp_a_i_w       = (i[7:0]==8'b00011101);                    endfunction
+function cmp_rm_r_b     (input[7:0]i1,i2); cmp_rm_r_b   = (i1[7:0]==8'b00011000);                   endfunction
+function cmp_r_rm_b     (input[7:0]i1,i2); cmp_r_rm_b   = (i1[7:0]==8'b00011010);                   endfunction
+function cmp_rm_r_w     (input[7:0]i1,i2); cmp_rm_r_w   = (i1[7:0]==8'b00011001);                   endfunction
+function cmp_r_rm_w     (input[7:0]i1,i2); cmp_r_rm_w   = (i1[7:0]==8'b00011011);                   endfunction
+function cmp_rm_i_b     (input[7:0]i1,i2); cmp_rm_i_b   = (i1[7:0]==8'b10000000&i2[5:3]==3'b011);   endfunction
+function cmp_rm_zi_w    (input[7:0]i1,i2); cmp_rm_zi_w  = (i1[7:0]==8'b10000001&i2[5:3]==3'b011);   endfunction
+function cmp_rm_si_w    (input[7:0]i1,i2); cmp_rm_si_w  = (i1[7:0]==8'b10000011&i2[5:3]==3'b011);   endfunction
+function cmp_a_i_b      (input[7:0]i1,i2); cmp_a_i_b    = (i1[7:0]==8'b00011100);                   endfunction
+function cmp_a_i_w      (input[7:0]i1,i2); cmp_a_i_w    = (i1[7:0]==8'b00011101);                   endfunction
 // NEG
-function neg_rm_b       (input[7:0]i1,i2);  neg_rm_b        = (i1[7:0]==8'b11110110&i2[5:3]==3'b011);   endfunction
-function neg_rm_w       (input[7:0]i1,i2);  neg_rm_w        = (i1[7:0]==8'b11110111&i2[5:3]==3'b011);   endfunction
+function neg_rm_b       (input[7:0]i1,i2); neg_rm_b     = (i1[7:0]==8'b11110110&i2[5:3]==3'b011);   endfunction
+function neg_rm_w       (input[7:0]i1,i2); neg_rm_w     = (i1[7:0]==8'b11110111&i2[5:3]==3'b011);   endfunction
 // AAS
-function aas            (input[7:0]i);      aas             = (i[7:0]==8'b00111111);                    endfunction
+function aas            (input[7:0]i1,i2); aas          = (i1[7:0]==8'b00111111);                   endfunction
 // DAS
-function das            (input[7:0]i);      das             = (i[7:0]==8'b00101111);                    endfunction
+function das            (input[7:0]i1,i2); das          = (i1[7:0]==8'b00101111);                   endfunction
 // MUL
-function mul_r_rm_b     (input[7:0]i1,i2);  mul_r_rm_b      = (i1[7:0]==8'b11110110&i2[5:3]==3'b100);   endfunction
-function mul_r_rm_w     (input[7:0]i1,i2);  mul_r_rm_w      = (i1[7:0]==8'b11110111&i2[5:3]==3'b100);   endfunction
+function mul_r_rm_b     (input[7:0]i1,i2); mul_r_rm_b   = (i1[7:0]==8'b11110110&i2[5:3]==3'b100);   endfunction
+function mul_r_rm_w     (input[7:0]i1,i2); mul_r_rm_w   = (i1[7:0]==8'b11110111&i2[5:3]==3'b100);   endfunction
 // IMUL
-function imul_r_rm_b    (input[7:0]i1,i2);  imul_r_rm_b     = (i1[7:0]==8'b11110110&i2[5:3]==3'b101);   endfunction
-function imul_r_rm_w    (input[7:0]i1,i2);  imul_r_rm_w     = (i1[7:0]==8'b11110111&i2[5:3]==3'b101);   endfunction
+function imul_r_rm_b    (input[7:0]i1,i2); imul_r_rm_b  = (i1[7:0]==8'b11110110&i2[5:3]==3'b101);   endfunction
+function imul_r_rm_w    (input[7:0]i1,i2); imul_r_rm_w  = (i1[7:0]==8'b11110111&i2[5:3]==3'b101);   endfunction
 // AAM
-function aam            (input[7:0]i1,i2);  aam             = (i1[7:0]==8'b11010100&i2==8'b00001010);   endfunction
+function aam            (input[7:0]i1,i2); aam          = (i1[7:0]==8'b11010100&i2==8'b00001010);   endfunction
 // DIV
-function div_r_rm_b     (input[7:0]i1,i2);  div_r_rm_b      = (i1[7:0]==8'b11110110&i2[5:3]==3'b110);   endfunction
-function div_r_rm_w     (input[7:0]i1,i2);  div_r_rm_w      = (i1[7:0]==8'b11110111&i2[5:3]==3'b110);   endfunction
+function div_r_rm_b     (input[7:0]i1,i2); div_r_rm_b   = (i1[7:0]==8'b11110110&i2[5:3]==3'b110);   endfunction
+function div_r_rm_w     (input[7:0]i1,i2); div_r_rm_w   = (i1[7:0]==8'b11110111&i2[5:3]==3'b110);   endfunction
 // IDIV
-function idiv_r_rm_b    (input[7:0]i1,i2);  idiv_r_rm_b     = (i1[7:0]==8'b11110110&i2[5:3]==3'b111);   endfunction
-function idiv_r_rm_w    (input[7:0]i1,i2);  idiv_r_rm_w     = (i1[7:0]==8'b11110111&i2[5:3]==3'b111);   endfunction
+function idiv_r_rm_b    (input[7:0]i1,i2); idiv_r_rm_b  = (i1[7:0]==8'b11110110&i2[5:3]==3'b111);   endfunction
+function idiv_r_rm_w    (input[7:0]i1,i2); idiv_r_rm_w  = (i1[7:0]==8'b11110111&i2[5:3]==3'b111);   endfunction
 // AAD
-function aad            (input[7:0]i1,i2);  aad             = (i1[7:0]==8'b11010101&i2==8'b00001010);   endfunction
+function aad            (input[7:0]i1,i2); aad          = (i1[7:0]==8'b11010101&i2==8'b00001010);   endfunction
 // CBW
-function cbw            (input[7:0]i);      cbw             = (i[7:0]==8'b10011000);                    endfunction
+function cbw            (input[7:0]i1,i2); cbw          = (i1[7:0]==8'b10011000);                   endfunction
 // CWD
-function cwd            (input[7:0]i);      cwd             = (i[7:0]==8'b10011001);                    endfunction
+function cwd            (input[7:0]i1,i2); cwd          = (i1[7:0]==8'b10011001);                   endfunction
 
 // LOGIC OPERATIONS
 // SHL
-function shl_rm_1_b     (input[7:0]i1,i2)   shl_rm_1_b      = (i1[7:0]==8'b11010000&i2[5:3]==3'b100);   endfunction
-function shl_rm_1_w     (input[7:0]i1,i2)   shl_rm_1_w      = (i1[7:0]==8'b11010001&i2[5:3]==3'b100);   endfunction
-function shl_rm_c_b     (input[7:0]i1,i2)   shl_rm_c_b      = (i1[7:0]==8'b11010010&i2[5:3]==3'b100);   endfunction
-function shl_rm_c_w     (input[7:0]i1,i2)   shl_rm_c_w      = (i1[7:0]==8'b11010011&i2[5:3]==3'b100);   endfunction
+function shl_rm_1_b     (input[7:0]i1,i2); shl_rm_1_b   = (i1[7:0]==8'b11010000&i2[5:3]==3'b100);   endfunction
+function shl_rm_1_w     (input[7:0]i1,i2); shl_rm_1_w   = (i1[7:0]==8'b11010001&i2[5:3]==3'b100);   endfunction
+function shl_rm_c_b     (input[7:0]i1,i2); shl_rm_c_b   = (i1[7:0]==8'b11010010&i2[5:3]==3'b100);   endfunction
+function shl_rm_c_w     (input[7:0]i1,i2); shl_rm_c_w   = (i1[7:0]==8'b11010011&i2[5:3]==3'b100);   endfunction
 // SHR
-function shr_rm_1_b     (input[7:0]i1,i2)   shr_rm_1_b      = (i1[7:0]==8'b11010000&i2[5:3]==3'b101);   endfunction
-function shr_rm_1_w     (input[7:0]i1,i2)   shr_rm_1_w      = (i1[7:0]==8'b11010001&i2[5:3]==3'b101);   endfunction
-function shr_rm_c_b     (input[7:0]i1,i2)   shr_rm_c_b      = (i1[7:0]==8'b11010010&i2[5:3]==3'b101);   endfunction
-function shr_rm_c_w     (input[7:0]i1,i2)   shr_rm_c_w      = (i1[7:0]==8'b11010011&i2[5:3]==3'b101);   endfunction
+function shr_rm_1_b     (input[7:0]i1,i2); shr_rm_1_b   = (i1[7:0]==8'b11010000&i2[5:3]==3'b101);   endfunction
+function shr_rm_1_w     (input[7:0]i1,i2); shr_rm_1_w   = (i1[7:0]==8'b11010001&i2[5:3]==3'b101);   endfunction
+function shr_rm_c_b     (input[7:0]i1,i2); shr_rm_c_b   = (i1[7:0]==8'b11010010&i2[5:3]==3'b101);   endfunction
+function shr_rm_c_w     (input[7:0]i1,i2); shr_rm_c_w   = (i1[7:0]==8'b11010011&i2[5:3]==3'b101);   endfunction
 // SAR
-function sar_rm_1_b     (input[7:0]i1,i2)   sar_rm_1_b      = (i1[7:0]==8'b11010000&i2[5:3]==3'b111);   endfunction
-function sar_rm_1_w     (input[7:0]i1,i2)   sar_rm_1_w      = (i1[7:0]==8'b11010001&i2[5:3]==3'b111);   endfunction
-function sar_rm_c_b     (input[7:0]i1,i2)   sar_rm_c_b      = (i1[7:0]==8'b11010010&i2[5:3]==3'b111);   endfunction
-function sar_rm_c_w     (input[7:0]i1,i2)   sar_rm_c_w      = (i1[7:0]==8'b11010011&i2[5:3]==3'b111);   endfunction
+function sar_rm_1_b     (input[7:0]i1,i2); sar_rm_1_b   = (i1[7:0]==8'b11010000&i2[5:3]==3'b111);   endfunction
+function sar_rm_1_w     (input[7:0]i1,i2); sar_rm_1_w   = (i1[7:0]==8'b11010001&i2[5:3]==3'b111);   endfunction
+function sar_rm_c_b     (input[7:0]i1,i2); sar_rm_c_b   = (i1[7:0]==8'b11010010&i2[5:3]==3'b111);   endfunction
+function sar_rm_c_w     (input[7:0]i1,i2); sar_rm_c_w   = (i1[7:0]==8'b11010011&i2[5:3]==3'b111);   endfunction
 // ROL
-function rol_rm_1_b     (input[7:0]i1,i2)   rol_rm_1_b      = (i1[7:0]==8'b11010000&i2[5:3]==3'b000);   endfunction
-function rol_rm_1_w     (input[7:0]i1,i2)   rol_rm_1_w      = (i1[7:0]==8'b11010001&i2[5:3]==3'b000);   endfunction
-function rol_rm_c_b     (input[7:0]i1,i2)   rol_rm_c_b      = (i1[7:0]==8'b11010010&i2[5:3]==3'b000);   endfunction
-function rol_rm_c_w     (input[7:0]i1,i2)   rol_rm_c_w      = (i1[7:0]==8'b11010011&i2[5:3]==3'b000);   endfunction
+function rol_rm_1_b     (input[7:0]i1,i2); rol_rm_1_b   = (i1[7:0]==8'b11010000&i2[5:3]==3'b000);   endfunction
+function rol_rm_1_w     (input[7:0]i1,i2); rol_rm_1_w   = (i1[7:0]==8'b11010001&i2[5:3]==3'b000);   endfunction
+function rol_rm_c_b     (input[7:0]i1,i2); rol_rm_c_b   = (i1[7:0]==8'b11010010&i2[5:3]==3'b000);   endfunction
+function rol_rm_c_w     (input[7:0]i1,i2); rol_rm_c_w   = (i1[7:0]==8'b11010011&i2[5:3]==3'b000);   endfunction
 // ROR
-function ror_rm_1_b     (input[7:0]i1,i2)   ror_rm_1_b      = (i1[7:0]==8'b11010000&i2[5:3]==3'b001);   endfunction
-function ror_rm_1_w     (input[7:0]i1,i2)   ror_rm_1_w      = (i1[7:0]==8'b11010001&i2[5:3]==3'b001);   endfunction
-function ror_rm_c_b     (input[7:0]i1,i2)   ror_rm_c_b      = (i1[7:0]==8'b11010010&i2[5:3]==3'b001);   endfunction
-function ror_rm_c_w     (input[7:0]i1,i2)   ror_rm_c_w      = (i1[7:0]==8'b11010011&i2[5:3]==3'b001);   endfunction
+function ror_rm_1_b     (input[7:0]i1,i2); ror_rm_1_b   = (i1[7:0]==8'b11010000&i2[5:3]==3'b001);   endfunction
+function ror_rm_1_w     (input[7:0]i1,i2); ror_rm_1_w   = (i1[7:0]==8'b11010001&i2[5:3]==3'b001);   endfunction
+function ror_rm_c_b     (input[7:0]i1,i2); ror_rm_c_b   = (i1[7:0]==8'b11010010&i2[5:3]==3'b001);   endfunction
+function ror_rm_c_w     (input[7:0]i1,i2); ror_rm_c_w   = (i1[7:0]==8'b11010011&i2[5:3]==3'b001);   endfunction
 // RCL
-function rcl_rm_1_b     (input[7:0]i1,i2)   rcl_rm_1_b      = (i1[7:0]==8'b11010000&i2[5:3]==3'b010);   endfunction
-function rcl_rm_1_w     (input[7:0]i1,i2)   rcl_rm_1_w      = (i1[7:0]==8'b11010001&i2[5:3]==3'b010);   endfunction
-function rcl_rm_c_b     (input[7:0]i1,i2)   rcl_rm_c_b      = (i1[7:0]==8'b11010010&i2[5:3]==3'b010);   endfunction
-function rcl_rm_c_w     (input[7:0]i1,i2)   rcl_rm_c_w      = (i1[7:0]==8'b11010011&i2[5:3]==3'b010);   endfunction
+function rcl_rm_1_b     (input[7:0]i1,i2); rcl_rm_1_b   = (i1[7:0]==8'b11010000&i2[5:3]==3'b010);   endfunction
+function rcl_rm_1_w     (input[7:0]i1,i2); rcl_rm_1_w   = (i1[7:0]==8'b11010001&i2[5:3]==3'b010);   endfunction
+function rcl_rm_c_b     (input[7:0]i1,i2); rcl_rm_c_b   = (i1[7:0]==8'b11010010&i2[5:3]==3'b010);   endfunction
+function rcl_rm_c_w     (input[7:0]i1,i2); rcl_rm_c_w   = (i1[7:0]==8'b11010011&i2[5:3]==3'b010);   endfunction
 // RCR
-function rcr_rm_1_b     (input[7:0]i1,i2)   rcr_rm_1_b      = (i1[7:0]==8'b11010000&i2[5:3]==3'b011);   endfunction
-function rcr_rm_1_w     (input[7:0]i1,i2)   rcr_rm_1_w      = (i1[7:0]==8'b11010001&i2[5:3]==3'b011);   endfunction
-function rcr_rm_c_b     (input[7:0]i1,i2)   rcr_rm_c_b      = (i1[7:0]==8'b11010010&i2[5:3]==3'b011);   endfunction
-function rcr_rm_c_w     (input[7:0]i1,i2)   rcr_rm_c_w      = (i1[7:0]==8'b11010011&i2[5:3]==3'b011);   endfunction
+function rcr_rm_1_b     (input[7:0]i1,i2); rcr_rm_1_b   = (i1[7:0]==8'b11010000&i2[5:3]==3'b011);   endfunction
+function rcr_rm_1_w     (input[7:0]i1,i2); rcr_rm_1_w   = (i1[7:0]==8'b11010001&i2[5:3]==3'b011);   endfunction
+function rcr_rm_c_b     (input[7:0]i1,i2); rcr_rm_c_b   = (i1[7:0]==8'b11010010&i2[5:3]==3'b011);   endfunction
+function rcr_rm_c_w     (input[7:0]i1,i2); rcr_rm_c_w   = (i1[7:0]==8'b11010011&i2[5:3]==3'b011);   endfunction
 // NOT
-function not_rm_b       (input[7:0]i1,i2)   not_rm_b        = (i1[7:0]==8'b11110110&i2[5:3]==3'b010);   endfunction
-function not_rm_w       (input[7:0]i1,i2)   not_rm_w        = (i1[7:0]==8'b11110111&i2[5:3]==3'b010);   endfunction
+function not_rm_b       (input[7:0]i1,i2); not_rm_b     = (i1[7:0]==8'b11110110&i2[5:3]==3'b010);   endfunction
+function not_rm_w       (input[7:0]i1,i2); not_rm_w     = (i1[7:0]==8'b11110111&i2[5:3]==3'b010);   endfunction
 // AND
-function and_rm_r_b     (input[7:0]i);      and_rm_r_b      = (i[7:0]==8'b00100000);                    endfunction
-function and_r_rm_b     (input[7:0]i);      and_r_rm_b      = (i[7:0]==8'b00100010);                    endfunction
-function and_rm_r_w     (input[7:0]i);      and_rm_r_w      = (i[7:0]==8'b00100001);                    endfunction
-function and_r_rm_w     (input[7:0]i);      and_r_rm_w      = (i[7:0]==8'b00100011);                    endfunction
-function and_rm_i_b     (input[7:0]i1,i2);  and_rm_i_b      = (i1[7:0]==8'b10000000&i2[5:3]==3'b100);   endfunction
-function and_rm_i_w     (input[7:0]i1,i2);  and_rm_i_w      = (i1[7:0]==8'b10000001&i2[5:3]==3'b100);   endfunction
-function and_a_i_b      (input[7:0]i);      and_a_i_b       = (i[7:0]==8'b00100100);                    endfunction
-function and_a_i_w      (input[7:0]i);      and_a_i_w       = (i[7:0]==8'b00100101);                    endfunction
+function and_rm_r_b     (input[7:0]i1,i2); and_rm_r_b   = (i1[7:0]==8'b00100000);                   endfunction
+function and_r_rm_b     (input[7:0]i1,i2); and_r_rm_b   = (i1[7:0]==8'b00100010);                   endfunction
+function and_rm_r_w     (input[7:0]i1,i2); and_rm_r_w   = (i1[7:0]==8'b00100001);                   endfunction
+function and_r_rm_w     (input[7:0]i1,i2); and_r_rm_w   = (i1[7:0]==8'b00100011);                   endfunction
+function and_rm_i_b     (input[7:0]i1,i2); and_rm_i_b   = (i1[7:0]==8'b10000000&i2[5:3]==3'b100);   endfunction
+function and_rm_i_w     (input[7:0]i1,i2); and_rm_i_w   = (i1[7:0]==8'b10000001&i2[5:3]==3'b100);   endfunction
+function and_a_i_b      (input[7:0]i1,i2); and_a_i_b    = (i1[7:0]==8'b00100100);                   endfunction
+function and_a_i_w      (input[7:0]i1,i2); and_a_i_w    = (i1[7:0]==8'b00100101);                   endfunction
 // TEST
-function test_rm_r_b    (input[7:0]i);      test_rm_r_b     = (i[7:0]==8'b00010000);                    endfunction
-function test_r_rm_b    (input[7:0]i);      test_r_rm_b     = (i[7:0]==8'b00010010);                    endfunction
-function test_rm_r_w    (input[7:0]i);      test_rm_r_w     = (i[7:0]==8'b00010001);                    endfunction
-function test_r_rm_w    (input[7:0]i);      test_r_rm_w     = (i[7:0]==8'b00010011);                    endfunction
-function test_rm_i_b    (input[7:0]i1,i2);  test_rm_i_b     = (i1[7:0]==8'b11110110&i2[5:3]==3'b000);   endfunction
-function test_rm_i_w    (input[7:0]i1,i2);  test_rm_i_w     = (i1[7:0]==8'b11110110&i2[5:3]==3'b000);   endfunction
-function test_a_i_b     (input[7:0]i);      test_a_i_b      = (i[7:0]==8'b10101000);                    endfunction
-function test_a_i_w     (input[7:0]i);      test_a_i_w      = (i[7:0]==8'b10101001);                    endfunction
+function test_rm_r_b    (input[7:0]i1,i2); test_rm_r_b  = (i1[7:0]==8'b00010000);                   endfunction
+function test_r_rm_b    (input[7:0]i1,i2); test_r_rm_b  = (i1[7:0]==8'b00010010);                   endfunction
+function test_rm_r_w    (input[7:0]i1,i2); test_rm_r_w  = (i1[7:0]==8'b00010001);                   endfunction
+function test_r_rm_w    (input[7:0]i1,i2); test_r_rm_w  = (i1[7:0]==8'b00010011);                   endfunction
+function test_rm_i_b    (input[7:0]i1,i2); test_rm_i_b  = (i1[7:0]==8'b11110110&i2[5:3]==3'b000);   endfunction
+function test_rm_i_w    (input[7:0]i1,i2); test_rm_i_w  = (i1[7:0]==8'b11110110&i2[5:3]==3'b000);   endfunction
+function test_a_i_b     (input[7:0]i1,i2); test_a_i_b   = (i1[7:0]==8'b10101000);                   endfunction
+function test_a_i_w     (input[7:0]i1,i2); test_a_i_w   = (i1[7:0]==8'b10101001);                   endfunction
 // OR
-function or_rm_r_b      (input[7:0]i);      or_rm_r_b       = (i[7:0]==8'b00001000);                    endfunction
-function or_r_rm_b      (input[7:0]i);      or_r_rm_b       = (i[7:0]==8'b00001010);                    endfunction
-function or_rm_r_w      (input[7:0]i);      or_rm_r_w       = (i[7:0]==8'b00001001);                    endfunction
-function or_r_rm_w      (input[7:0]i);      or_r_rm_w       = (i[7:0]==8'b00001011);                    endfunction
-function or_rm_i_b      (input[7:0]i1,i2);  or_rm_i_b       = (i1[7:0]==8'b10000000&i2[5:3]==3'b001);   endfunction
-function or_rm_i_w      (input[7:0]i1,i2);  or_rm_i_w       = (i1[7:0]==8'b10000001&i2[5:3]==3'b001);   endfunction
-function or_a_i_b       (input[7:0]i);      or_a_i_b        = (i[7:0]==8'b00001100);                    endfunction
-function or_a_i_w       (input[7:0]i);      or_a_i_w        = (i[7:0]==8'b00001101);                    endfunction
+function or_rm_r_b      (input[7:0]i1,i2); or_rm_r_b    = (i1[7:0]==8'b00001000);                   endfunction
+function or_r_rm_b      (input[7:0]i1,i2); or_r_rm_b    = (i1[7:0]==8'b00001010);                   endfunction
+function or_rm_r_w      (input[7:0]i1,i2); or_rm_r_w    = (i1[7:0]==8'b00001001);                   endfunction
+function or_r_rm_w      (input[7:0]i1,i2); or_r_rm_w    = (i1[7:0]==8'b00001011);                   endfunction
+function or_rm_i_b      (input[7:0]i1,i2); or_rm_i_b    = (i1[7:0]==8'b10000000&i2[5:3]==3'b001);   endfunction
+function or_rm_i_w      (input[7:0]i1,i2); or_rm_i_w    = (i1[7:0]==8'b10000001&i2[5:3]==3'b001);   endfunction
+function or_a_i_b       (input[7:0]i1,i2); or_a_i_b     = (i1[7:0]==8'b00001100);                   endfunction
+function or_a_i_w       (input[7:0]i1,i2); or_a_i_w     = (i1[7:0]==8'b00001101);                   endfunction
 // XOR
-function xor_rm_r_b     (input[7:0]i);      xor_rm_r_b      = (i[7:0]==8'b00110000);                    endfunction
-function xor_r_rm_b     (input[7:0]i);      xor_r_rm_b      = (i[7:0]==8'b00110010);                    endfunction
-function xor_rm_r_w     (input[7:0]i);      xor_rm_r_w      = (i[7:0]==8'b00110001);                    endfunction
-function xor_r_rm_w     (input[7:0]i);      xor_r_rm_w      = (i[7:0]==8'b00110011);                    endfunction
-function xor_rm_i_b     (input[7:0]i1,i2);  xor_rm_i_b      = (i1[7:0]==8'b10000000&i2[5:3]==3'b110);   endfunction
-function xor_rm_i_w     (input[7:0]i1,i2);  xor_rm_i_w      = (i1[7:0]==8'b10000001&i2[5:3]==3'b110);   endfunction
-function xor_a_i_b      (input[7:0]i);      xor_a_i_b       = (i[7:0]==8'b00100100);                    endfunction
-function xor_a_i_w      (input[7:0]i);      xor_a_i_w       = (i[7:0]==8'b00100101);                    endfunction
+function xor_rm_r_b     (input[7:0]i1,i2); xor_rm_r_b   = (i1[7:0]==8'b00110000);                   endfunction
+function xor_r_rm_b     (input[7:0]i1,i2); xor_r_rm_b   = (i1[7:0]==8'b00110010);                   endfunction
+function xor_rm_r_w     (input[7:0]i1,i2); xor_rm_r_w   = (i1[7:0]==8'b00110001);                   endfunction
+function xor_r_rm_w     (input[7:0]i1,i2); xor_r_rm_w   = (i1[7:0]==8'b00110011);                   endfunction
+function xor_rm_i_b     (input[7:0]i1,i2); xor_rm_i_b   = (i1[7:0]==8'b10000000&i2[5:3]==3'b110);   endfunction
+function xor_rm_i_w     (input[7:0]i1,i2); xor_rm_i_w   = (i1[7:0]==8'b10000001&i2[5:3]==3'b110);   endfunction
+function xor_a_i_b      (input[7:0]i1,i2); xor_a_i_b    = (i1[7:0]==8'b00100100);                   endfunction
+function xor_a_i_w      (input[7:0]i1,i2); xor_a_i_w    = (i1[7:0]==8'b00100101);                   endfunction
 
 // STRING MANUPULATE OPERATIONS
 // REP
-function rep_z          (input[7:0]i);      rep_z           = (i[7:1]==8'b11110011);                    endfunction
-function rep_nz         (input[7:0]i);      rep_nz          = (i[7:1]==8'b11110010);                    endfunction
+function rep_z          (input[7:0]i1,i2); rep_z        = (i[7:1]==8'b11110011);                    endfunction
+function rep_nz         (input[7:0]i1,i2); rep_nz       = (i[7:1]==8'b11110010);                    endfunction
 // MOVS
-function movs_b         (input[7:0]i);      movs_b          = (i[7:0]==8'b10100100);                    endfunction
-function movs_w         (input[7:0]i);      movs_w          = (i[7:0]==8'b10100101);                    endfunction
+function movs_b         (input[7:0]i1,i2); movs_b       = (i1[7:0]==8'b10100100);                   endfunction
+function movs_w         (input[7:0]i1,i2); movs_w       = (i1[7:0]==8'b10100101);                   endfunction
 // CMPS
-function cmps_b         (input[7:0]i);      cmps_b          = (i[7:0]==8'b10100110);                    endfunction
-function cmps_w         (input[7:0]i);      cmps_w          = (i[7:0]==8'b10100111);                    endfunction
+function cmps_b         (input[7:0]i1,i2); cmps_b       = (i1[7:0]==8'b10100110);                   endfunction
+function cmps_w         (input[7:0]i1,i2); cmps_w       = (i1[7:0]==8'b10100111);                   endfunction
 // SCAS
-function scas_b         (input[7:0]i);      scas_b          = (i[7:0]==8'b10101110);                    endfunction
-function scas_w         (input[7:0]i);      scas_w          = (i[7:0]==8'b10101111);                    endfunction
+function scas_b         (input[7:0]i1,i2); scas_b       = (i1[7:0]==8'b10101110);                   endfunction
+function scas_w         (input[7:0]i1,i2); scas_w       = (i1[7:0]==8'b10101111);                   endfunction
 // LODS
-function lods_b         (input[7:0]i);      lods_b          = (i[7:0]==8'b10101100);                    endfunction
-function lods_w         (input[7:0]i);      lods_w          = (i[7:0]==8'b10101101);                    endfunction
+function lods_b         (input[7:0]i1,i2); lods_b       = (i1[7:0]==8'b10101100);                   endfunction
+function lods_w         (input[7:0]i1,i2); lods_w       = (i1[7:0]==8'b10101101);                   endfunction
 // STDS
-function stos_b         (input[7:0]i);      stos_b          = (i[7:0]==8'b10101010);                    endfunction
-function stos_w         (input[7:0]i);      stos_w          = (i[7:0]==8'b10101011);                    endfunction
+function stos_b         (input[7:0]i1,i2); stos_b       = (i1[7:0]==8'b10101010);                   endfunction
+function stos_w         (input[7:0]i1,i2); stos_w       = (i1[7:0]==8'b10101011);                   endfunction
 
 // CONTROL TRANSFER OPERATIONS
 // CALL
-function call_i_dir     (input[7:0]i);      call_i_dir      = (i[7:0]==8'b11101000);                    endfunction
-function call_i_ptr     (input[7:0]i);      call_i_ptr      = (i[7:0]==8'b10011010);                    endfunction
-function call_rm_dir    (input[7:0]i1,i2);  call_rm_dir     = (i1[7:0]==8'b11111111&i2[5:3]==3'b010);   endfunction
-function call_rm_ptr    (input[7:0]i1,i2);  call_rm_ptr     = (i1[7:0]==8'b11111111&i2[5:3]==3'b011);   endfunction
+function call_i_dir     (input[7:0]i1,i2); call_i_dir   = (i1[7:0]==8'b11101000);                   endfunction
+function call_i_ptr     (input[7:0]i1,i2); call_i_ptr   = (i1[7:0]==8'b10011010);                   endfunction
+function call_rm_dir    (input[7:0]i1,i2); call_rm_dir  = (i1[7:0]==8'b11111111&i2[5:3]==3'b010);   endfunction
+function call_rm_ptr    (input[7:0]i1,i2); call_rm_ptr  = (i1[7:0]==8'b11111111&i2[5:3]==3'b011);   endfunction
 // JMP
-function jmp_i_dir_b    (input[7:0]i);      jmp_i_dir_b     = (i[7:0]==8'b11101011);                    endfunction
-function jmp_i_dir_w    (input[7:0]i);      jmp_i_dir_w     = (i[7:0]==8'b11101001);                    endfunction
-function jmp_i_ptr      (input[7:0]i);      jmp_i_ptr       = (i[7:0]==8'b11101010);                    endfunction
-function jmp_rm_dir     (input[7:0]i1,i2);  jmp_rm_dir      = (i1[7:0]==8'b11111111&i2[5:3]==3'b100);   endfunction
-function jmp_rm_ptr     (input[7:0]i1,i2);  jmp_rm_ptr      = (i1[7:0]==8'b11111111&i2[5:3]==3'b101);   endfunction
+function jmp_i_dir_b    (input[7:0]i1,i2); jmp_i_dir_b  = (i1[7:0]==8'b11101011);                   endfunction
+function jmp_i_dir_w    (input[7:0]i1,i2); jmp_i_dir_w  = (i1[7:0]==8'b11101001);                   endfunction
+function jmp_i_ptr      (input[7:0]i1,i2); jmp_i_ptr    = (i1[7:0]==8'b11101010);                   endfunction
+function jmp_rm_dir     (input[7:0]i1,i2); jmp_rm_dir   = (i1[7:0]==8'b11111111&i2[5:3]==3'b100);   endfunction
+function jmp_rm_ptr     (input[7:0]i1,i2); jmp_rm_ptr   = (i1[7:0]==8'b11111111&i2[5:3]==3'b101);   endfunction
+// RET
+function ret            (input[7:0]i1,i2); ret          = (i1[7:0]==8'b11000011);                   endfunction
+function ret_i          (input[7:0]i1,i2); ret_i        = (i1[7:0]==8'b11000010);                   endfunction
+function retf           (input[7:0]i1,i2); retf         = (i1[7:0]==8'b11001011);                   endfunction
+function retf_i         (input[7:0]i1,i2); retf_i       = (i1[7:0]==8'b11001010);                   endfunction
 
 
 
-function length1 (input [7:0] i);
-    length1 = push_r(i)|push_sr(i)|pop_r(i)|pop_sr(i)|xchg_a_r(i)|xlat(i)|lahf(i)|sahf(i)|pushf(i)|popf(i)|inc_r(i)|aaa(i)|daa(i)|dec_r(i)|aas(i)|das(i)|aam(i)|aad(i)|cbw(i)|cwd(i)|
-              rep_z(i)|rep_nz(i)|movs_b(i)|movs_w(i)|scas_b(i)|scas_w(i)|lods_b(i)|lods_w(i)|stds_b(i)|stds_w(i);
+function length1 (input [7:0] i1, input [7:0] i2);
+    length1 = push_r(i1,i2)|push_sr(i1,i2)|pop_r(i1,i2)|pop_sr(i1,i2)|xchg_a_r(i1,i2)|xlat(i1,i2)|lahf(i1,i2)|sahf(i1,i2)|pushf(i1,i2)|popf(i1,i2)|
+              inc_r(i1,i2)|aaa(i1,i2)|daa(i1,i2)|dec_r(i1,i2)|aas(i1,i2)|das(i1,i2)|aam(i1,i2)|aad(i1,i2)|cbw(i1,i2)|cwd(i1,i2)|
+              rep_z(i1,i2)|rep_nz(i1,i2)|movs_b(i1,i2)|movs_w(i1,i2)|scas_b(i1,i2)|scas_w(i1,i2)|lods_b(i1,i2)|lods_w(i1,i2)|stds_b(i1,i2)|stds_w(i1,i2);
 endfunction
 
 function length2 (input [7:0] i1, input [7:0] i2);
-    length2 = mov_rm_r_b(i1)&disp0(i2)|mov_r_rm_b(i1)&disp0(i2)|mov_rm_r_w(i1)&disp0(i2)|mov_r_rm_w(i1)&disp0(i2)|mov_r_i_b(i1)|mov_sr_rm(i1)&disp0(i2)|mov_rm_sr(i1)&disp0(i2)|
-              push_rm(i1)&disp0(i2)|pop_rm(i1)&disp0(i2)|xchg_r_rm_b(i1)&disp0(i2)|xchg_r_rm_w(i1)&disp0(i2)|
-              lea(i1)&disp0(i2)|lds(i1)&disp0(i2)|les(i1)&disp0(i2)|
-              add_rm_r_b(i1)&disp0(i2)|add_r_rm_b(i1)&disp0(i2)|add_rm_r_w(i1)&disp0(i2)|add_r_rm_w(i1)&disp0(i2)|add_a_i_b(i1)|
-              adc_rm_r_b(i1)&disp0(i2)|adc_r_rm_b(i1)&disp0(i2)|adc_rm_r_w(i1)&disp0(i2)|adc_r_rm_w(i1)&disp0(i2)|adc_a_i_b(i1)|
+    length2 = mov_rm_r_b(i1,i2)&disp0(i2)|mov_r_rm_b(i1,i2)&disp0(i2)|mov_rm_r_w(i1,i2)&disp0(i2)|mov_r_rm_w(i1,i2)&disp0(i2)|mov_r_i_b(i1,i2)|mov_sr_rm(i1,i2)&disp0(i2)|mov_rm_sr(i1,i2)&disp0(i2)|
+              push_rm(i1,i2)&disp0(i2)|pop_rm(i1,i2)&disp0(i2)|xchg_r_rm_b(i1,i2)&disp0(i2)|xchg_r_rm_w(i1,i2)&disp0(i2)|
+              lea(i1,i2)&disp0(i2)|lds(i1,i2)&disp0(i2)|les(i1,i2)&disp0(i2)|
+              add_rm_r_b(i1,i2)&disp0(i2)|add_r_rm_b(i1,i2)&disp0(i2)|add_rm_r_w(i1,i2)&disp0(i2)|add_r_rm_w(i1,i2)&disp0(i2)|add_a_i_b(i1,i2)|
+              adc_rm_r_b(i1,i2)&disp0(i2)|adc_r_rm_b(i1,i2)&disp0(i2)|adc_rm_r_w(i1,i2)&disp0(i2)|adc_r_rm_w(i1,i2)&disp0(i2)|adc_a_i_b(i1,i2)|
               inc_rm_b(i1,i2)&disp0(i2)|inc_rm_w(i1,i2)&disp0(i2)|
-              sub_rm_r_b(i1)&disp0(i2)|sub_r_rm_b(i1)&disp0(i2)|sub_rm_r_w(i1)&disp0(i2)|sub_r_rm_w(i1)&disp0(i2)|sub_a_i_b(i1)|
-              sbb_rm_r_b(i1)&disp0(i2)|sbb_r_rm_b(i1)&disp0(i2)|sbb_rm_r_w(i1)&disp0(i2)|sbb_r_rm_w(i1)&disp0(i2)|sbb_a_i_b(i1)|
+              sub_rm_r_b(i1,i2)&disp0(i2)|sub_r_rm_b(i1,i2)&disp0(i2)|sub_rm_r_w(i1,i2)&disp0(i2)|sub_r_rm_w(i1,i2)&disp0(i2)|sub_a_i_b(i1,i2)|
+              sbb_rm_r_b(i1,i2)&disp0(i2)|sbb_r_rm_b(i1,i2)&disp0(i2)|sbb_rm_r_w(i1,i2)&disp0(i2)|sbb_r_rm_w(i1,i2)&disp0(i2)|sbb_a_i_b(i1,i2)|
               dec_rm_b(i1,i2)&disp0(i2)|dec_rm_w(i1,i2)&disp0(i2)|
-              cmp_rm_r_b(i1)&disp0(i2)|cmp_r_rm_b(i1)&disp0(i2)|cmp_rm_r_w(i1)&disp0(i2)|cmp_r_rm_w(i1)&disp0(i2)|cmp_a_i_b(i1)|
-              neg_rm_b(i1)&disp0(i2)|neg_rm_w(i1)&disp0(i2)|
-              shl_rm_1_b(i1)&disp0(i2)|shl_rm_1_w(i1)&disp0(i2)|shl_rm_c_b(i1)&disp0(i2)|shl_rm_c_w(i1)&disp0(i2)|
-              shr_rm_1_b(i1)&disp0(i2)|shr_rm_1_w(i1)&disp0(i2)|shr_rm_c_b(i1)&disp0(i2)|shr_rm_c_w(i1)&disp0(i2)|
-              sar_rm_1_b(i1)&disp0(i2)|sar_rm_1_w(i1)&disp0(i2)|sar_rm_c_b(i1)&disp0(i2)|sar_rm_c_w(i1)&disp0(i2)|
-              rol_rm_1_b(i1)&disp0(i2)|rol_rm_1_w(i1)&disp0(i2)|rol_rm_c_b(i1)&disp0(i2)|rol_rm_c_w(i1)&disp0(i2)|
-              ror_rm_1_b(i1)&disp0(i2)|ror_rm_1_w(i1)&disp0(i2)|ror_rm_c_b(i1)&disp0(i2)|ror_rm_c_w(i1)&disp0(i2)|
-              rcl_rm_1_b(i1)&disp0(i2)|rcl_rm_1_w(i1)&disp0(i2)|rcl_rm_c_b(i1)&disp0(i2)|rcl_rm_c_w(i1)&disp0(i2)|
-              rcr_rm_1_b(i1)&disp0(i2)|rcr_rm_1_w(i1)&disp0(i2)|rcr_rm_c_b(i1)&disp0(i2)|rcr_rm_c_w(i1)&disp0(i2)|
-              not_rm_b(i1)&disp0(i2)|not_rm_w(i1)&disp0(i2)|
-              and_rm_r_b(i1)&disp0(i2)|and_r_rm_b(i1)&disp0(i2)|and_rm_r_w(i1)&disp0(i2)|and_r_rm_w(i1)&disp0(i2)|and_a_i_b(i1)|
-              test_rm_r_b(i1)&disp0(i2)|test_r_rm_b(i1)&disp0(i2)|test_rm_r_w(i1)&disp0(i2)|test_r_rm_w(i1)&disp0(i2)|test_a_i_b(i1)|
-              or_rm_r_b(i1)&disp0(i2)|or_r_rm_b(i1)&disp0(i2)|or_rm_r_w(i1)&disp0(i2)|or_r_rm_w(i1)&disp0(i2)|or_a_i_b(i1)|
-              xor_rm_r_b(i1)&disp0(i2)|xor_r_rm_b(i1)&disp0(i2)|xor_rm_r_w(i1)&disp0(i2)|xor_r_rm_w(i1)&disp0(i2)|xor_a_i_b(i1)|
-              cmps_b(i1)|cmps_w(i1)|
-              call_rm_dir(i1)&disp0(i2)|call_rm_ptr(i1)&disp0(i2)|jmp_i_dir_b(i1)|jmp_rm_dir(i1)&disp0(i2)|jmp_rm_ptr(i1)&disp0(i2);
+              cmp_rm_r_b(i1,i2)&disp0(i2)|cmp_r_rm_b(i1,i2)&disp0(i2)|cmp_rm_r_w(i1,i2)&disp0(i2)|cmp_r_rm_w(i1,i2)&disp0(i2)|cmp_a_i_b(i1,i2)|
+              neg_rm_b(i1,i2)&disp0(i2)|neg_rm_w(i1,i2)&disp0(i2)|
+              shl_rm_1_b(i1,i2)&disp0(i2)|shl_rm_1_w(i1,i2)&disp0(i2)|shl_rm_c_b(i1,i2)&disp0(i2)|shl_rm_c_w(i1,i2)&disp0(i2)|
+              shr_rm_1_b(i1,i2)&disp0(i2)|shr_rm_1_w(i1,i2)&disp0(i2)|shr_rm_c_b(i1,i2)&disp0(i2)|shr_rm_c_w(i1,i2)&disp0(i2)|
+              sar_rm_1_b(i1,i2)&disp0(i2)|sar_rm_1_w(i1,i2)&disp0(i2)|sar_rm_c_b(i1,i2)&disp0(i2)|sar_rm_c_w(i1,i2)&disp0(i2)|
+              rol_rm_1_b(i1,i2)&disp0(i2)|rol_rm_1_w(i1,i2)&disp0(i2)|rol_rm_c_b(i1,i2)&disp0(i2)|rol_rm_c_w(i1,i2)&disp0(i2)|
+              ror_rm_1_b(i1,i2)&disp0(i2)|ror_rm_1_w(i1,i2)&disp0(i2)|ror_rm_c_b(i1,i2)&disp0(i2)|ror_rm_c_w(i1,i2)&disp0(i2)|
+              rcl_rm_1_b(i1,i2)&disp0(i2)|rcl_rm_1_w(i1,i2)&disp0(i2)|rcl_rm_c_b(i1,i2)&disp0(i2)|rcl_rm_c_w(i1,i2)&disp0(i2)|
+              rcr_rm_1_b(i1,i2)&disp0(i2)|rcr_rm_1_w(i1,i2)&disp0(i2)|rcr_rm_c_b(i1,i2)&disp0(i2)|rcr_rm_c_w(i1,i2)&disp0(i2)|
+              not_rm_b(i1,i2)&disp0(i2)|not_rm_w(i1,i2)&disp0(i2)|
+              and_rm_r_b(i1,i2)&disp0(i2)|and_r_rm_b(i1,i2)&disp0(i2)|and_rm_r_w(i1,i2)&disp0(i2)|and_r_rm_w(i1,i2)&disp0(i2)|and_a_i_b(i1,i2)|
+              test_rm_r_b(i1,i2)&disp0(i2)|test_r_rm_b(i1,i2)&disp0(i2)|test_rm_r_w(i1,i2)&disp0(i2)|test_r_rm_w(i1,i2)&disp0(i2)|test_a_i_b(i1,i2)|
+              or_rm_r_b(i1,i2)&disp0(i2)|or_r_rm_b(i1,i2)&disp0(i2)|or_rm_r_w(i1,i2)&disp0(i2)|or_r_rm_w(i1,i2)&disp0(i2)|or_a_i_b(i1,i2)|
+              xor_rm_r_b(i1,i2)&disp0(i2)|xor_r_rm_b(i1,i2)&disp0(i2)|xor_rm_r_w(i1,i2)&disp0(i2)|xor_r_rm_w(i1,i2)&disp0(i2)|xor_a_i_b(i1,i2)|
+              cmps_b(i1,i2)|cmps_w(i1,i2)|
+              call_rm_dir(i1,i2)&disp0(i2)|call_rm_ptr(i1,i2)&disp0(i2)|jmp_i_dir_b(i1,i2)|jmp_rm_dir(i1,i2)&disp0(i2)|jmp_rm_ptr(i1,i2)&disp0(i2);
 endfunction
 
 function length3 (input [7:0] i1, input [7:0] i2);
-    length3 = mov_rm_r_b(i1)&disp1(i2)|mov_r_rm_b(i1)&disp1(i2)|mov_rm_r_w(i1)&disp1(i2)|mov_r_rm_w(i1)&disp1(i2)|mov_rm_i_b(i1)&disp0(i2)|mov_r_i_w(i1)|mov_a_m_b(i1)|mov_a_m_w(i1)|mov_m_a_b(i1)|mov_m_a_w(i1)|mov_sr_rm(i1)&disp1(i2)|mov_rm_sr(i1)&disp1(i2)|
-              push_rm(i1)&disp1(i2)|pop_rm(i1)&disp1(i2)|xchg_r_rm_b(i1)&disp1(i2)|xchg_r_rm_w(i1)&disp1(i2)|
-              lea(i1)&disp1(i2)|lds(i1)&disp1(i2)|les(i1)&disp1(i2)|
-              add_rm_r_b(i1)&disp1(i2)|add_r_rm_b(i1)&disp1(i2)|add_rm_r_w(i1)&disp1(i2)|add_r_rm_w(i1)&disp1(i2)|add_rm_i_b(i1,i2)&disp0(i2)|add_rm_si_w(i1,i2)&disp0(i2)|add_a_i_w(i1)|
-              adc_rm_r_b(i1)&disp1(i2)|adc_r_rm_b(i1)&disp1(i2)|adc_rm_r_w(i1)&disp1(i2)|adc_r_rm_w(i1)&disp1(i2)|adc_rm_i_b(i1,i2)&disp0(i2)|adc_rm_si_w(i1,i2)&disp0(i2)|adc_a_i_w(i1)|
+    length3 = mov_rm_r_b(i1,i2)&disp1(i2)|mov_r_rm_b(i1,i2)&disp1(i2)|mov_rm_r_w(i1,i2)&disp1(i2)|mov_r_rm_w(i1,i2)&disp1(i2)|mov_rm_i_b(i1,i2)&disp0(i2)|mov_r_i_w(i1,i2)|mov_a_m_b(i1,i2)|mov_a_m_w(i1,i2)|mov_m_a_b(i1,i2)|mov_m_a_w(i1,i2)|mov_sr_rm(i1,i2)&disp1(i2)|mov_rm_sr(i1,i2)&disp1(i2)|
+              push_rm(i1,i2)&disp1(i2)|pop_rm(i1,i2)&disp1(i2)|xchg_r_rm_b(i1,i2)&disp1(i2)|xchg_r_rm_w(i1,i2)&disp1(i2)|
+              lea(i1,i2)&disp1(i2)|lds(i1,i2)&disp1(i2)|les(i1,i2)&disp1(i2)|
+              add_rm_r_b(i1,i2)&disp1(i2)|add_r_rm_b(i1,i2)&disp1(i2)|add_rm_r_w(i1,i2)&disp1(i2)|add_r_rm_w(i1,i2)&disp1(i2)|add_rm_i_b(i1,i2)&disp0(i2)|add_rm_si_w(i1,i2)&disp0(i2)|add_a_i_w(i1,i2)|
+              adc_rm_r_b(i1,i2)&disp1(i2)|adc_r_rm_b(i1,i2)&disp1(i2)|adc_rm_r_w(i1,i2)&disp1(i2)|adc_r_rm_w(i1,i2)&disp1(i2)|adc_rm_i_b(i1,i2)&disp0(i2)|adc_rm_si_w(i1,i2)&disp0(i2)|adc_a_i_w(i1,i2)|
               inc_rm_b(i1,i2)&disp1(i2)|inc_rm_w(i1,i2)&disp1(i2)|
-              sub_rm_r_b(i1)&disp1(i2)|sub_r_rm_b(i1)&disp1(i2)|sub_rm_r_w(i1)&disp1(i2)|sub_r_rm_w(i1)&disp1(i2)|sub_rm_i_b(i1,i2)&disp0(i2)|sub_rm_si_w(i1,i2)&disp0(i2)|sub_a_i_w(i1)|
-              sbb_rm_r_b(i1)&disp1(i2)|sbb_r_rm_b(i1)&disp1(i2)|sbb_rm_r_w(i1)&disp1(i2)|sbb_r_rm_w(i1)&disp1(i2)|sbb_rm_i_b(i1,i2)&disp0(i2)|sbb_rm_si_w(i1,i2)&disp0(i2)|sbb_a_i_w(i1)|
+              sub_rm_r_b(i1,i2)&disp1(i2)|sub_r_rm_b(i1,i2)&disp1(i2)|sub_rm_r_w(i1,i2)&disp1(i2)|sub_r_rm_w(i1,i2)&disp1(i2)|sub_rm_i_b(i1,i2)&disp0(i2)|sub_rm_si_w(i1,i2)&disp0(i2)|sub_a_i_w(i1,i2)|
+              sbb_rm_r_b(i1,i2)&disp1(i2)|sbb_r_rm_b(i1,i2)&disp1(i2)|sbb_rm_r_w(i1,i2)&disp1(i2)|sbb_r_rm_w(i1,i2)&disp1(i2)|sbb_rm_i_b(i1,i2)&disp0(i2)|sbb_rm_si_w(i1,i2)&disp0(i2)|sbb_a_i_w(i1,i2)|
               dec_rm_b(i1,i2)&disp1(i2)|dec_rm_w(i1,i2)&disp1(i2)|
-              cmp_rm_r_b(i1)&disp1(i2)|cmp_r_rm_b(i1)&disp1(i2)|cmp_rm_r_w(i1)&disp1(i2)|cmp_r_rm_w(i1)&disp1(i2)|cmp_rm_i_b(i1,i2)&disp0(i2)|cmp_rm_si_w(i1,i2)&disp0(i2)|cmp_a_i_w(i1)|
-              neg_rm_b(i1)&disp1(i2)|neg_rm_w(i1)&disp1(i2)|
-              shl_rm_1_b(i1)&disp1(i2)|shl_rm_1_w(i1)&disp1(i2)|shl_rm_c_b(i1)&disp1(i2)|shl_rm_c_w(i1)&disp1(i2)|
-              shr_rm_1_b(i1)&disp1(i2)|shr_rm_1_w(i1)&disp1(i2)|shr_rm_c_b(i1)&disp1(i2)|shr_rm_c_w(i1)&disp1(i2)|
-              sar_rm_1_b(i1)&disp1(i2)|sar_rm_1_w(i1)&disp1(i2)|sar_rm_c_b(i1)&disp1(i2)|sar_rm_c_w(i1)&disp1(i2)|
-              rol_rm_1_b(i1)&disp1(i2)|rol_rm_1_w(i1)&disp1(i2)|rol_rm_c_b(i1)&disp1(i2)|rol_rm_c_w(i1)&disp1(i2)|
-              ror_rm_1_b(i1)&disp1(i2)|ror_rm_1_w(i1)&disp1(i2)|ror_rm_c_b(i1)&disp1(i2)|ror_rm_c_w(i1)&disp1(i2)|
-              rcl_rm_1_b(i1)&disp1(i2)|rcl_rm_1_w(i1)&disp1(i2)|rcl_rm_c_b(i1)&disp1(i2)|rcl_rm_c_w(i1)&disp1(i2)|
-              rcr_rm_1_b(i1)&disp1(i2)|rcr_rm_1_w(i1)&disp1(i2)|rcr_rm_c_b(i1)&disp1(i2)|rcr_rm_c_w(i1)&disp1(i2)|
-              and_rm_r_b(i1)&disp1(i2)|and_r_rm_b(i1)&disp1(i2)|and_rm_r_w(i1)&disp1(i2)|and_r_rm_w(i1)&disp1(i2)|and_rm_i_b(i1,i2)&disp0(i2)|and_a_i_w(i1)|
-              test_rm_r_b(i1)&disp1(i2)|test_r_rm_b(i1)&disp1(i2)|test_rm_r_w(i1)&disp1(i2)|test_r_rm_w(i1)&disp1(i2)|test_rm_i_b(i1,i2)&disp0(i2)|test_a_i_w(i1)|
-              or_rm_r_b(i1)&disp1(i2)|or_r_rm_b(i1)&disp1(i2)|or_rm_r_w(i1)&disp1(i2)|or_r_rm_w(i1)&disp1(i2)|or_rm_i_b(i1,i2)&disp0(i2)|or_a_i_w(i1)|
-              xor_rm_r_b(i1)&disp1(i2)|xor_r_rm_b(i1)&disp1(i2)|xor_rm_r_w(i1)&disp1(i2)|xor_r_rm_w(i1)&disp1(i2)|xor_rm_i_b(i1,i2)&disp0(i2)|xor_a_i_w(i1)|
-              call_i_dir(i1)|call_rm_dir(i1)&disp1(i2)|call_rm_ptr(i1)&disp1(i2)|jmp_i_dir_w(i1)|jmp_rm_dir(i1)&disp1(i2)|jmp_rm_ptr(i1)&disp1(i2);
+              cmp_rm_r_b(i1,i2)&disp1(i2)|cmp_r_rm_b(i1,i2)&disp1(i2)|cmp_rm_r_w(i1,i2)&disp1(i2)|cmp_r_rm_w(i1,i2)&disp1(i2)|cmp_rm_i_b(i1,i2)&disp0(i2)|cmp_rm_si_w(i1,i2)&disp0(i2)|cmp_a_i_w(i1,i2)|
+              neg_rm_b(i1,i2)&disp1(i2)|neg_rm_w(i1,i2)&disp1(i2)|
+              shl_rm_1_b(i1,i2)&disp1(i2)|shl_rm_1_w(i1,i2)&disp1(i2)|shl_rm_c_b(i1,i2)&disp1(i2)|shl_rm_c_w(i1,i2)&disp1(i2)|
+              shr_rm_1_b(i1,i2)&disp1(i2)|shr_rm_1_w(i1,i2)&disp1(i2)|shr_rm_c_b(i1,i2)&disp1(i2)|shr_rm_c_w(i1,i2)&disp1(i2)|
+              sar_rm_1_b(i1,i2)&disp1(i2)|sar_rm_1_w(i1,i2)&disp1(i2)|sar_rm_c_b(i1,i2)&disp1(i2)|sar_rm_c_w(i1,i2)&disp1(i2)|
+              rol_rm_1_b(i1,i2)&disp1(i2)|rol_rm_1_w(i1,i2)&disp1(i2)|rol_rm_c_b(i1,i2)&disp1(i2)|rol_rm_c_w(i1,i2)&disp1(i2)|
+              ror_rm_1_b(i1,i2)&disp1(i2)|ror_rm_1_w(i1,i2)&disp1(i2)|ror_rm_c_b(i1,i2)&disp1(i2)|ror_rm_c_w(i1,i2)&disp1(i2)|
+              rcl_rm_1_b(i1,i2)&disp1(i2)|rcl_rm_1_w(i1,i2)&disp1(i2)|rcl_rm_c_b(i1,i2)&disp1(i2)|rcl_rm_c_w(i1,i2)&disp1(i2)|
+              rcr_rm_1_b(i1,i2)&disp1(i2)|rcr_rm_1_w(i1,i2)&disp1(i2)|rcr_rm_c_b(i1,i2)&disp1(i2)|rcr_rm_c_w(i1,i2)&disp1(i2)|
+              and_rm_r_b(i1,i2)&disp1(i2)|and_r_rm_b(i1,i2)&disp1(i2)|and_rm_r_w(i1,i2)&disp1(i2)|and_r_rm_w(i1,i2)&disp1(i2)|and_rm_i_b(i1,i2)&disp0(i2)|and_a_i_w(i1,i2)|
+              test_rm_r_b(i1,i2)&disp1(i2)|test_r_rm_b(i1,i2)&disp1(i2)|test_rm_r_w(i1,i2)&disp1(i2)|test_r_rm_w(i1,i2)&disp1(i2)|test_rm_i_b(i1,i2)&disp0(i2)|test_a_i_w(i1,i2)|
+              or_rm_r_b(i1,i2)&disp1(i2)|or_r_rm_b(i1,i2)&disp1(i2)|or_rm_r_w(i1,i2)&disp1(i2)|or_r_rm_w(i1,i2)&disp1(i2)|or_rm_i_b(i1,i2)&disp0(i2)|or_a_i_w(i1,i2)|
+              xor_rm_r_b(i1,i2)&disp1(i2)|xor_r_rm_b(i1,i2)&disp1(i2)|xor_rm_r_w(i1,i2)&disp1(i2)|xor_r_rm_w(i1,i2)&disp1(i2)|xor_rm_i_b(i1,i2)&disp0(i2)|xor_a_i_w(i1,i2)|
+              call_i_dir(i1,i2)|call_rm_dir(i1,i2)&disp1(i2)|call_rm_ptr(i1,i2)&disp1(i2)|jmp_i_dir_w(i1,i2)|jmp_rm_dir(i1,i2)&disp1(i2)|jmp_rm_ptr(i1,i2)&disp1(i2);
 endfunction
 
 function length4 (input [7:0] i1, input [7:0] i2);
-    length4 = mov_rm_r_b(i1)&disp2(i2)|mov_r_rm_b(i1)&disp2(i2)|mov_rm_r_w(i1)&disp2(i2)|mov_r_rm_w(i1)&disp2(i2)|mov_rm_i_b(i1)&disp1(i2)|mov_rm_i_w(i1)&disp0(i2)|mov_sr_rm(i1)&disp2(i2)|mov_rm_sr(i1)&disp2(i2)|
-              push_rm(i1)&disp2(i2)|pop_rm(i1)&disp2(i2)|xchg_r_rm_b(i1)&disp2(i2)|xchg_r_rm_w(i1)&disp2(i2)|
-              lea(i1)&disp2(i2)|lds(i1)&disp2(i2)|les(i1)&disp2(i2)|
-              add_rm_r_b(i1)&disp2(i2)|add_r_rm_b(i1)&disp2(i2)|add_rm_r_w(i1)&disp2(i2)|add_r_rm_w(i1)&disp2(i2)|add_rm_i_b(i1,i2)&disp1(i2)|add_rm_si_w(i1,i2)&disp1(i2)|add_rm_zi_w(i1,i2)&disp0(i2)|
-              adc_rm_r_b(i1)&disp2(i2)|adc_r_rm_b(i1)&disp2(i2)|adc_rm_r_w(i1)&disp2(i2)|adc_r_rm_w(i1)&disp2(i2)|adc_rm_i_b(i1,i2)&disp1(i2)|adc_rm_si_w(i1,i2)&disp1(i2)|adc_rm_zi_w(i1,i2)&disp0(i2)|
+    length4 = mov_rm_r_b(i1,i2)&disp2(i2)|mov_r_rm_b(i1,i2)&disp2(i2)|mov_rm_r_w(i1,i2)&disp2(i2)|mov_r_rm_w(i1,i2)&disp2(i2)|mov_rm_i_b(i1,i2)&disp1(i2)|mov_rm_i_w(i1,i2)&disp0(i2)|mov_sr_rm(i1,i2)&disp2(i2)|mov_rm_sr(i1,i2)&disp2(i2)|
+              push_rm(i1,i2)&disp2(i2)|pop_rm(i1,i2)&disp2(i2)|xchg_r_rm_b(i1,i2)&disp2(i2)|xchg_r_rm_w(i1,i2)&disp2(i2)|
+              lea(i1,i2)&disp2(i2)|lds(i1,i2)&disp2(i2)|les(i1,i2)&disp2(i2)|
+              add_rm_r_b(i1,i2)&disp2(i2)|add_r_rm_b(i1,i2)&disp2(i2)|add_rm_r_w(i1,i2)&disp2(i2)|add_r_rm_w(i1,i2)&disp2(i2)|add_rm_i_b(i1,i2)&disp1(i2)|add_rm_si_w(i1,i2)&disp1(i2)|add_rm_zi_w(i1,i2)&disp0(i2)|
+              adc_rm_r_b(i1,i2)&disp2(i2)|adc_r_rm_b(i1,i2)&disp2(i2)|adc_rm_r_w(i1,i2)&disp2(i2)|adc_r_rm_w(i1,i2)&disp2(i2)|adc_rm_i_b(i1,i2)&disp1(i2)|adc_rm_si_w(i1,i2)&disp1(i2)|adc_rm_zi_w(i1,i2)&disp0(i2)|
               inc_rm_b(i1,i2)&disp2(i2)|inc_rm_w(i1,i2)&disp2(i2)|
-              sub_rm_r_b(i1)&disp2(i2)|sub_r_rm_b(i1)&disp2(i2)|sub_rm_r_w(i1)&disp2(i2)|sub_r_rm_w(i1)&disp2(i2)|sub_rm_i_b(i1,i2)&disp1(i2)|sub_rm_si_w(i1,i2)&disp1(i2)|sub_rm_zi_w(i1,i2)&disp0(i2)|
-              sbb_rm_r_b(i1)&disp2(i2)|sbb_r_rm_b(i1)&disp2(i2)|sbb_rm_r_w(i1)&disp2(i2)|sbb_r_rm_w(i1)&disp2(i2)|sbb_rm_i_b(i1,i2)&disp1(i2)|sbb_rm_si_w(i1,i2)&disp1(i2)|sbb_rm_zi_w(i1,i2)&disp0(i2)|
+              sub_rm_r_b(i1,i2)&disp2(i2)|sub_r_rm_b(i1,i2)&disp2(i2)|sub_rm_r_w(i1,i2)&disp2(i2)|sub_r_rm_w(i1,i2)&disp2(i2)|sub_rm_i_b(i1,i2)&disp1(i2)|sub_rm_si_w(i1,i2)&disp1(i2)|sub_rm_zi_w(i1,i2)&disp0(i2)|
+              sbb_rm_r_b(i1,i2)&disp2(i2)|sbb_r_rm_b(i1,i2)&disp2(i2)|sbb_rm_r_w(i1,i2)&disp2(i2)|sbb_r_rm_w(i1,i2)&disp2(i2)|sbb_rm_i_b(i1,i2)&disp1(i2)|sbb_rm_si_w(i1,i2)&disp1(i2)|sbb_rm_zi_w(i1,i2)&disp0(i2)|
               dec_rm_b(i1,i2)&disp2(i2)|dec_rm_w(i1,i2)&disp2(i2)|
-              cmp_rm_r_b(i1)&disp2(i2)|cmp_r_rm_b(i1)&disp2(i2)|cmp_rm_r_w(i1)&disp2(i2)|cmp_r_rm_w(i1)&disp2(i2)|cmp_rm_i_b(i1,i2)&disp1(i2)|cmp_rm_si_w(i1,i2)&disp1(i2)|cmp_rm_zi_w(i1,i2)&disp0(i2)|
-              neg_rm_b(i1)&disp2(i2)|neg_rm_w(i1)&disp2(i2)|
-              shl_rm_1_b(i1)&disp2(i2)|shl_rm_1_w(i1)&disp2(i2)|shl_rm_c_b(i1)&disp2(i2)|shl_rm_c_w(i1)&disp2(i2)|
-              shr_rm_1_b(i1)&disp2(i2)|shr_rm_1_w(i1)&disp2(i2)|shr_rm_c_b(i1)&disp2(i2)|shr_rm_c_w(i1)&disp2(i2)|
-              sar_rm_1_b(i1)&disp2(i2)|sar_rm_1_w(i1)&disp2(i2)|sar_rm_c_b(i1)&disp2(i2)|sar_rm_c_w(i1)&disp2(i2)|
-              rol_rm_1_b(i1)&disp2(i2)|rol_rm_1_w(i1)&disp2(i2)|rol_rm_c_b(i1)&disp2(i2)|rol_rm_c_w(i1)&disp2(i2)|
-              ror_rm_1_b(i1)&disp2(i2)|ror_rm_1_w(i1)&disp2(i2)|ror_rm_c_b(i1)&disp2(i2)|ror_rm_c_w(i1)&disp2(i2)|
-              rcl_rm_1_b(i1)&disp2(i2)|rcl_rm_1_w(i1)&disp2(i2)|rcl_rm_c_b(i1)&disp2(i2)|rcl_rm_c_w(i1)&disp2(i2)|
-              rcr_rm_1_b(i1)&disp2(i2)|rcr_rm_1_w(i1)&disp2(i2)|rcr_rm_c_b(i1)&disp2(i2)|rcr_rm_c_w(i1)&disp2(i2)|
-              and_rm_r_b(i1)&disp2(i2)|and_r_rm_b(i1)&disp2(i2)|and_rm_r_w(i1)&disp2(i2)|and_r_rm_w(i1)&disp2(i2)|and_rm_i_b(i1,i2)&disp1(i2)|and_rm_i_w(i1,i2)&disp0(i2)|
-              test_rm_r_b(i1)&disp2(i2)|test_r_rm_b(i1)&disp2(i2)|test_rm_r_w(i1)&disp2(i2)|test_r_rm_w(i1)&disp2(i2)|test_rm_i_b(i1,i2)&disp1(i2)|test_rm_i_w(i1,i2)&disp0(i2)|
-              or_rm_r_b(i1)&disp2(i2)|or_r_rm_b(i1)&disp2(i2)|or_rm_r_w(i1)&disp2(i2)|or_r_rm_w(i1)&disp2(i2)|or_rm_i_b(i1,i2)&disp1(i2)|or_rm_i_w(i1,i2)&disp0(i2)|
-              xor_rm_r_b(i1)&disp2(i2)|xor_r_rm_b(i1)&disp2(i2)|xor_rm_r_w(i1)&disp2(i2)|xor_r_rm_w(i1)&disp2(i2)|xor_rm_i_b(i1,i2)&disp1(i2)|xor_rm_i_w(i1,i2)&disp0(i2)|
-              call_rm_dir(i1)&disp2(i2)|call_rm_ptr(i1)&disp2(i2)|jmp_rm_dir(i1)&disp2(i2)|jmp_rm_ptr(i1)&disp2(i2);
+              cmp_rm_r_b(i1,i2)&disp2(i2)|cmp_r_rm_b(i1,i2)&disp2(i2)|cmp_rm_r_w(i1,i2)&disp2(i2)|cmp_r_rm_w(i1,i2)&disp2(i2)|cmp_rm_i_b(i1,i2)&disp1(i2)|cmp_rm_si_w(i1,i2)&disp1(i2)|cmp_rm_zi_w(i1,i2)&disp0(i2)|
+              neg_rm_b(i1,i2)&disp2(i2)|neg_rm_w(i1,i2)&disp2(i2)|
+              shl_rm_1_b(i1,i2)&disp2(i2)|shl_rm_1_w(i1,i2)&disp2(i2)|shl_rm_c_b(i1,i2)&disp2(i2)|shl_rm_c_w(i1,i2)&disp2(i2)|
+              shr_rm_1_b(i1,i2)&disp2(i2)|shr_rm_1_w(i1,i2)&disp2(i2)|shr_rm_c_b(i1,i2)&disp2(i2)|shr_rm_c_w(i1,i2)&disp2(i2)|
+              sar_rm_1_b(i1,i2)&disp2(i2)|sar_rm_1_w(i1,i2)&disp2(i2)|sar_rm_c_b(i1,i2)&disp2(i2)|sar_rm_c_w(i1,i2)&disp2(i2)|
+              rol_rm_1_b(i1,i2)&disp2(i2)|rol_rm_1_w(i1,i2)&disp2(i2)|rol_rm_c_b(i1,i2)&disp2(i2)|rol_rm_c_w(i1,i2)&disp2(i2)|
+              ror_rm_1_b(i1,i2)&disp2(i2)|ror_rm_1_w(i1,i2)&disp2(i2)|ror_rm_c_b(i1,i2)&disp2(i2)|ror_rm_c_w(i1,i2)&disp2(i2)|
+              rcl_rm_1_b(i1,i2)&disp2(i2)|rcl_rm_1_w(i1,i2)&disp2(i2)|rcl_rm_c_b(i1,i2)&disp2(i2)|rcl_rm_c_w(i1,i2)&disp2(i2)|
+              rcr_rm_1_b(i1,i2)&disp2(i2)|rcr_rm_1_w(i1,i2)&disp2(i2)|rcr_rm_c_b(i1,i2)&disp2(i2)|rcr_rm_c_w(i1,i2)&disp2(i2)|
+              and_rm_r_b(i1,i2)&disp2(i2)|and_r_rm_b(i1,i2)&disp2(i2)|and_rm_r_w(i1,i2)&disp2(i2)|and_r_rm_w(i1,i2)&disp2(i2)|and_rm_i_b(i1,i2)&disp1(i2)|and_rm_i_w(i1,i2)&disp0(i2)|
+              test_rm_r_b(i1,i2)&disp2(i2)|test_r_rm_b(i1,i2)&disp2(i2)|test_rm_r_w(i1,i2)&disp2(i2)|test_r_rm_w(i1,i2)&disp2(i2)|test_rm_i_b(i1,i2)&disp1(i2)|test_rm_i_w(i1,i2)&disp0(i2)|
+              or_rm_r_b(i1,i2)&disp2(i2)|or_r_rm_b(i1,i2)&disp2(i2)|or_rm_r_w(i1,i2)&disp2(i2)|or_r_rm_w(i1,i2)&disp2(i2)|or_rm_i_b(i1,i2)&disp1(i2)|or_rm_i_w(i1,i2)&disp0(i2)|
+              xor_rm_r_b(i1,i2)&disp2(i2)|xor_r_rm_b(i1,i2)&disp2(i2)|xor_rm_r_w(i1,i2)&disp2(i2)|xor_r_rm_w(i1,i2)&disp2(i2)|xor_rm_i_b(i1,i2)&disp1(i2)|xor_rm_i_w(i1,i2)&disp0(i2)|
+              call_rm_dir(i1,i2)&disp2(i2)|call_rm_ptr(i1,i2)&disp2(i2)|jmp_rm_dir(i1,i2)&disp2(i2)|jmp_rm_ptr(i1,i2)&disp2(i2);
 endfunction
 
 function length5 (input [7:0] i1, input [7:0] i2);
-    length5 = mov_rm_i_b(i1)&disp2(i2)|mov_rm_i_w(i1)&disp1(i2)|
+    length5 = mov_rm_i_b(i1,i2)&disp2(i2)|mov_rm_i_w(i1,i2)&disp1(i2)|
               add_rm_i_b(i1,i2)&disp2(i2)|add_rm_si_w(i1,i2)&disp2(i2)|add_rm_zi_w(i1,i2)&disp1(i2)|
               adc_rm_i_b(i1,i2)&disp2(i2)|adc_rm_si_w(i1,i2)&disp2(i2)|adc_rm_zi_w(i1,i2)&disp1(i2)|
               sub_rm_i_b(i1,i2)&disp2(i2)|sub_rm_si_w(i1,i2)&disp2(i2)|sub_rm_zi_w(i1,i2)&disp1(i2)|
@@ -373,11 +379,11 @@ function length5 (input [7:0] i1, input [7:0] i2);
               test_rm_i_b(i1,i2)&disp2(i2)|test_rm_i_w(i1,i2)&disp1(i2)|
               or_rm_i_b(i1,i2)&disp2(i2)|or_rm_i_w(i1,i2)&disp1(i2)|
               xor_rm_i_b(i1,i2)&disp2(i2)|xor_rm_i_w(i1,i2)&disp1(i2)|
-              call_i_ptr(i1)|jmp_i_ptr(i1);
+              call_i_ptr(i1,i2)|jmp_i_ptr(i1,i2);
 endfunction
 
 function length6 (input [7:0] i1, input [7:0] i2);
-    length6 = mov_rm_i_w(i1)&disp2(i2)|add_rm_zi_w(i1,i2)&disp2(i2)|adc_rm_zi_w(i1,i2)&disp2(i2)|sub_rm_zi_w(i1,i2)&disp2(i2)|sbb_rm_zi_w(i1,i2)&disp2(i2)|cmp_rm_zi_w(i1,i2)&disp2(i2)|
+    length6 = mov_rm_i_w(i1,i2)&disp2(i2)|add_rm_zi_w(i1,i2)&disp2(i2)|adc_rm_zi_w(i1,i2)&disp2(i2)|sub_rm_zi_w(i1,i2)&disp2(i2)|sbb_rm_zi_w(i1,i2)&disp2(i2)|cmp_rm_zi_w(i1,i2)&disp2(i2)|
               and_rm_i_w(i1,i2)&disp2(i2)|test_rm_i_w(i1,i2)&disp2(i2)|or_rm_i_w(i1,i2)&disp2(i2)|xor_rm_i_w(i1,i2)&disp2(i2);
 endfunction
 
