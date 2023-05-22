@@ -36,22 +36,34 @@ module core (
             retf        (ir[4], ir[3]) || retf_i      (ir[4], ir[3]) ||
             jmp_rm_dir  (ir[4], ir[3]) || jmp_rm_ptr  (ir[4], ir[3]) 
         )) ip <= data_reg;
-        else if (first_byte[4] && call_i_dir  (ir[4], ir[3])) ip <= ip + {ir[2], ir[3]};
-        else if (first_byte[4] && call_i_ptr  (ir[4], ir[3])) ip <=      {ir[3], ir[4]};
-        else if (first_byte[4] && jmp_i_dir_b (ir[4], ir[3])) ip <= ip + {8'h00, ir[3]};
-        else if (first_byte[4] && jmp_i_dir_w (ir[4], ir[3])) ip <= ip + {ir[2], ir[3]};
-        else if (first_byte[4] && jmp_i_ptr   (ir[4], ir[3])) ip <=      {ir[2], ir[3]};
+        else if (first_byte[4] && call_i_dir  (ir[4], ir[3])) ip <= ip + {  ir[2],     ir[3]};
+        else if (first_byte[4] && call_i_ptr  (ir[4], ir[3])) ip <=      {  ir[3],     ir[4]};
+        else if (first_byte[4] && jmp_i_dir_b (ir[4], ir[3])) ip <= ip + {8{ir[3][7]}, ir[3]};
+        else if (first_byte[4] && jmp_i_dir_w (ir[4], ir[3])) ip <= ip + {  ir[2],     ir[3]};
+        else if (first_byte[4] && jmp_i_ptr   (ir[4], ir[3])) ip <=      {  ir[2],     ir[3]};
         else if (first_byte[4] && (
-            je          (ir[4], ir[3]) || jne         (ir[4], ir[3]) ||
-            jl          (ir[4], ir[3]) || jnl         (ir[4], ir[3]) ||
-            jle         (ir[4], ir[3]) || jnle        (ir[4], ir[3]) ||
-            jb          (ir[4], ir[3]) || jnb         (ir[4], ir[3]) ||
-            jbe         (ir[4], ir[3]) || jnbe        (ir[4], ir[3]) ||
-            jp          (ir[4], ir[3]) || jnp         (ir[4], ir[3]) ||
-            jo          (ir[4], ir[3]) || jno         (ir[4], ir[3]) ||
-            js          (ir[4], ir[3]) || jns         (ir[4], ir[3])
+            je      (ir[4], ir[3]) &&  `ZF              ||
+            jne     (ir[4], ir[3]) && ~`ZF              ||
+            jl      (ir[4], ir[3]) &&  (`SF^`OF)        ||
+            jnl     (ir[4], ir[3]) && ~(`SF^`OF)        ||
+            jle     (ir[4], ir[3]) &&  (`ZF|(`SF^`OF))  ||
+            jnle    (ir[4], ir[3]) && ~(`ZF|(`SF^`OF))  ||
+            jb      (ir[4], ir[3]) &&  `CF              ||
+            jnb     (ir[4], ir[3]) && ~`CF              ||
+            jbe     (ir[4], ir[3]) &&  (`CF|`ZF)        ||
+            jnbe    (ir[4], ir[3]) && ~(`CF|`ZF)        ||
+            jp      (ir[4], ir[3]) &&  `PF              ||
+            jnp     (ir[4], ir[3]) && ~`PF              ||
+            jo      (ir[4], ir[3]) &&  `OF              ||
+            jno     (ir[4], ir[3]) && ~`OF              ||
+            js      (ir[4], ir[3]) &&  `SF              ||
+            jns     (ir[4], ir[3]) && ~`SF              ||
+            jcxz    (ir[4], ir[3]) &&  `CX == 'b0       ||
+            loop    (ir[4], ir[3]) &&  `CX == 'b0       ||
+            loopz   (ir[4], ir[3]) &&  `CX == 'b0       ||
+            loopnz  (ir[4], ir[3]) &&  `CX != 'b0
         ))
-            ip <= ip + {8'h00, ir[3]};
+            ip <= ip + {8{ir[3][7]}, ir[3]};
         else if (first_byte[0] && (
             cmps_b(ir[0], rom_data) ||
             cmps_w(ir[0], rom_data)
@@ -756,8 +768,11 @@ module core (
             )
                 {`DX, `AX} <= {s, r};
             else if (
-                rep_z (pr) ||
-                rep_nz(pr)
+                rep_z       (pr,    ir[4]) ||
+                rep_nz      (pr,    ir[4]) ||
+                loop        (ir[4], ir[3]) ||
+                loopz       (ir[4], ir[3]) ||
+                loopnz      (ir[4], ir[3])
             )
                 `CX <= `CX - 'b1;
             else if (

@@ -311,6 +311,14 @@ function jnp            (input[7:0]i1,i2); jnp          = (i1[7:0]==8'b01111011)
 function jno            (input[7:0]i1,i2); jno          = (i1[7:0]==8'b01110001);                   endfunction
 // JNS
 function jns            (input[7:0]i1,i2); jns          = (i1[7:0]==8'b01111001);                   endfunction
+// JCXZ
+function jcxz           (input[7:0]i1,i2); jcxz         = (i1[7:0]==8'b11100011);                   endfunction
+// LOOP
+function loop           (input[7:0]i1,i2); loop         = (i1[7:0]==8'b11100010);                   endfunction
+function loopz          (input[7:0]i1,i2); loopz        = (i1[7:0]==8'b11100001);                   endfunction
+function loopnz         (input[7:0]i1,i2); loopnz       = (i1[7:0]==8'b11100000);                   endfunction
+
+
 
 function length1 (input [7:0] i1, input [7:0] i2);
     length1 = push_r(i1,i2)|push_sr(i1,i2)|pop_r(i1,i2)|pop_sr(i1,i2)|xchg_a_r(i1,i2)|xlat(i1,i2)|lahf(i1,i2)|sahf(i1,i2)|pushf(i1,i2)|popf(i1,i2)|
@@ -345,7 +353,8 @@ function length2 (input [7:0] i1, input [7:0] i2);
               cmps_b(i1,i2)|cmps_w(i1,i2)|
               call_rm_dir(i1,i2)&disp0(i2)|call_rm_ptr(i1,i2)&disp0(i2)|jmp_i_dir_b(i1,i2)|jmp_rm_dir(i1,i2)&disp0(i2)|jmp_rm_ptr(i1,i2)&disp0(i2)|
               je(i1,i2)|jl(i1,i2)|jle(i1,i2)|jb(i1,i2)|jbe(i1,i2)|jp(i1,i2)|jo(i1,i2)|js(i1,i2)|
-              jne(i1,i2)|jnl(i1,i2)|jnle(i1,i2)|jnb(i1,i2)|jnbe(i1,i2)|jnp(i1,i2)|jno(i1,i2)|jns(i1,i2);
+              jne(i1,i2)|jnl(i1,i2)|jnle(i1,i2)|jnb(i1,i2)|jnbe(i1,i2)|jnp(i1,i2)|jno(i1,i2)|jns(i1,i2)|
+              jcxz(i1,i2)|loop(i1,i2)|loopz(i1,i2)|loopnz(i1,i2);
 endfunction
 
 function length3 (input [7:0] i1, input [7:0] i2);
