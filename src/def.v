@@ -14,10 +14,10 @@
 `define BP register[7'b1010000 +: 16]
 `define SI register[7'b1100000 +: 16]
 `define DI register[7'b1110000 +: 16]
-`define ES segment_register[2'b0]
-`define CS segment_register[2'b1]
-`define SS segment_register[2'b2]
-`define DS segment_register[2'b3]
+`define ES segment_register[2'd0]
+`define CS segment_register[2'd1]
+`define SS segment_register[2'd2]
+`define DS segment_register[2'd3]
 `define OF flags[4'd11]
 `define DF flags[4'd10]
 `define IF flags[4'd9 ]
@@ -244,8 +244,8 @@ function xor_a_i_w      (input[7:0]i1,i2); xor_a_i_w    = (i1[7:0]==8'b00100101)
 
 // STRING MANUPULATE OPERATIONS
 // REP
-function rep_z          (input[7:0]i1,i2); rep_z        = (i[7:1]==8'b11110011);                    endfunction
-function rep_nz         (input[7:0]i1,i2); rep_nz       = (i[7:1]==8'b11110010);                    endfunction
+function rep_z          (input[7:0]i1,i2); rep_z        = (i1[7:1]==8'b11110011);                    endfunction
+function rep_nz         (input[7:0]i1,i2); rep_nz       = (i1[7:1]==8'b11110010);                    endfunction
 // MOVS
 function movs_b         (input[7:0]i1,i2); movs_b       = (i1[7:0]==8'b10100100);                   endfunction
 function movs_w         (input[7:0]i1,i2); movs_w       = (i1[7:0]==8'b10100101);                   endfunction
@@ -318,12 +318,22 @@ function loop           (input[7:0]i1,i2); loop         = (i1[7:0]==8'b11100010)
 function loopz          (input[7:0]i1,i2); loopz        = (i1[7:0]==8'b11100001);                   endfunction
 function loopnz         (input[7:0]i1,i2); loopnz       = (i1[7:0]==8'b11100000);                   endfunction
 
+// PROCESSOR CONTROL OPERATIONS
+function cmc            (input[7:0]i1,i2); cmc          = (i1[7:0]==8'b11110101);                   endfunction
+function clc            (input[7:0]i1,i2); clc          = (i1[7:0]==8'b11111000);                   endfunction
+function stc            (input[7:0]i1,i2); stc          = (i1[7:0]==8'b11111001);                   endfunction
+function cld            (input[7:0]i1,i2); cld          = (i1[7:0]==8'b11111100);                   endfunction
+function std            (input[7:0]i1,i2); std          = (i1[7:0]==8'b11111101);                   endfunction
+function cli            (input[7:0]i1,i2); cli          = (i1[7:0]==8'b11111010);                   endfunction
+function sti            (input[7:0]i1,i2); sti          = (i1[7:0]==8'b11111011);                   endfunction
+
 
 
 function length1 (input [7:0] i1, input [7:0] i2);
     length1 = push_r(i1,i2)|push_sr(i1,i2)|pop_r(i1,i2)|pop_sr(i1,i2)|xchg_a_r(i1,i2)|xlat(i1,i2)|lahf(i1,i2)|sahf(i1,i2)|pushf(i1,i2)|popf(i1,i2)|
               inc_r(i1,i2)|aaa(i1,i2)|daa(i1,i2)|dec_r(i1,i2)|aas(i1,i2)|das(i1,i2)|aam(i1,i2)|aad(i1,i2)|cbw(i1,i2)|cwd(i1,i2)|
-              rep_z(i1,i2)|rep_nz(i1,i2)|movs_b(i1,i2)|movs_w(i1,i2)|scas_b(i1,i2)|scas_w(i1,i2)|lods_b(i1,i2)|lods_w(i1,i2)|stds_b(i1,i2)|stds_w(i1,i2);
+              rep_z(i1,i2)|rep_nz(i1,i2)|movs_b(i1,i2)|movs_w(i1,i2)|scas_b(i1,i2)|scas_w(i1,i2)|lods_b(i1,i2)|lods_w(i1,i2)|stds_b(i1,i2)|stds_w(i1,i2)|
+              cmc(i1,i2)|clc(i1,i2)|stc(i1,i2)|cld(i1,i2)|std(i1,i2)|cli(i1,i2)|sti(i1,i2);
 endfunction
 
 function length2 (input [7:0] i1, input [7:0] i2);
@@ -449,7 +459,7 @@ function [2:0] field_reg (input [7:0] i);
 endfunction
 
 function [2:0] field_r_m (input [7:0] i);
-    field_reg = i[2:0];
+    field_r_m = i[2:0];
 endfunction
 
 function is_mem_mod (input [7:0] i);
@@ -492,11 +502,11 @@ function zf_w (input [15:0] r);
     zf_w = r == 16'b0;
 endfunction
 
-function af_b (input [7:0] a,b,c; reg [3:0] r);
+function af_b (input [7:0] a,b,c); reg [3:0] r;
     {af_b, r} = a[3:0] + b[3:0] + c;
 endfunction
 
-function af_w (input [15:0] a,b,c; reg [3:0] r);
+function af_w (input [15:0] a,b,c); reg [3:0] r;
     {af_w, r} = a[3:0] + b[3:0] + c;
 endfunction
 
@@ -508,11 +518,11 @@ function pf_w (input [15:0] r);
     pf_w = ~(^r);
 endfunction
 
-function cf_b (input [7:0] a,b,c; reg [7:0] r);
+function cf_b (input [7:0] a,b,c); reg [7:0] r;
     {cf_b, r} = a + b + c;
 endfunction
 
-function cf_w (input [15:0] a,b,c; reg [15:0] r);
+function cf_w (input [15:0] a,b,c); reg [15:0] r;
     {cf_w, r} = a + b + c;
 endfunction
 
