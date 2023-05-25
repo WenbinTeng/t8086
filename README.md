@@ -6,8 +6,19 @@ This is a repository for a soft CPU core compatible for Intel 8086. 8086 is a 16
 
 ## Introduction
 
+Since our CPU will be implemented on FPGA, different execution/memory architectures and peripheral ports will be employed.
 
+- We build three-stage pipelined architecture for instruction execution, comprising address generating, operand fetching, execute and write back stages, instructions will take maximum six machine cycles to finish execution.
+
+- We setup 1MB on-chip memory, where ROM takes 0xC0000-0xFFFFF address space, and RAM occupies the other.
+
+- We provide a interface for the peripherals on FPGA board.
+
+## Architecture
+
+<img src="asset/arch.png" alt="arch" style="width:70%;" />
 
 ## Reference
 
 [Intel 8086 - Wikipedia](https://en.wikipedia.org/wiki/Intel_8086#Background)
+
