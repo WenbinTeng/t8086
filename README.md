@@ -18,7 +18,16 @@ Since our CPU will be implemented on FPGA, different execution/memory architectu
 
 <img src="asset/arch.png" alt="arch" style="width:70%;" />
 
+
+
+## Implementation
+
+We run FPGA implementation in Vivado, the core utilization is shown below.
+
+| Resource    | LUT   | FF    | DSP   | IO    | BUFG  |
+| ----------- | ----- | ----- | ----- | ----- | ----- |
+| Utilization | 6296  | 358   | 1     | 141   | 2     |
+
 ## Reference
 
 [Intel 8086 - Wikipedia](https://en.wikipedia.org/wiki/Intel_8086#Background)
-
